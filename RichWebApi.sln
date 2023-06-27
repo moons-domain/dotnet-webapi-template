@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Application", "RichWebApi.Application\RichWebApi.Application.csproj", "{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Core", "RichWebApi.Core\RichWebApi.Core.csproj", "{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{E7D89A8D-9835-4A6D-BA2C-97C75CAB1893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Database", "RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj", "{30C0B70C-6CA9-4662-BA51-6874C4B5EB09}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parts", "Parts", "{2504DDD8-13F0-4E1E-88E3-F940F25E1AA8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts.Core", "RichWebApi.Parts.Core\RichWebApi.Parts.Core.csproj", "{E40723F9-86E9-42AB-9BAA-E52D3251D98A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{AA9C06E9-D972-4B95-9FBA-E6449B317186}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Part", "RichWebApi.Part\RichWebApi.Part.csproj", "{FF65221D-BDCD-419F-8704-3B9B9FF12E26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.WebApi", "RichWebApi.WebApi\RichWebApi.WebApi.csproj", "{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E40723F9-86E9-42AB-9BAA-E52D3251D98A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E40723F9-86E9-42AB-9BAA-E52D3251D98A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E40723F9-86E9-42AB-9BAA-E52D3251D98A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E40723F9-86E9-42AB-9BAA-E52D3251D98A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09} = {E7D89A8D-9835-4A6D-BA2C-97C75CAB1893}
+		{E40723F9-86E9-42AB-9BAA-E52D3251D98A} = {2504DDD8-13F0-4E1E-88E3-F940F25E1AA8}
+		{AA9C06E9-D972-4B95-9FBA-E6449B317186} = {2504DDD8-13F0-4E1E-88E3-F940F25E1AA8}
+		{FF65221D-BDCD-419F-8704-3B9B9FF12E26} = {AA9C06E9-D972-4B95-9FBA-E6449B317186}
+	EndGlobalSection
+EndGlobal
