@@ -1,0 +1,45 @@
+{
+	"name": "richwebapi",
+	"version": "1.0.0",
+	"description": "Ready-to-run template for aspnetcore web api solution",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mrlldd/dotnet-richtemplate.git"
+	},
+	"author": "mrlldd",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/mrlldd/dotnet-richtemplate/issues"
+	},
+	"homepage": "https://github.com/mrlldd/dotnet-richtemplate#readme",
+	"private": true,
+	"scripts": {
+		"preinstall": "dotnet tool restore && dotnet restore -f",
+		"postinstall": "husky install",
+		"hooks:pre-commit": "lint-staged -r",
+		"format-all": "npm run format:cs && npm run format:other",
+		"format:cs": "dotnet format whitespace RichWebApi.sln",
+		"format:other": "prettier . --write -u",
+		"hooks:pre-push": "npm run test",
+		"test": "dotnet test -c Release",
+		"build:apiclient": "cd RichWebApi.Tests.Integration && nswag run .nswag"
+	},
+	"engineStrict": true,
+	"engines": {
+		"yarn": ">=1.22"
+	},
+	"prettier": {
+		"semi": true,
+		"printWidth": 120,
+		"singleQuote": true,
+		"bracketSpacing": true,
+		"useTabs": true
+	},
+	"devDependencies": {
+		"husky": "^8.0.2",
+		"lint-staged": "^13.1.0",
+		"prettier": "^2.8.1",
+		"nswag": "^13.18.2"
+	}
+}

@@ -1,3 +1,4 @@
-﻿RichWebApi/.idea
-**/obj
-**/bin
+﻿obj/
+bin/
+node_modules
+.idea
