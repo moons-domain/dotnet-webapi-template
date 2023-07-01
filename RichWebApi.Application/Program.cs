@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using RichWebApi;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -37,8 +38,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer(
-);
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(s =>
 {
 	s.SwaggerDoc("v1", new OpenApiInfo
@@ -49,6 +49,9 @@ builder.Services.AddSwaggerGen(s =>
 });
 
 builder.Services.AddHealthChecks();
+builder.Services
+	.AddMvcCore()
+	.AddBasePart();
 
 var app = builder.Build();
 

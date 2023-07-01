@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RichWebApi.Core\RichWebApi.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Part\RichWebApi.Part.csproj" />
     </ItemGroup>
 
 </Project>
