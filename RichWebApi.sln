@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{AA9C06E9-D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Part", "RichWebApi.Part\RichWebApi.Part.csproj", "{FF65221D-BDCD-419F-8704-3B9B9FF12E26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.WebApi", "RichWebApi.WebApi\RichWebApi.WebApi.csproj", "{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +44,10 @@ Global
 		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FF65221D-BDCD-419F-8704-3B9B9FF12E26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24BBB4F4-FD4A-4C0C-A007-483E479DFB1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09} = {E7D89A8D-9835-4A6D-BA2C-97C75CAB1893}

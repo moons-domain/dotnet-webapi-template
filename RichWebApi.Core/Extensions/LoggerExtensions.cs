@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using Dawn;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -27,7 +28,7 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 				break;
 		}
 	}
-	
+
 	private static void LogPerformanceEnd(this ILogger logger, string description, object[] args, Stopwatch sw)
 	{
 		switch (args.Length)
@@ -48,15 +49,24 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 	}
 
 	public static Task TimeAsync(this ILogger? logger,
-	                             Func<Task> operation,
-	                             string description,
-	                             params object[] args)
+								 Func<Task> operation,
+								 string description,
+								 params object[] args)
 	{
 		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
 		{
 			return operation();
 		}
 
+		if (string.IsNullOrEmpty(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Argument {description} is null or empty");
+		}
+
+		if (operation is null)
+		{
+			throw new ArgumentNullException(nameof(operation), "Argument {operation} is null");
+		}
 		Guard.Argument(description, nameof(description)).NotNull().NotEmpty();
 		Guard.Argument(operation, nameof(operation)).NotNull();
 		logger.LogPerformanceStart(description, args);
@@ -73,11 +83,11 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 		}, TaskContinuationOptions.ExecuteSynchronously);
 		return originalTask;
 	}
-	
+
 	public static Task<T> TimeAsync<T>(this ILogger? logger,
-	                                   Func<Task<T>> operation,
-	                                   string description,
-	                                   params object[] args)
+									   Func<Task<T>> operation,
+									   string description,
+									   params object[] args)
 	{
 		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
 		{

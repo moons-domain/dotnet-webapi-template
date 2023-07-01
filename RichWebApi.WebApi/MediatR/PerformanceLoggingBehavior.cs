@@ -12,7 +12,7 @@ public sealed class PerformanceLoggingBehavior<TRequest, TResponse> : IPipelineB
 	public PerformanceLoggingBehavior(ILogger<PerformanceLoggingBehavior<TRequest, TResponse>> logger) => _logger = logger;
 
 	public Task<TResponse> Handle(TRequest request,
-	                              RequestHandlerDelegate<TResponse> next,
-	                              CancellationToken cancellationToken) 
+								  RequestHandlerDelegate<TResponse> next,
+								  CancellationToken cancellationToken)
 		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), "Request {RequestName} performance", typeof(TRequest).Name);
 }

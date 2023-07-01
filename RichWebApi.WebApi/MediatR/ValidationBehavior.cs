@@ -6,7 +6,8 @@ using RichWebApi.Part.Exceptions;
 
 namespace RichWebApi.MediatR;
 
-public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+	where TRequest : IRequest<TResponse>
 {
 	private readonly IEnumerable<IValidator<TRequest>> _validators;
 	private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;

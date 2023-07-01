@@ -5,9 +5,9 @@ using RichWebApi.MediatR;
 
 namespace RichWebApi;
 
-public static class ServiceCollectionExtension
+public static class ServiceCollectionExtensions
 {
-	public static IMvcCoreBuilder AddBasePart(this IMvcCoreBuilder builder)
+	public static IMvcCoreBuilder AddCore(this IMvcCoreBuilder builder)
 	{
 		builder.AddPart<RichWebApiException>();
 		builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));

@@ -51,7 +51,7 @@ builder.Services.AddSwaggerGen(s =>
 builder.Services.AddHealthChecks();
 builder.Services
 	.AddMvcCore()
-	.AddBasePart();
+	.AddCore();
 
 var app = builder.Build();
 
