@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RichWebApi.Extensions;

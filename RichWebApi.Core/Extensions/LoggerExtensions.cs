@@ -73,4 +73,27 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 		}, TaskContinuationOptions.ExecuteSynchronously);
 		return originalTask;
 	}
+	
+	public static Task<T> TimeAsync<T>(this ILogger? logger,
+	                                   Func<Task<T>> operation,
+	                                   string description,
+	                                   params object[] args)
+	{
+		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
+		{
+			return operation();
+		}
+
+		Guard.Argument(description, nameof(description)).NotNull().NotEmpty();
+		Guard.Argument(operation, nameof(operation)).NotNull();
+		logger.LogPerformanceStart(description, args);
+		var sw = Stopwatch.StartNew();
+		var originalTask = operation();
+		originalTask.ContinueWith(_ =>
+		{
+			sw.Stop();
+			logger.LogPerformanceEnd(description, args, sw);
+		}, TaskContinuationOptions.ExecuteSynchronously);
+		return originalTask;
+	}
 }
