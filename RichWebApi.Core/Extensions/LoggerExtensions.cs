@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Numerics;
-using Dawn;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -11,7 +9,7 @@ public static class LoggerExtensions
 #if DEBUG
 	private const LogLevel PerformanceLoggingLevel = LogLevel.Information;
 #else
-private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
+	private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 #endif
 
 	private static void LogPerformanceStart(this ILogger logger, string description, params object[] args)
@@ -53,22 +51,22 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 								 string description,
 								 params object[] args)
 	{
+		if (operation is null)
+		{
+			throw new ArgumentNullException(nameof(operation), "Operation should be real");
+		}
+
+		if (string.IsNullOrEmpty(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Operation should have description");
+		}
+
 		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
 		{
 			return operation();
 		}
 
-		if (string.IsNullOrEmpty(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Argument {description} is null or empty");
-		}
 
-		if (operation is null)
-		{
-			throw new ArgumentNullException(nameof(operation), "Argument {operation} is null");
-		}
-		Guard.Argument(description, nameof(description)).NotNull().NotEmpty();
-		Guard.Argument(operation, nameof(operation)).NotNull();
 		logger.LogPerformanceStart(description, args);
 		var sw = Stopwatch.StartNew();
 		var originalTask = operation();
@@ -76,6 +74,7 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 		{
 			sw.Stop();
 			logger.LogPerformanceEnd(description, args, sw);
+
 			if (t.Exception is not null)
 			{
 				logger.LogError(t.Exception, "Action [{Description}] ended with an error", description);
@@ -89,13 +88,21 @@ private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 									   string description,
 									   params object[] args)
 	{
+		if (operation is null)
+		{
+			throw new ArgumentNullException(nameof(operation), "Operation should be real");
+		}
+
+		if (string.IsNullOrEmpty(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Operation should have description");
+		}
+
 		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
 		{
 			return operation();
 		}
 
-		Guard.Argument(description, nameof(description)).NotNull().NotEmpty();
-		Guard.Argument(operation, nameof(operation)).NotNull();
 		logger.LogPerformanceStart(description, args);
 		var sw = Stopwatch.StartNew();
 		var originalTask = operation();
