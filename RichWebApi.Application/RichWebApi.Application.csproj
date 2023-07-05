@@ -21,6 +21,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RichWebApi.Core\RichWebApi.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj" />
+      <ProjectReference Include="..\RichWebApi.Dependencies.SignalR\RichWebApi.Dependencies.SignalR.csproj" />
       <ProjectReference Include="..\RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj" />
     </ItemGroup>
 

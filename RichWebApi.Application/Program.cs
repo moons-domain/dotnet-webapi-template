@@ -38,6 +38,11 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 
+builder.Services.AddDependencies(b =>
+{
+	b.AddSignalR();
+});
+
 // Add services to the container.
 
 builder.Services.AddControllers();
