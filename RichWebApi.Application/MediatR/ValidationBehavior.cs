@@ -7,17 +7,20 @@ using RichWebApi.Part.Exceptions;
 namespace RichWebApi.MediatR;
 
 public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-	where TRequest : IRequest<TResponse>
+	where TRequest : IBaseRequest
 {
 	private readonly IEnumerable<IValidator<TRequest>> _validators;
 	private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
 
-	public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidationBehavior<TRequest, TResponse>> logger)
+	public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators,
+							  ILogger<ValidationBehavior<TRequest, TResponse>> logger)
 	{
 		_validators = validators;
 		_logger = logger;
 	}
-	public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+
+	public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next,
+										CancellationToken cancellationToken)
 	{
 		await _logger.TimeAsync(async () =>
 		{
@@ -29,12 +32,12 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
 
 			if (failures.Any())
 			{
-				_logger.LogWarning("Validation failed for {Request}, failures: {Failures}",
-					request,
-					failures);
-				throw new BadRequestException(failures.SelectMany(x => x.Errors.Select(f => f.ErrorMessage)));
+				var errors = failures.SelectMany(x => x.Errors).ToArray();
+				_logger.LogWarning("Validation failed for {Request}, failures: {@Failures}", request,
+					errors.Select(e => new { e.ErrorMessage, e.PropertyName, e.ErrorCode }));
+				throw new BadRequestException(errors.Select(f => f.ErrorMessage));
 			}
-		}, "Request {RequestName} validation", typeof(TRequest).Name);
+		}, "validation");
 
 		return await next();
 	}

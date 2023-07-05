@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+﻿using MediatR;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
-using RichWebApi;
+using RichWebApi.MediatR;
+using RichWebApi.Parts.Weather;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -16,7 +18,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 							+ "[{RequestId}] "
 							+ "[{SourceContext:l}] "
 							+ "[{Level:u3}] "
-							+ "{Message:lj}{NewLine}{Exception}";
+							+ "{Message:lj} {Properties:j} {NewLine}{Exception}";
 
 	loggerConfiguration
 		.ReadFrom.Configuration(context.Configuration)
@@ -27,10 +29,12 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 	if (context.HostingEnvironment.IsDevelopment())
 	{
 		loggerConfiguration.WriteTo.Console(
-			outputTemplate: logOutputTemplate,
-			theme: AnsiConsoleTheme.Literate,
-			restrictedToMinimumLevel: LogEventLevel.Debug);
+				outputTemplate: logOutputTemplate,
+				theme: AnsiConsoleTheme.Literate,
+				restrictedToMinimumLevel: LogEventLevel.Debug)
+			.WriteTo.Seq("http://localhost:5341");
 	}
+
 });
 
 
@@ -51,7 +55,11 @@ builder.Services.AddSwaggerGen(s =>
 builder.Services.AddHealthChecks();
 builder.Services
 	.AddMvcCore()
-	.AddCore();
+	.AddWeatherPart();
+
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
 
 var app = builder.Build();
 

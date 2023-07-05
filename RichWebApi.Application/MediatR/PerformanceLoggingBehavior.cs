@@ -1,11 +1,10 @@
 ﻿using RichWebApi.Extensions;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace RichWebApi.MediatR;
 
 public sealed class PerformanceLoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-	where TRequest : IRequest<TResponse>
+	where TRequest : IBaseRequest
 {
 	private readonly ILogger<PerformanceLoggingBehavior<TRequest, TResponse>> _logger;
 
@@ -14,5 +13,5 @@ public sealed class PerformanceLoggingBehavior<TRequest, TResponse> : IPipelineB
 	public Task<TResponse> Handle(TRequest request,
 								  RequestHandlerDelegate<TResponse> next,
 								  CancellationToken cancellationToken)
-		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), "Request {RequestName} performance", typeof(TRequest).Name);
+		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), "performance");
 }

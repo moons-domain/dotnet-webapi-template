@@ -1,4 +1,6 @@
 ﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -12,82 +14,26 @@ public static class LoggerExtensions
 	private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 #endif
 
-	private static void LogPerformanceStart(this ILogger logger, string description, params object[] args)
-	{
-		switch (args.Length)
-		{
-			case >= 1:
-				logger.Log(PerformanceLoggingLevel, $"PERF: Start  [{description}]", args);
-				break;
-			default:
-				logger.Log(
-					PerformanceLoggingLevel,
-					"PERF: Start  [{Description}]", description);
-				break;
-		}
-	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void LogPerformanceStart(this ILogger logger)
+		=> logger.Log(PerformanceLoggingLevel, "PERF: Start");
 
-	private static void LogPerformanceEnd(this ILogger logger, string description, object[] args, Stopwatch sw)
-	{
-		switch (args.Length)
-		{
-			case >= 1:
-				logger.Log(
-					PerformanceLoggingLevel,
-					$"PERF: Finish [{description}] elapsed in {{ElapsedMs}} ms",
-					args.Append(sw.Elapsed.TotalMilliseconds.ToString("F")).ToArray());
-				break;
-			default:
-				logger.Log(
-					PerformanceLoggingLevel,
-					$"PERF: Finish [{description}] elapsed in {{ElapsedMs}} ms",
-					sw.Elapsed.TotalMilliseconds.ToString("F"));
-				break;
-		}
-	}
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void LogPerformanceEnd(this ILogger logger, Stopwatch sw)
+		=> logger.Log(PerformanceLoggingLevel, "PERF: Finish - operation elapsed in {ElapsedMs} ms",
+			sw.Elapsed.TotalMilliseconds.ToString("F"));
 
-	public static Task TimeAsync(this ILogger? logger,
-								 Func<Task> operation,
-								 string description,
-								 params object[] args)
-	{
-		if (operation is null)
-		{
-			throw new ArgumentNullException(nameof(operation), "Operation should be real");
-		}
-
-		if (string.IsNullOrEmpty(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Operation should have description");
-		}
-
-		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
-		{
-			return operation();
-		}
-
-
-		logger.LogPerformanceStart(description, args);
-		var sw = Stopwatch.StartNew();
-		var originalTask = operation();
-		originalTask.ContinueWith(t =>
-		{
-			sw.Stop();
-			logger.LogPerformanceEnd(description, args, sw);
-
-			if (t.Exception is not null)
-			{
-				logger.LogError(t.Exception, "Action [{Description}] ended with an error", description);
-			}
-		}, TaskContinuationOptions.ExecuteSynchronously);
-		return originalTask;
-	}
-
-	public static Task<T> TimeAsync<T>(this ILogger? logger,
-									   Func<Task<T>> operation,
-									   string description,
+	public static async Task TimeAsync(this ILogger? logger,
+									   Func<Task> operation,
+									   [StructuredMessageTemplate] string description,
 									   params object[] args)
 	{
+		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
+		{
+			await operation();
+			return;
+		}
+
 		if (operation is null)
 		{
 			throw new ArgumentNullException(nameof(operation), "Operation should be real");
@@ -98,19 +44,69 @@ public static class LoggerExtensions
 			throw new ArgumentNullException(nameof(description), "Operation should have description");
 		}
 
+		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+		using (logger.BeginScope(description, args))
+		{
+			logger.LogPerformanceStart();
+			var sw = Stopwatch.StartNew();
+
+			try
+			{
+				await operation();
+			}
+			catch (Exception e)
+			{
+				sw.Stop();
+				logger.LogPerformanceEnd(sw);
+				logger.LogError(e, "Action [{Description}] ended with an error", description);
+				throw;
+			}
+			sw.Stop();
+			logger.LogPerformanceEnd(sw);
+		}
+	}
+
+	public static async Task<T> TimeAsync<T>(this ILogger? logger,
+											 Func<Task<T>> operation,
+											 [StructuredMessageTemplate] string description,
+											 params object[] args)
+	{
 		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
 		{
-			return operation();
+			return await operation();
 		}
 
-		logger.LogPerformanceStart(description, args);
-		var sw = Stopwatch.StartNew();
-		var originalTask = operation();
-		originalTask.ContinueWith(_ =>
+		if (operation is null)
 		{
+			throw new ArgumentNullException(nameof(operation), "Operation should be real");
+		}
+
+		if (string.IsNullOrEmpty(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Operation should have description");
+		}
+
+		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+		using (logger.BeginScope(description, args))
+		{
+			logger.LogPerformanceStart();
+			var sw = Stopwatch.StartNew();
+			T? result;
+			try
+			{
+				result = await operation();
+			}
+			catch (Exception e)
+			{
+				sw.Stop();
+				logger.LogPerformanceEnd(sw);
+				logger.LogError(e, "Operation [{Description}] ended with an error", description);
+				throw;
+			}
+
 			sw.Stop();
-			logger.LogPerformanceEnd(description, args, sw);
-		}, TaskContinuationOptions.ExecuteSynchronously);
-		return originalTask;
+			logger.LogPerformanceEnd(sw);
+			return result;
+		}
 	}
 }
