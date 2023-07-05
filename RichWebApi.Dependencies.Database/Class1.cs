@@ -1,4 +1,4 @@
-﻿namespace RichWebApi.Dependencies.Database;
+﻿namespace RichWebApi;
 
 public class Class1
 {

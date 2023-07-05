@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using RichWebApi.Parts.Weather.Operations;
+using RichWebApi.Models;
+using RichWebApi.Operations;
 
 namespace RichWebApi.Controllers;
 

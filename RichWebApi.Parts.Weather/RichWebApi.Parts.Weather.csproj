@@ -6,6 +6,7 @@
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
+        <RootNamespace>RichWebApi</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

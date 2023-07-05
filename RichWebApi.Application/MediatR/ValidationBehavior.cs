@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using RichWebApi.Exceptions;
 using RichWebApi.Extensions;
-using RichWebApi.Part.Exceptions;
 
 namespace RichWebApi.MediatR;
 

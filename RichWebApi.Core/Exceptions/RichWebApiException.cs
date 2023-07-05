@@ -1,4 +1,4 @@
-﻿namespace RichWebApi.Core.Exceptions;
+﻿namespace RichWebApi.Exceptions;
 
 public abstract class RichWebApiException : ApplicationException
 {

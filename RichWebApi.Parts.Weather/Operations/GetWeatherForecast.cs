@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
+using RichWebApi.Models;
 
-namespace RichWebApi.Parts.Weather.Operations;
+namespace RichWebApi.Operations;
 
 public record GetWeatherForecast : IRequest<ICollection<WeatherForecast>>
 {

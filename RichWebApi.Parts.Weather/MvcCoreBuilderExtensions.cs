@@ -1,8 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RichWebApi.Controllers;
-using RichWebApi.Parts.Core;
 
-namespace RichWebApi.Parts.Weather;
+namespace RichWebApi;
 
 public static class MvcCoreBuilderExtensions
 {

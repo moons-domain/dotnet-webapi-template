@@ -1,4 +1,4 @@
-﻿namespace RichWebApi;
+﻿namespace RichWebApi.Models;
 
 public class WeatherForecast
 {

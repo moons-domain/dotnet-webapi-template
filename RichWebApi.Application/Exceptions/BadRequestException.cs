@@ -1,6 +1,4 @@
-﻿using RichWebApi.Core.Exceptions;
-
-namespace RichWebApi.Part.Exceptions;
+﻿namespace RichWebApi.Exceptions;
 
 public class BadRequestException : RichWebApiException
 {

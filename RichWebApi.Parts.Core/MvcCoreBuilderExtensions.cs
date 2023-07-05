@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RichWebApi.Parts.Core;
+namespace RichWebApi;
 
 public static class MvcCoreBuilderExtensions
 {
