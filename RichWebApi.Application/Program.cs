@@ -37,11 +37,9 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 
 });
 
-
-builder.Services.AddDependencies(b =>
-{
-	b.AddSignalR();
-});
+var applicationDependencies = new AppDependenciesBuilder()
+	.AddSignalR(_ => { })
+	.Build();
 
 // Add services to the container.
 
@@ -66,6 +64,8 @@ builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavi
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
 
+builder.Services.AddDependencyServices(applicationDependencies);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -75,6 +75,7 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+
 app.UseHealthChecks(new PathString("/api/health"));
 
 app.UseHttpsRedirection();
@@ -83,4 +84,5 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.UseDependencies(applicationDependencies);
+await app.RunAsync();

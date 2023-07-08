@@ -1,9 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace RichWebApi;
+﻿namespace RichWebApi;
 
 public interface IAppDependenciesBuilder
 {
-	public IAppDependenciesBuilder AddServices(Action<IServiceCollection> configure);
+	public IAppDependenciesBuilder Add(IAppDependency dependency);
 
+	public IReadOnlyCollection<IAppDependency> Build();
 }

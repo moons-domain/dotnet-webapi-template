@@ -1,19 +1,14 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿namespace RichWebApi;
 
-namespace RichWebApi;
-
-internal class AppDependenciesBuilder : IAppDependenciesBuilder
+public class AppDependenciesBuilder : IAppDependenciesBuilder
 {
-	private readonly IServiceCollection _services;
-
-	public AppDependenciesBuilder(IServiceCollection services)
+	private readonly List<IAppDependency> _dependencies = new();
+	public IAppDependenciesBuilder Add(IAppDependency dependency)
 	{
-		_services = services;
-	}
-
-	public IAppDependenciesBuilder AddServices(Action<IServiceCollection> configure)
-	{
-		configure.Invoke(_services);
+		_dependencies.Add(dependency);
 		return this;
 	}
+
+	public IReadOnlyCollection<IAppDependency> Build()
+		=> _dependencies.AsReadOnly();
 }

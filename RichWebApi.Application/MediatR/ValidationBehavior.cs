@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using RichWebApi.Exceptions;
 using RichWebApi.Extensions;
 
@@ -37,7 +36,7 @@ public sealed class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<
 					errors.Select(e => new { e.ErrorMessage, e.PropertyName, e.ErrorCode }));
 				throw new BadRequestException(errors.Select(f => f.ErrorMessage));
 			}
-		}, "validation");
+		}, "MediatR request validation");
 
 		return await next();
 	}
