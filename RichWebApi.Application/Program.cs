@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.MediatR;
@@ -36,7 +36,6 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 	}
 
 });
-
 var applicationDependencies = new AppDependenciesBuilder()
 	.AddSignalR(_ => { })
 	.Build();
@@ -53,6 +52,7 @@ builder.Services.AddSwaggerGen(s =>
 		Title = "RichWebApi",
 		Version = "v1"
 	});
+	s.AddSignalRSwaggerGen();
 });
 
 builder.Services.AddHealthChecks();
@@ -75,7 +75,6 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
-
 app.UseHealthChecks(new PathString("/api/health"));
 
 app.UseHttpsRedirection();
@@ -83,6 +82,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+app.UseRouting();
 app.UseDependencies(applicationDependencies);
 await app.RunAsync();

@@ -13,27 +13,23 @@ public class SignalRDependency : ISignalRDependency
 	private readonly List<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new();
 
 	public void ConfigureServices(IServiceCollection services)
-	{
-		services.AddSignalR(x =>
-			{
-				x.EnableDetailedErrors = true;
-				x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
-			})
-			.AddJsonProtocol(x =>
-				x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
-	}
+		=> services.AddSignalR(x =>
+		{
+			x.EnableDetailedErrors = true;
+			x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+		})
+		.AddJsonProtocol(x =>
+			x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
 
 	public void ConfigureApplication(IApplicationBuilder builder)
-	{
-		builder.UseEndpoints(b =>
+		=> builder.UseEndpoints(b =>
+		{
+			foreach (var hubConfigurator in _hubEndpointsConfigurators)
 			{
-				foreach (var hubConfigurator in _hubEndpointsConfigurators)
-				{
-					hubConfigurator.Invoke(b);
-				}
+				hubConfigurator.Invoke(b);
 			}
-		);
-	}
+		}
+	);
 
 	public ISignalRDependency WithHub<T>(string pattern,
 										 Action<HttpConnectionDispatcherOptions>? configureOptions = null,

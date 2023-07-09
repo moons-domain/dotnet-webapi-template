@@ -12,4 +12,8 @@
       <ProjectReference Include="..\RichWebApi.Dependencies.Core\RichWebApi.Dependencies.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="SignalRSwaggerGen" Version="4.4.0" />
+    </ItemGroup>
+
 </Project>
