@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.MediatR;
@@ -34,8 +33,8 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 				restrictedToMinimumLevel: LogEventLevel.Debug)
 			.WriteTo.Seq("http://localhost:5341");
 	}
-
 });
+
 var applicationDependencies = new AppDependenciesBuilder()
 	.AddSignalR(_ => { })
 	.Build();
@@ -78,10 +77,10 @@ if (app.Environment.IsDevelopment())
 app.UseHealthChecks(new PathString("/api/health"));
 
 app.UseHttpsRedirection();
+app.MapControllers();
+app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
-app.UseRouting();
 app.UseDependencies(applicationDependencies);
 await app.RunAsync();

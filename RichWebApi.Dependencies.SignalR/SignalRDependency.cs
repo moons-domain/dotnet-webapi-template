@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace RichWebApi;
 
-public class SignalRDependency : ISignalRDependency
+internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 {
 	private readonly List<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new();
 
@@ -31,13 +31,24 @@ public class SignalRDependency : ISignalRDependency
 		}
 	);
 
-	public ISignalRDependency WithHub<T>(string pattern,
+	public ISignalRConfigurator WithHub<T>(string pattern,
 										 Action<HttpConnectionDispatcherOptions>? configureOptions = null,
 										 Action<HubEndpointConventionBuilder>? configureConventions = null)
 		where T : Hub
 	{
 		_hubEndpointsConfigurators.Add(b =>
 		{
+			var conventionBuilder = b.MapHub<T>(pattern, configureOptions);
+			configureConventions?.Invoke(conventionBuilder);
+		});
+		return this;
+	}
+
+	public ISignalRConfigurator WithHub<T>(Func<IServiceProvider, (string Pattern, Action<HttpConnectionDispatcherOptions>? ConfigureOptions, Action<HubEndpointConventionBuilder>? ConfigureConventions)> configure) where T : Hub
+	{
+		_hubEndpointsConfigurators.Add(b =>
+		{
+			var (pattern, configureOptions, configureConventions) = configure.Invoke(b.ServiceProvider);
 			var conventionBuilder = b.MapHub<T>(pattern, configureOptions);
 			configureConventions?.Invoke(conventionBuilder);
 		});
