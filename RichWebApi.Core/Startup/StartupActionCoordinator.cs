@@ -27,16 +27,16 @@ internal sealed class StartupActionCoordinator : IStartupActionCoordinator
 			return;
 		}
 
-		_logger.LogDebug("Will run {ActionCount} startup actions: {@Actions}", actions.Count, actions.Select(a => new { a.GetType().Name, a.Order }));
+		_logger.LogDebug("Will run {StartupActionCount} startup actions: {@StartupActions}", actions.Count, actions.Select(a => new { a.GetType().Name, a.Order }));
 		foreach (var actionGroup in actions.GroupBy(x => x.Order))
 		{
 			await _logger.TimeAsync(() =>
 			{
 				var tasks = actionGroup.Select(action => _logger.TimeAsync(
 					() => action.PerformActionAsync(cancellationToken),
-					"run startup action {Action}", actionGroup.GetType().Name));
+					"run startup action '{StartupActionName}'", action.GetType().Name));
 				return Task.WhenAll(tasks);
-			}, "run startup action group {GroupKey}", actionGroup.Key);
+			}, "run startup action group '{StartupActionGroupKey}'", actionGroup.Key);
 		}
 	}, "startup");
 }

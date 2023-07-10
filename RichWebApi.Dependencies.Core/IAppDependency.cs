@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace RichWebApi;
 
-public interface IAppDependency
+public interface IAppDependency : IServiceCollectionConfigurator
 {
-	public void ConfigureServices(IServiceCollection services);
-
-	public void ConfigureApplication(IApplicationBuilder builder);
+	void ConfigureApplication(IApplicationBuilder builder);
 }
