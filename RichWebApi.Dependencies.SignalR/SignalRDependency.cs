@@ -13,27 +13,41 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 	private readonly List<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new();
 
 	public void ConfigureServices(IServiceCollection services)
-		=> services.AddSignalR(x =>
+	{
+		if (_hubEndpointsConfigurators.Count == 0)
 		{
-			x.EnableDetailedErrors = true;
-			x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
-		})
-		.AddJsonProtocol(x =>
-			x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+			return;
+		}
+
+		services.AddSignalR(x =>
+			{
+				x.EnableDetailedErrors = true;
+				x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+			})
+			.AddJsonProtocol(x =>
+				x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+	}
 
 	public void ConfigureApplication(IApplicationBuilder builder)
-		=> builder.UseEndpoints(b =>
+	{
+		if (_hubEndpointsConfigurators.Count == 0)
 		{
-			foreach (var hubConfigurator in _hubEndpointsConfigurators)
-			{
-				hubConfigurator.Invoke(b);
-			}
+			return;
 		}
-	);
+
+		builder.UseEndpoints(b =>
+			{
+				foreach (var hubConfigurator in _hubEndpointsConfigurators)
+				{
+					hubConfigurator.Invoke(b);
+				}
+			}
+		);
+	}
 
 	public ISignalRConfigurator WithHub<T>(string pattern,
-										 Action<HttpConnectionDispatcherOptions>? configureOptions = null,
-										 Action<HubEndpointConventionBuilder>? configureConventions = null)
+										   Action<HttpConnectionDispatcherOptions>? configureOptions = null,
+										   Action<HubEndpointConventionBuilder>? configureConventions = null)
 		where T : Hub
 	{
 		_hubEndpointsConfigurators.Add(b =>
@@ -44,7 +58,9 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 		return this;
 	}
 
-	public ISignalRConfigurator WithHub<T>(Func<IServiceProvider, (string Pattern, Action<HttpConnectionDispatcherOptions>? ConfigureOptions, Action<HubEndpointConventionBuilder>? ConfigureConventions)> configure) where T : Hub
+	public ISignalRConfigurator WithHub<T>(
+		Func<IServiceProvider, (string Pattern, Action<HttpConnectionDispatcherOptions>? ConfigureOptions,
+			Action<HubEndpointConventionBuilder>? ConfigureConventions)> configure) where T : Hub
 	{
 		_hubEndpointsConfigurators.Add(b =>
 		{
