@@ -10,7 +10,7 @@ namespace RichWebApi;
 
 internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 {
-	private readonly List<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new();
+	private readonly IList<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new List<Action<IEndpointRouteBuilder>>();
 
 	public void ConfigureServices(IServiceCollection services)
 	{

@@ -2,13 +2,13 @@
 
 public class AppDependenciesBuilder : IAppDependenciesBuilder
 {
-	private readonly List<IAppDependency> _dependencies = new();
+	private readonly IDictionary<Type, IAppDependency> _dependencies = new Dictionary<Type, IAppDependency>();
 	public IAppDependenciesBuilder Add(IAppDependency dependency)
 	{
-		_dependencies.Add(dependency);
+		_dependencies.TryAdd(dependency.GetType(), dependency);
 		return this;
 	}
 
 	public IReadOnlyCollection<IAppDependency> Build()
-		=> _dependencies.AsReadOnly();
+		=> _dependencies.Values.ToList().AsReadOnly();
 }
