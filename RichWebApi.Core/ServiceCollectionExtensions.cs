@@ -13,4 +13,11 @@ public static class ServiceCollectionExtensions
 		services.TryAddSingleton<IApplicationMaintenance, ApplicationMaintenance>();
 		return services;
 	}
+
+	public static IServiceCollection AddStartupAction<T>(this IServiceCollection services) where T : IAsyncStartupAction
+	{
+		services.TryAddEnumerable(new ServiceDescriptor(typeof(IAsyncStartupAction), typeof(T),
+			ServiceLifetime.Scoped));
+		return services;
+	}
 }
