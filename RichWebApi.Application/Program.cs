@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using AutoMapper.EquivalencyExpression;
+using MediatR;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.Maintenance;
 using RichWebApi.MediatR;
 using RichWebApi.Middleware;
+using RichWebApi.Parts;
 using RichWebApi.Startup;
 using Serilog;
 using Serilog.Events;
@@ -40,16 +42,19 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 	}
 });
 
-var applicationDependencies = new AppDependenciesBuilder()
-	.AddSignalR(_ => { })
-	.Build();
+var applicationDependencies = new AppDependenciesCollection()
+	.AddSignalR(_ => { });
+
+var applicationParts = new AppPartsCollection()
+	.AddWeather();
 
 // Add services to the container.
+var services = builder.Services;
 
-builder.Services.AddControllers();
+services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(s =>
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen(s =>
 {
 	s.SwaggerDoc("v1", new OpenApiInfo
 	{
@@ -59,19 +64,21 @@ builder.Services.AddSwaggerGen(s =>
 	s.AddSignalRSwaggerGen();
 });
 
-builder.Services
+services
 	.AddCore();
 
-builder.Services.AddHealthChecks();
-builder.Services
-	.AddMvcCore()
-	.AddWeatherPart();
+services.AddHealthChecks();
 
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
 
-builder.Services.AddDependencyServices(applicationDependencies);
+
+services.AddAutoMapper(x => x.AddCollectionMappers(), typeof(Program).Assembly);
+services.EnrichWithApplicationParts(applicationParts);
+services.AddDependencyServices(applicationDependencies);
+
+services.AddStartupAction<AutoMapperValidationAction>();
 
 var app = builder.Build();
 
