@@ -14,15 +14,6 @@ public static class LoggerExtensions
 	private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 #endif
 
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static void LogPerformanceStart(this ILogger logger)
-		=> logger.Log(PerformanceLoggingLevel, "PERF: Start");
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	private static void LogPerformanceEnd(this ILogger logger, Stopwatch sw)
-		=> logger.Log(PerformanceLoggingLevel, "PERF: Finish - operation elapsed in {ElapsedMs} ms",
-			sw.Elapsed.TotalMilliseconds.ToString("F"));
-
 	public static async Task TimeAsync(this ILogger? logger,
 									   Func<Task> operation,
 									   [StructuredMessageTemplate] string description,
@@ -34,15 +25,7 @@ public static class LoggerExtensions
 			return;
 		}
 
-		if (operation is null)
-		{
-			throw new ArgumentNullException(nameof(operation), "Operation should be real");
-		}
-
-		if (string.IsNullOrEmpty(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Operation should have description");
-		}
+		AssertOperationCanBeTimed(operation, description);
 
 		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
 		using (logger.BeginScope(description, args))
@@ -76,15 +59,7 @@ public static class LoggerExtensions
 			return await operation();
 		}
 
-		if (operation is null)
-		{
-			throw new ArgumentNullException(nameof(operation), "Operation should be real");
-		}
-
-		if (string.IsNullOrEmpty(description))
-		{
-			throw new ArgumentNullException(nameof(description), "Operation should have description");
-		}
+		AssertOperationCanBeTimed(operation, description);
 
 		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
 		using (logger.BeginScope(description, args))
@@ -107,6 +82,29 @@ public static class LoggerExtensions
 			sw.Stop();
 			logger.LogPerformanceEnd(sw);
 			return result;
+		}
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void LogPerformanceStart(this ILogger logger)
+		=> logger.Log(PerformanceLoggingLevel, "PERF: Start");
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void LogPerformanceEnd(this ILogger logger, Stopwatch sw)
+		=> logger.Log(PerformanceLoggingLevel, "PERF: Finish - operation elapsed in {ElapsedMs} ms",
+			sw.Elapsed.TotalMilliseconds.ToString("F"));
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	private static void AssertOperationCanBeTimed(Delegate operation, string description)
+	{
+		if (operation is null)
+		{
+			throw new ArgumentNullException(nameof(operation), "Operation should be real");
+		}
+
+		if (string.IsNullOrEmpty(description))
+		{
+			throw new ArgumentNullException(nameof(description), "Operation should have description");
 		}
 	}
 }

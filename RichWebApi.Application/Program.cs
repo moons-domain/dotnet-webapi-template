@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.MediatR;
@@ -34,9 +33,11 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 				restrictedToMinimumLevel: LogEventLevel.Debug)
 			.WriteTo.Seq("http://localhost:5341");
 	}
-
 });
 
+var applicationDependencies = new AppDependenciesBuilder()
+	.AddSignalR(_ => { })
+	.Build();
 
 // Add services to the container.
 
@@ -50,6 +51,7 @@ builder.Services.AddSwaggerGen(s =>
 		Title = "RichWebApi",
 		Version = "v1"
 	});
+	s.AddSignalRSwaggerGen();
 });
 
 builder.Services.AddHealthChecks();
@@ -60,6 +62,8 @@ builder.Services
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+
+builder.Services.AddDependencyServices(applicationDependencies);
 
 var app = builder.Build();
 
@@ -73,9 +77,10 @@ if (app.Environment.IsDevelopment())
 app.UseHealthChecks(new PathString("/api/health"));
 
 app.UseHttpsRedirection();
+app.MapControllers();
+app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllers();
-
-app.Run();
+app.UseDependencies(applicationDependencies);
+await app.RunAsync();

@@ -13,5 +13,5 @@ public sealed class PerformanceLoggingBehavior<TRequest, TResponse> : IPipelineB
 	public Task<TResponse> Handle(TRequest request,
 								  RequestHandlerDelegate<TResponse> next,
 								  CancellationToken cancellationToken)
-		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), "performance");
+		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), "MediatR request performance");
 }
