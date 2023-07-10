@@ -1,7 +1,10 @@
 ﻿using MediatR;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
+using RichWebApi.Maintenance;
 using RichWebApi.MediatR;
+using RichWebApi.Middleware;
+using RichWebApi.Startup;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
@@ -13,11 +16,13 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 	// When something wrong with logging - uncomment the line below
 	// Serilog.Debugging.SelfLog.Enable(Console.Error);
 
-	var logOutputTemplate = "[{Timestamp:HH:mm:ss.fff}] "
-							+ "[{RequestId}] "
-							+ "[{SourceContext:l}] "
-							+ "[{Level:u3}] "
-							+ "{Message:lj} {Properties:j} {NewLine}{Exception}";
+	const string logOutputTemplate = "[{Timestamp:HH:mm:ss.fff}] "
+									 + "[{RequestId}] "
+									 + "[{SourceContext:l}] "
+									 + "[{Level:u3}] "
+									 + "{Message:lj}{NewLine}"
+									 + "{Properties:j}{NewLine}"
+									 + "{Exception}";
 
 	loggerConfiguration
 		.ReadFrom.Configuration(context.Configuration)
@@ -54,6 +59,9 @@ builder.Services.AddSwaggerGen(s =>
 	s.AddSignalRSwaggerGen();
 });
 
+builder.Services
+	.AddCore();
+
 builder.Services.AddHealthChecks();
 builder.Services
 	.AddMvcCore()
@@ -75,12 +83,39 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHealthChecks(new PathString("/api/health"));
+app.UseMiddleware<MaintenanceMiddleware>();
 
 app.UseHttpsRedirection();
 app.MapControllers();
 app.UseRouting();
 
 app.UseAuthorization();
-
 app.UseDependencies(applicationDependencies);
-await app.RunAsync();
+
+var lifetime = app.Lifetime;
+
+try
+{
+	var appRunner = app.RunAsync();
+	lifetime.ApplicationStarted.WaitHandle.WaitOne();
+
+	await using (var scope = app.Services.CreateAsyncScope())
+	{
+		var sp = scope.ServiceProvider;
+		var maintenance = sp.GetRequiredService<IApplicationMaintenance>();
+		maintenance.Enable("startup");
+		await sp.GetRequiredService<IStartupActionCoordinator>()
+			.PerformStartupActionsAsync(lifetime.ApplicationStopping);
+		maintenance.Disable();
+	}
+
+	await appRunner;
+}
+catch (Exception e)
+{
+	Log.Error(e, "Application exited with error");
+}
+finally
+{
+	await Log.CloseAndFlushAsync();
+}
