@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using JetBrains.Annotations;
 
 namespace RichWebApi.Startup;
 
+[UsedImplicitly]
 public class AutoMapperValidationAction : IAsyncStartupAction
 {
 	private readonly IMapper _mapper;

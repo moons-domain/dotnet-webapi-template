@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Internal;
 using RichWebApi.Maintenance;
 using RichWebApi.Startup;
 
@@ -11,6 +12,7 @@ public static class ServiceCollectionExtensions
 	{
 		services.TryAddTransient<IStartupActionCoordinator, StartupActionCoordinator>();
 		services.TryAddSingleton<IApplicationMaintenance, ApplicationMaintenance>();
+		services.TryAddSingleton<ISystemClock, SystemClock>();
 		return services;
 	}
 

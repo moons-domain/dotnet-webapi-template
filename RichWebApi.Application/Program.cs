@@ -13,7 +13,11 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, loggerConfiguration) =>
+builder.Configuration
+	.AddEnvironmentVariables()
+	.AddUserSecrets<Program>(true, true);
+
+builder.Host.UseSerilog((context, sp, loggerConfiguration) =>
 {
 	// When something wrong with logging - uncomment the line below
 	// Serilog.Debugging.SelfLog.Enable(Console.Error);
@@ -43,6 +47,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 var applicationDependencies = new AppDependenciesCollection()
+	.AddDatabase(builder.Environment)
 	.AddSignalR(_ => { });
 
 var applicationParts = new AppPartsCollection()
