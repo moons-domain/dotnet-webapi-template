@@ -10,10 +10,7 @@ public class AuditSaveChangesReactor : ISaveChangesReactor
 {
 	private readonly ISystemClock _clock;
 
-	public AuditSaveChangesReactor(ISystemClock clock)
-	{
-		_clock = clock;
-	}
+	public AuditSaveChangesReactor(ISystemClock clock) => _clock = clock;
 
 	public uint Order => 0;
 
@@ -36,11 +33,11 @@ public class AuditSaveChangesReactor : ISaveChangesReactor
 				switch (entry.State)
 				{
 					case EntityState.Modified:
-						auditable.LastUpdatedAt = now;
+						auditable.ModifiedAt = now;
 						break;
 					case EntityState.Added:
 						auditable.CreatedAt = now;
-						auditable.LastUpdatedAt = now;
+						auditable.ModifiedAt = now;
 						break;
 					case EntityState.Detached:
 					case EntityState.Unchanged:

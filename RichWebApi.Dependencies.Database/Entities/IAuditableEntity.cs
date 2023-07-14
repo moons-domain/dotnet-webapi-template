@@ -5,5 +5,5 @@ public interface IAuditableEntity : IEntity
 {
 	public DateTime CreatedAt { get; set; }
 
-	public DateTime LastUpdatedAt { get; set; }
+	public DateTime ModifiedAt { get; set; }
 }

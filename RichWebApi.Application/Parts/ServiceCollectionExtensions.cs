@@ -25,7 +25,8 @@ public static class ServiceCollectionExtensions
 		services.AddValidatorsFromAssemblies(assembliesList, includeInternalTypes: true)
 			.AddMediatR(x => x.RegisterServicesFromAssemblies(assembliesList))
 			.AddSwaggerGen(s => s.AddSignalRSwaggerGen(options => options.ScanAssemblies(assembliesList)))
-			.AddAutoMapper(assembliesList);
+			.AddAutoMapper(assembliesList)
+			.CollectDatabaseEntities(assembliesList);
 		return services;
 	}
 }

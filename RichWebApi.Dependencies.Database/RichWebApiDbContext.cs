@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
 
 namespace RichWebApi;
@@ -6,9 +7,25 @@ namespace RichWebApi;
 public sealed class RichWebApiDbContext : DbContext
 {
 	private readonly IEnumerable<ISaveChangesReactor> _saveChangesReactors;
+	private readonly IDatabaseConfigurator _databaseConfigurator;
 
-	public RichWebApiDbContext(IEnumerable<ISaveChangesReactor> saveChangesReactors)
-		=> _saveChangesReactors = saveChangesReactors;
+	public RichWebApiDbContext(IEnumerable<ISaveChangesReactor> saveChangesReactors, IDatabaseConfigurator databaseConfigurator)
+	{
+		_saveChangesReactors = saveChangesReactors;
+		_databaseConfigurator = databaseConfigurator;
+	}
+
+	protected override void OnModelCreating(ModelBuilder builder)
+	{
+		base.OnModelCreating(builder);
+		_databaseConfigurator.OnModelCreating(builder);
+	}
+
+	protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+	{
+		base.ConfigureConventions(configurationBuilder);
+		_databaseConfigurator.ConfigureConventions(configurationBuilder, Database);
+	}
 
 	public override int SaveChanges(bool acceptAllChangesOnSuccess) => throw new NotSupportedException();
 

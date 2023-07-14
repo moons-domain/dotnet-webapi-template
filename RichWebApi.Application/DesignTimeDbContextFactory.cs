@@ -5,7 +5,7 @@ using Microsoft.Extensions.FileProviders;
 namespace RichWebApi;
 
 [UsedImplicitly]
-public class DesignTimeContextFactory : IDesignTimeDbContextFactory<RichWebApiDbContext>
+public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<RichWebApiDbContext>
 {
 	private sealed class DummyEnvironment : IWebHostEnvironment
 	{
