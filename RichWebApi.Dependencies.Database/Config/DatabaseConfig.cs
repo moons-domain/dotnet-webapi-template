@@ -30,7 +30,7 @@ public class DatabaseConfig
 		public DevEnvValidator()
 		{
 			Include(new CommonValidator());
-			RuleFor(x => x.ConnectionString).SqlServerConnectionString();
+			RuleFor(x => x.ConnectionString).NotNull().NotEmpty().SqlServerConnectionString();
 		}
 	}
 
@@ -38,7 +38,7 @@ public class DatabaseConfig
 	{
 		public CommonValidator()
 		{
-			RuleFor(x => x.Retries).GreaterThanOrEqualTo(0);
+			RuleFor(x => x.Retries).GreaterThan(0);
 			RuleFor(x => x.Timeout).GreaterThan(0);
 		}
 	}
@@ -49,7 +49,9 @@ public class DatabaseConfig
 		public ProdEnvValidator()
 		{
 			void ConnectionStringPart(Expression<Func<DatabaseConfig, string>> expr)
-				=> RuleFor(expr).MinimumLength(1).Must(x => !x.Contains(';'));
+				=> RuleFor(expr)
+					.Must(x => !string.IsNullOrEmpty(x) && !x.Contains(';'))
+					.WithMessage("Should be real and not contain restricted characters");
 
 			Include(new CommonValidator());
 			RuleFor(x => x.Port).GreaterThan((ushort)0);

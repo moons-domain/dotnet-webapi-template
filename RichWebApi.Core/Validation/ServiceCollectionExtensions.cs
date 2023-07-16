@@ -16,16 +16,16 @@ public static class ServiceCollectionExtensions
 		where TValidator : AbstractValidator<TOptions>
 	{
 		services.TryAddTransient<IValidator<TOptions>, TValidator>();
-		services
-			.AddOptions<TOptions>()
-			.BindConfiguration(configurationSection)
-			.ValidateDataAnnotations()
-			.ValidateOnStart();
 		services.TryAddSingleton<IValidateOptions<TOptions>>(x
 			=> new FluentOptionValidator<TOptions>(configurationSection,
 				x.GetRequiredService<IValidator<TOptions>>(),
 				x.GetRequiredService<IHostEnvironment>(),
 				x.GetRequiredService<ILogger<FluentOptionValidator<TOptions>>>()));
+		services
+			.AddOptions<TOptions>()
+			.BindConfiguration(configurationSection)
+			.ValidateDataAnnotations()
+			.ValidateOnStart();
 		return services;
 	}
 }

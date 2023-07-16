@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
 using RichWebApi.Startup;
 using RichWebApi.Utilities;
+using RichWebApi.Utilities.Paging;
 using RichWebApi.Validation;
 
 namespace RichWebApi;
@@ -59,6 +61,7 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
 		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();
+		services.TryAddScoped<IValidator<IPagedRequest>, IPagedRequest.Validator>();
 	}
 
 	public void ConfigureApplication(IApplicationBuilder builder)

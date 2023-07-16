@@ -7,6 +7,7 @@ using RichWebApi.Entities.Configuration;
 namespace RichWebApi.Entities;
 
 [Table("WeatherForecasts", Schema = "weather")]
+[Comment("Weather per day forecasts")]
 public class WeatherForecast : IAuditableEntity, ISoftDeletableEntity
 {
 	public long WeatherForecastId { get; set; }
@@ -30,7 +31,9 @@ public class WeatherForecast : IAuditableEntity, ISoftDeletableEntity
 			base.Configure(builder);
 			builder.HasKey(x => x.WeatherForecastId);
 			builder.Property(x => x.Date).HasColumnType("date");
-			builder.HasIndex(x => new { x.Date, x.DeletedAt }).IsUnique();
+			builder.HasIndex(x => new { x.Date, x.DeletedAt })
+				.IsUnique()
+				.HasFilter(null);
 			builder.HasData(new WeatherForecast
 			{
 				WeatherForecastId = 1,

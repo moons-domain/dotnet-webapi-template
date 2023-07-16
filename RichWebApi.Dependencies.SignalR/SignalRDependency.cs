@@ -46,10 +46,6 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 		);
 	}
 
-	public void EnrichServicesFromAssemblies(IServiceCollection services, Assembly[] assemblies)
-	{
-	}
-
 	public ISignalRConfigurator WithHub<T>(string pattern,
 										   Action<HttpConnectionDispatcherOptions>? configureOptions = null,
 										   Action<HubEndpointConventionBuilder>? configureConventions = null)

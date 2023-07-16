@@ -41,21 +41,13 @@ public class FluentOptionValidator<T> : IValidateOptions<T>
 
 			return ValidateOptionsResult.Success;
 		}
-
-		var firstError = result.Errors.First();
-		var value = result
-			.Errors
-			.Select(x => x.AttemptedValue)
-			.FirstOrDefault(x => x != null);
-		var configurationKey = _configurationSection + ":" + firstError.PropertyName;
 		var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
-		var errorMessage = $"Config key {configurationKey} contains an invalid value of \"{value}\", reasons:"
+		var errorMessage = $"Config section '{_configurationSection}' is invalid, reasons:"
 						   + Environment.NewLine
 						   + string.Join(Environment.NewLine, errorMessages);
 
-		_logger.LogError("Config key {ConfigKey} contains an invalid value of \"{InvalidValue}\", reasons: {@Reasons}",
-			configurationKey,
-			value,
+		_logger.LogError("Config section '{ConfigurationSection}' is invalid, reasons: {@Reasons}",
+			_configurationSection,
 			errorMessages);
 		return ValidateOptionsResult.Fail(errorMessage);
 	}
