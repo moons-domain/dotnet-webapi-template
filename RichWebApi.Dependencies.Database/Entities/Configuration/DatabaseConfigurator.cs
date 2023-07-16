@@ -11,7 +11,7 @@ public class DatabaseConfigurator : IDatabaseConfigurator
 	private readonly ILogger<DatabaseConfigurator> _logger;
 
 	public DatabaseConfigurator(IEnumerable<INonGenericEntityConfiguration> configurations,
-							  ILogger<DatabaseConfigurator> logger)
+								ILogger<DatabaseConfigurator> logger)
 	{
 		_configurations = configurations;
 		_logger = logger;
@@ -19,6 +19,8 @@ public class DatabaseConfigurator : IDatabaseConfigurator
 
 	public void OnModelCreating(ModelBuilder modelBuilder) => _logger.Time(() =>
 	{
+		_logger.LogInformation($"{nameof(OnModelCreating)}({{Count}})", _configurations.Count());
+
 		foreach (var configuration in _configurations)
 		{
 			if (configuration is IIgnoredEntityConfiguration)
@@ -52,6 +54,7 @@ public class DatabaseConfigurator : IDatabaseConfigurator
 	{
 		var configurationGenericInterface = configurationType
 			.GetInterface(typeof(IEntityTypeConfiguration<>).Name);
+
 		if (configurationGenericInterface is null)
 		{
 			throw new InvalidOperationException(string.Format(
@@ -72,6 +75,7 @@ public class DatabaseConfigurator : IDatabaseConfigurator
 
 		var configureMethod =
 			configurationType.GetMethod(nameof(IEntityTypeConfiguration<object>.Configure));
+
 		if (configureMethod is null)
 		{
 			throw new InvalidOperationException(string.Format(

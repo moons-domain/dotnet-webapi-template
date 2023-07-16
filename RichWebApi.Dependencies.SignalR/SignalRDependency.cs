@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Reflection;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Connections;
@@ -43,6 +44,10 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 				}
 			}
 		);
+	}
+
+	public void EnrichServicesFromAssemblies(IServiceCollection services, Assembly[] assemblies)
+	{
 	}
 
 	public ISignalRConfigurator WithHub<T>(string pattern,

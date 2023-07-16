@@ -5,7 +5,7 @@ using RichWebApi.Models;
 
 namespace RichWebApi.Operations;
 
-public record GetWeatherForecast : IRequest<ICollection<WeatherForecast>>
+public record GetWeatherForecast : IRequest<ICollection<WeatherForecastDto>>
 {
 	[UsedImplicitly]
 	public class Validator : AbstractValidator<GetWeatherForecast>
@@ -13,18 +13,18 @@ public record GetWeatherForecast : IRequest<ICollection<WeatherForecast>>
 	}
 
 	[UsedImplicitly]
-	public class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, ICollection<WeatherForecast>>
+	public class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, ICollection<WeatherForecastDto>>
 	{
 		private static readonly string[] summaries = {
 			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 		};
 
-		public Task<ICollection<WeatherForecast>> Handle(GetWeatherForecast request,
+		public Task<ICollection<WeatherForecastDto>> Handle(GetWeatherForecast request,
 														 CancellationToken cancellationToken)
 		{
-			ICollection<WeatherForecast> result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+			ICollection<WeatherForecastDto> result = Enumerable.Range(1, 5).Select(index => new WeatherForecastDto
 			{
-				Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
+				Date = DateTime.Now.AddDays(index),
 				TemperatureC = Random.Shared.Next(-20, 55),
 				Summary = summaries[Random.Shared.Next(summaries.Length)]
 			})

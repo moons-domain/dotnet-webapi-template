@@ -22,6 +22,37 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Dat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{40A0E382-FEF5-4F37-A4C4-72BCA1C9DCCD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{7C0470FC-178E-42F2-983B-7672E0F0B57E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+		.lintstagedrc.js = .lintstagedrc.js
+		CODEOWNERS = CODEOWNERS
+		package.json = package.json
+		package-lock.json = package-lock.json
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nix", "nix", "{D6C11702-27B4-4F33-A24F-7DB36F8F8C8A}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\nix\add-migration.sh = scripts\nix\add-migration.sh
+		scripts\nix\list-migrations.sh = scripts\nix\list-migrations.sh
+		scripts\nix\recreate-initial.sh = scripts\nix\recreate-initial.sh
+		scripts\nix\remove-last-migration.sh = scripts\nix\remove-last-migration.sh
+		scripts\nix\update-db.sh = scripts\nix\update-db.sh
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{C48A2076-5D0C-4252-9E4D-77D20791F147}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win", "win", "{BEB5FEE9-12A5-453C-BA7F-168D7990B0E5}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\win\add-migration.bat = scripts\win\add-migration.bat
+		scripts\win\list-migrations.bat = scripts\win\list-migrations.bat
+		scripts\win\recreate-initial.bat = scripts\win\recreate-initial.bat
+		scripts\win\remove-last-migration.bat = scripts\win\remove-last-migration.bat
+		scripts\win\update-db.bat = scripts\win\update-db.bat
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,5 +100,8 @@ Global
 		{40A0E382-FEF5-4F37-A4C4-72BCA1C9DCCD} = {E7D89A8D-9835-4A6D-BA2C-97C75CAB1893}
 		{30C0B70C-6CA9-4662-BA51-6874C4B5EB09} = {40A0E382-FEF5-4F37-A4C4-72BCA1C9DCCD}
 		{C2EB3CF2-14E4-4FF3-BAEB-ED2C194BE0C8} = {40A0E382-FEF5-4F37-A4C4-72BCA1C9DCCD}
+		{C48A2076-5D0C-4252-9E4D-77D20791F147} = {7C0470FC-178E-42F2-983B-7672E0F0B57E}
+		{D6C11702-27B4-4F33-A24F-7DB36F8F8C8A} = {C48A2076-5D0C-4252-9E4D-77D20791F147}
+		{BEB5FEE9-12A5-453C-BA7F-168D7990B0E5} = {C48A2076-5D0C-4252-9E4D-77D20791F147}
 	EndGlobalSection
 EndGlobal

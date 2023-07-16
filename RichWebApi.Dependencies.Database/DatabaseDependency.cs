@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
+using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
 using RichWebApi.Startup;
 using RichWebApi.Utilities;
@@ -32,7 +34,7 @@ internal class DatabaseDependency : IAppDependency
 			services.AddOptionsWithValidator<DatabaseConfig, DatabaseConfig.ProdEnvValidator>(ConfigurationSection);
 		}
 
-		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.FullName}.Migrations";
+		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.GetName().Name}.Migrations";
 		services.AddDbContext<RichWebApiDbContext>((sp, dbContextOptionsBuilder) =>
 		{
 			var host = sp.GetRequiredService<IWebHostEnvironment>();
@@ -56,6 +58,7 @@ internal class DatabaseDependency : IAppDependency
 		services.AddSaveChangesReactor<AuditSaveChangesReactor>();
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
+		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();
 	}
 
 	public void ConfigureApplication(IApplicationBuilder builder)

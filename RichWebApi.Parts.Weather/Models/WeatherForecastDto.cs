@@ -1,8 +1,8 @@
 ﻿namespace RichWebApi.Models;
 
-public class WeatherForecast
+public class WeatherForecastDto
 {
-	public DateOnly Date { get; set; }
+	public DateTime Date { get; set; }
 
 	public int TemperatureC { get; set; }
 

@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Linq.Expressions;
+using FluentValidation;
 using JetBrains.Annotations;
 using RichWebApi.Validation;
 
@@ -47,12 +48,15 @@ public class DatabaseConfig
 	{
 		public ProdEnvValidator()
 		{
+			void ConnectionStringPart(Expression<Func<DatabaseConfig, string>> expr)
+				=> RuleFor(expr).MinimumLength(1).Must(x => !x.Contains(';'));
+
 			Include(new CommonValidator());
 			RuleFor(x => x.Port).GreaterThan((ushort)0);
-			RuleFor(x => x.Host).MinimumLength(1);
-			RuleFor(x => x.Password).MinimumLength(1);
-			RuleFor(x => x.Username).MinimumLength(1);
-			RuleFor(x => x.DbInstanceIdentifier).MinimumLength(1);
+			ConnectionStringPart(x => x.Host);
+			ConnectionStringPart(x => x.Password);
+			ConnectionStringPart(x => x.Username);
+			ConnectionStringPart(x => x.DbInstanceIdentifier);
 			RuleFor(x
 					=> $"Server=tcp:{x.Host},{x.Port};Initial Catalog={x.DbInstanceIdentifier};User ID={x.Username};Password={x.Password}")
 				.SqlServerConnectionString();

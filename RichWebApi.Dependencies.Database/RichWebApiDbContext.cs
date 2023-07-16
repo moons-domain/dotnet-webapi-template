@@ -9,7 +9,9 @@ public sealed class RichWebApiDbContext : DbContext
 	private readonly IEnumerable<ISaveChangesReactor> _saveChangesReactors;
 	private readonly IDatabaseConfigurator _databaseConfigurator;
 
-	public RichWebApiDbContext(IEnumerable<ISaveChangesReactor> saveChangesReactors, IDatabaseConfigurator databaseConfigurator)
+	public RichWebApiDbContext(IEnumerable<ISaveChangesReactor> saveChangesReactors,
+							   IDatabaseConfigurator databaseConfigurator,
+							   DbContextOptions<RichWebApiDbContext> options) : base(options)
 	{
 		_saveChangesReactors = saveChangesReactors;
 		_databaseConfigurator = databaseConfigurator;
