@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -19,7 +20,7 @@ public static class ServiceCollectionExtensions
 		services.TryAddSingleton<IValidateOptions<TOptions>>(x
 			=> new FluentOptionValidator<TOptions>(configurationSection,
 				x.GetRequiredService<IValidator<TOptions>>(),
-				x.GetRequiredService<IHostEnvironment>(),
+				x.GetRequiredService<IWebHostEnvironment>(),
 				x.GetRequiredService<ILogger<FluentOptionValidator<TOptions>>>()));
 		services
 			.AddOptions<TOptions>()

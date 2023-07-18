@@ -19,8 +19,6 @@ public class DatabaseConfigurator : IDatabaseConfigurator
 
 	public void OnModelCreating(ModelBuilder modelBuilder) => _logger.Time(() =>
 	{
-		_logger.LogInformation($"{nameof(OnModelCreating)}({{Count}})", _configurations.Count());
-
 		foreach (var configuration in _configurations)
 		{
 			if (configuration is IIgnoredEntityConfiguration)

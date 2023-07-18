@@ -1,9 +1,12 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
+using RichWebApi.Persistence.Internal;
 
 namespace RichWebApi.Persistence;
 
+[UsedImplicitly]
 public class ValidationSaveChangesReactor : ISaveChangesReactor
 {
 	private readonly IServiceProvider _serviceProvider;
@@ -17,28 +20,35 @@ public class ValidationSaveChangesReactor : ISaveChangesReactor
 
 	public async ValueTask ReactAsync(RichWebApiDbContext context, CancellationToken cancellationToken = default)
 	{
+		var validatorsProvider = _serviceProvider.GetRequiredService<IEntityValidatorsProvider>();
 		var entriesByType = context.ChangeTracker.Entries()
 			.GroupBy(x => x.Metadata.ClrType)
-			.ToDictionary(x => x.Key, x => x.ToArray());
-		var validatorType = typeof(IValidator<>);
-		var failures = new Dictionary<Type, ValidationResult>(entriesByType.Count);
+			.ToDictionary(x => x.Key, x => x.Select(e => e.Entity).ToArray());
+		var failures = new Dictionary<Type, IList<ValidationResult>>(entriesByType.Count);
+
 		foreach (var group in entriesByType)
 		{
-			var concreteValidatorType = typeof(IEnumerable<>).MakeGenericType(validatorType.MakeGenericType(group.Key));
-			var validator = (IValidator)_serviceProvider.GetRequiredService(concreteValidatorType);
-			var validationResult =
-				await validator.ValidateAsync(new ValidationContext<IEnumerable<object>>(group.Value),
-					cancellationToken);
-			if (!validationResult.IsValid)
+			var asyncValidator = validatorsProvider.GetAsyncValidator(_serviceProvider, group.Key);
+
+			if (asyncValidator is null)
 			{
-				failures[group.Key] = validationResult;
+				continue;
+			}
+
+			var tasks = group.Value.Select(x => asyncValidator(x, cancellationToken));
+			var groupResult = await Task.WhenAll(tasks);
+			var groupFailures = groupResult.Where(x => !x.IsValid).ToArray();
+
+			if (groupFailures.Length != 0)
+			{
+				failures[group.Key] = groupFailures;
 			}
 		}
 
 		if (failures.Count != 0)
 		{
 			throw new AggregateException("Entity entries validation failed",
-				failures.Select(x => new ValidationException(x.Key.Name, x.Value.Errors)));
+				failures.SelectMany(x => x.Value.Select(v => new ValidationException(x.Key.Name, v.Errors, true))));
 		}
 	}
 }

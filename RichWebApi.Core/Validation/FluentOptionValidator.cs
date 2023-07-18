@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -10,12 +11,12 @@ public class FluentOptionValidator<T> : IValidateOptions<T>
 {
 	private readonly string _configurationSection;
 	private readonly IValidator<T> _validator;
-	private readonly IHostEnvironment _environment;
+	private readonly IWebHostEnvironment _environment;
 	private readonly ILogger<FluentOptionValidator<T>> _logger;
 
 	public FluentOptionValidator(string configurationSection,
 		IValidator<T> validator,
-		IHostEnvironment environment,
+		IWebHostEnvironment environment,
 		ILogger<FluentOptionValidator<T>> logger)
 	{
 		_configurationSection = configurationSection;

@@ -9,8 +9,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
+using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
+using RichWebApi.Persistence.Internal;
 using RichWebApi.Startup;
 using RichWebApi.Utilities;
 using RichWebApi.Utilities.Paging;
@@ -58,11 +60,20 @@ internal class DatabaseDependency : IAppDependency
 		}, ServiceLifetime.Transient);
 		services.AddStartupAction<DatabaseMigrationAction>();
 		services.AddSaveChangesReactor<AuditSaveChangesReactor>();
+		services.AddSaveChangesReactor<ValidationSaveChangesReactor>();
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
 		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();
+
 		services.TryAddScoped<IValidator<IPagedRequest>, IPagedRequest.Validator>();
+		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
+		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
+		AddInternalServices(services);
 	}
+
+	private void AddInternalServices(IServiceCollection services)
+		=> services.TryAddSingleton<IEntityValidatorsProvider, EntityValidatorsProvider>();
+
 
 	public void ConfigureApplication(IApplicationBuilder builder)
 	{

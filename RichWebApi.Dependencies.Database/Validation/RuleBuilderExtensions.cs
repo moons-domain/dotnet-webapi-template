@@ -4,7 +4,7 @@ using Microsoft.Data.SqlClient;
 
 namespace RichWebApi.Validation;
 
-public static class RuleBuilderExtensions
+internal static class RuleBuilderExtensions
 {
 	public static IRuleBuilder<T, string> SqlServerConnectionString<T>(this IRuleBuilder<T, string> builder) => builder
 		.Custom((value, context) =>
