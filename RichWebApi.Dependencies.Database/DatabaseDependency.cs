@@ -1,9 +1,7 @@
-﻿using System.Reflection;
-using FluentValidation;
+﻿using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -22,10 +20,10 @@ namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
 {
-	private readonly IHostEnvironment _environment;
+	private readonly IWebHostEnvironment _environment;
 	private const string ConfigurationSection = "Database";
 
-	public DatabaseDependency(IHostEnvironment environment) => _environment = environment;
+	public DatabaseDependency(IWebHostEnvironment environment) => _environment = environment;
 
 	public void ConfigureServices(IServiceCollection services)
 	{

@@ -2,7 +2,6 @@
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using RichWebApi.Entities;
 using RichWebApi.Extensions;
 using RichWebApi.Models;

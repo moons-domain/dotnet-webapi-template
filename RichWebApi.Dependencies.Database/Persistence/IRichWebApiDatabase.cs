@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace RichWebApi.Persistence;
+﻿namespace RichWebApi.Persistence;
 
 public interface IRichWebApiDatabase
 {

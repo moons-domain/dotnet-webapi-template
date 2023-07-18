@@ -1,11 +1,8 @@
 ﻿using System.Reflection;
-using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
-using RichWebApi.Persistence.Internal;
 
 namespace RichWebApi;
 
