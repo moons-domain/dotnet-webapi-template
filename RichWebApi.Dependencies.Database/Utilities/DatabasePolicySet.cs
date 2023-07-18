@@ -9,7 +9,7 @@ internal sealed class DatabasePolicySet : IDatabasePolicySet
 {
 	private readonly ILogger<DatabasePolicySet> _logger;
 
-	public DatabasePolicySet(ILogger<DatabasePolicySet> logger) => this._logger = logger;
+	public DatabasePolicySet(ILogger<DatabasePolicySet> logger) => _logger = logger;
 
 	public IAsyncPolicy DatabaseReadPolicy => Policy.WrapAsync(
 			CommonWaitAndRetryOn<SqlException, InvalidOperationException, TimeoutRejectedException>(3)
@@ -25,11 +25,6 @@ internal sealed class DatabasePolicySet : IDatabasePolicySet
 
 	private IAsyncPolicy CommonTimeoutPerTry(TimeSpan timeSpan)
 		=> Policy.TimeoutAsync(timeSpan, TimeoutStrategy.Pessimistic, LogTimeoutAsync);
-
-	private IAsyncPolicy CommonWaitAndRetryOn<T>(int times) where T : Exception => Policy
-		.Handle<T>(x => !(x is TaskCanceledException))
-		.OrInner<T>(x => !(x is TaskCanceledException))
-		.WaitAndRetryAsync(times, x => TimeSpan.FromSeconds(Math.Pow(x, 2) / 2), OnRetry);
 
 	private IAsyncPolicy CommonWaitAndRetryOn<T1, T2, T3>(int times)
 		where T1 : Exception
@@ -53,7 +48,7 @@ internal sealed class DatabasePolicySet : IDatabasePolicySet
 	}
 
 	private void OnRetry(Exception because, TimeSpan goingToWait, Context context) => _logger.LogWarning(because,
-		"{PolicyKey}:{PolicyWrapKey} - failed to do {Operation}. Unless retry count is exceeded, going to wait {Wait} and retry.",
+		"{PolicyKey}:{PolicyWrapKey} - failed to do {Operation}. Unless retry count is exceeded, going to wait {Wait} and retry",
 		context.PolicyKey,
 		context.PolicyWrapKey,
 		context.OperationKey,

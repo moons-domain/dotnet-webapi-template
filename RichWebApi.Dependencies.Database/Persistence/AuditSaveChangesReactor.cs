@@ -1,22 +1,29 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Internal;
+using Microsoft.Extensions.Logging;
 using RichWebApi.Entities;
+using RichWebApi.Extensions;
 
 namespace RichWebApi.Persistence;
 
 [UsedImplicitly]
 public class AuditSaveChangesReactor : ISaveChangesReactor
 {
+	private readonly ILogger<AuditSaveChangesReactor> _logger;
 	private readonly ISystemClock _clock;
 
-	public AuditSaveChangesReactor(ISystemClock clock) => _clock = clock;
+	public AuditSaveChangesReactor(ILogger<AuditSaveChangesReactor> logger, ISystemClock clock)
+	{
+		_logger = logger;
+		_clock = clock;
+	}
 
 	public uint Order => 0;
 
 	public ValueTask ReactAsync(RichWebApiDbContext context, CancellationToken cancellationToken)
 	{
-		OnBeforeSaving(context);
+		_logger.Time(() => OnBeforeSaving(context), "audit tracked db entities");
 		return new ValueTask();
 	}
 

@@ -40,12 +40,6 @@ public sealed class RichWebApiDbContext : DbContext
 		return await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
 	}
 
-	public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-	{
-		await EmitSaveChangesEventAsync(cancellationToken);
-		return await base.SaveChangesAsync(cancellationToken);
-	}
-
 	private async ValueTask EmitSaveChangesEventAsync(CancellationToken cancellationToken)
 	{
 		foreach (var reactor in _saveChangesReactors.OrderBy(x => x.Order))

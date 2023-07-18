@@ -1,5 +1,6 @@
 ﻿using AutoMapper.EquivalencyExpression;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.Maintenance;
@@ -69,6 +70,10 @@ services.AddSwaggerGen(s =>
 	s.AddSignalRSwaggerGen();
 });
 
+services.AddFluentValidationRulesToSwagger(opt => opt.SetFluentValidationCompatibility());
+
+
+
 services
 	.AddCore();
 
@@ -84,6 +89,8 @@ services.EnrichWithApplicationParts(applicationParts);
 services.AddDependencyServices(applicationDependencies);
 
 services.AddStartupAction<AutoMapperValidationAction>();
+
+
 
 var app = builder.Build();
 

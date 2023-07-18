@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using FluentValidation;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace RichWebApi.Parts;
 
@@ -9,6 +10,7 @@ public static class ServiceCollectionExtensions
 																IAppPartsCollection parts)
 	{
 		var partsArray = parts.ToArray();
+		services.TryAddEnumerable(partsArray.Select(x => new ServiceDescriptor(typeof(IAppPart), x)));
 		var mvcCoreBuilder = services.AddMvcCore();
 		var assembliesList = new Assembly[parts.Count];
 		for (var i = 0; i < partsArray.Length; i++)
