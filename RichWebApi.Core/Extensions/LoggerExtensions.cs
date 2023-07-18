@@ -14,6 +14,76 @@ public static class LoggerExtensions
 	private const LogLevel PerformanceLoggingLevel = LogLevel.Debug;
 #endif
 
+	public static void Time(this ILogger? logger,
+							Action operation,
+							[StructuredMessageTemplate] string description,
+							params object[] args
+	)
+	{
+		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
+		{
+			operation();
+			return;
+		}
+
+		AssertOperationCanBeTimed(operation, description);
+		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+		using (logger.BeginScope(description, args))
+		{
+			logger.LogPerformanceStart();
+			var sw = Stopwatch.StartNew();
+
+			try
+			{
+				operation();
+			}
+			catch (Exception e)
+			{
+				sw.Stop();
+				logger.LogPerformanceEnd(sw);
+				logger.LogError(e, "Action [{Description}] ended with an error", description);
+				throw;
+			}
+			sw.Stop();
+			logger.LogPerformanceEnd(sw);
+		}
+	}
+
+	public static T Time<T>(this ILogger? logger,
+							Func<T> operation,
+							[StructuredMessageTemplate] string description,
+							params object[] args
+	)
+	{
+		if (logger is null or NullLogger || !logger.IsEnabled(PerformanceLoggingLevel))
+		{
+			return operation();
+		}
+
+		AssertOperationCanBeTimed(operation, description);
+		// ReSharper disable once TemplateIsNotCompileTimeConstantProblem
+		using (logger.BeginScope(description, args))
+		{
+			logger.LogPerformanceStart();
+			var sw = Stopwatch.StartNew();
+			T? result;
+			try
+			{
+				result = operation();
+			}
+			catch (Exception e)
+			{
+				sw.Stop();
+				logger.LogPerformanceEnd(sw);
+				logger.LogError(e, "Action [{Description}] ended with an error", description);
+				throw;
+			}
+			sw.Stop();
+			logger.LogPerformanceEnd(sw);
+			return result;
+		}
+	}
+
 	public static async Task TimeAsync(this ILogger? logger,
 									   Func<Task> operation,
 									   [StructuredMessageTemplate] string description,

@@ -1,5 +1,6 @@
 ﻿using AutoMapper.EquivalencyExpression;
 using MediatR;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using RichWebApi;
 using RichWebApi.Maintenance;
@@ -13,7 +14,11 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseSerilog((context, services, loggerConfiguration) =>
+builder.Configuration
+	.AddEnvironmentVariables()
+	.AddUserSecrets<Program>(true, true);
+
+builder.Host.UseSerilog((context, sp, loggerConfiguration) =>
 {
 	// When something wrong with logging - uncomment the line below
 	// Serilog.Debugging.SelfLog.Enable(Console.Error);
@@ -43,6 +48,7 @@ builder.Host.UseSerilog((context, services, loggerConfiguration) =>
 });
 
 var applicationDependencies = new AppDependenciesCollection()
+	.AddDatabase(builder.Environment)
 	.AddSignalR(_ => { });
 
 var applicationParts = new AppPartsCollection()
@@ -64,6 +70,10 @@ services.AddSwaggerGen(s =>
 	s.AddSignalRSwaggerGen();
 });
 
+services.AddFluentValidationRulesToSwagger(opt => opt.SetFluentValidationCompatibility());
+
+
+
 services
 	.AddCore();
 
@@ -79,6 +89,8 @@ services.EnrichWithApplicationParts(applicationParts);
 services.AddDependencyServices(applicationDependencies);
 
 services.AddStartupAction<AutoMapperValidationAction>();
+
+
 
 var app = builder.Build();
 

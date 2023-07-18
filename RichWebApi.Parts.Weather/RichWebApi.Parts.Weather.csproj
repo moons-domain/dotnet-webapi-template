@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj" />
       <ProjectReference Include="..\RichWebApi.Parts.Core\RichWebApi.Parts.Core.csproj" />
     </ItemGroup>
 

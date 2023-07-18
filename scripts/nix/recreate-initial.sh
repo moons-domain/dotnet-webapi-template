@@ -1,0 +1,1 @@
+update-db 0 && remove-last-migration && add-migration Initial && update-db

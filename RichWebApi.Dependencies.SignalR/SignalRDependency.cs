@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace RichWebApi;
 
@@ -52,8 +53,10 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 	{
 		_hubEndpointsConfigurators.Add(b =>
 		{
+			var logger = b.ServiceProvider.GetRequiredService<ILogger<SignalRDependency>>();
 			var conventionBuilder = b.MapHub<T>(pattern, configureOptions);
 			configureConventions?.Invoke(conventionBuilder);
+			logger.LogDebug("Mapped hub '{HubName}' with route '{HubRoute}'", typeof(T).Name, pattern);
 		});
 		return this;
 	}
@@ -64,9 +67,11 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 	{
 		_hubEndpointsConfigurators.Add(b =>
 		{
+			var logger = b.ServiceProvider.GetRequiredService<ILogger<SignalRDependency>>();
 			var (pattern, configureOptions, configureConventions) = configure.Invoke(b.ServiceProvider);
 			var conventionBuilder = b.MapHub<T>(pattern, configureOptions);
 			configureConventions?.Invoke(conventionBuilder);
+			logger.LogDebug("Mapped hub '{HubName}' with route '{HubRoute}'", typeof(T).Name, pattern);
 		});
 		return this;
 	}

@@ -1,35 +1,41 @@
-﻿using FluentValidation;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
+using RichWebApi.Entities;
 using RichWebApi.Models;
+using RichWebApi.Persistence;
+using RichWebApi.Utilities.Paging;
 
 namespace RichWebApi.Operations;
 
-public record GetWeatherForecast : IRequest<ICollection<WeatherForecast>>
+public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<WeatherForecastDto>>, IPagedRequest
 {
 	[UsedImplicitly]
 	public class Validator : AbstractValidator<GetWeatherForecast>
 	{
+		public Validator(IValidator<IPagedRequest> validator)
+			=> Include(validator);
 	}
 
 	[UsedImplicitly]
-	public class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, ICollection<WeatherForecast>>
+	public class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, PagedResult<WeatherForecastDto>>
 	{
-		private static readonly string[] summaries = {
-			"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-		};
+		private readonly IRichWebApiDatabase _database;
+		private readonly IMapper _mapper;
 
-		public Task<ICollection<WeatherForecast>> Handle(GetWeatherForecast request,
-														 CancellationToken cancellationToken)
+		public GetWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper)
 		{
-			ICollection<WeatherForecast> result = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-			{
-				Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-				TemperatureC = Random.Shared.Next(-20, 55),
-				Summary = summaries[Random.Shared.Next(summaries.Length)]
-			})
-				.ToArray();
-			return Task.FromResult(result);
+			_database = database;
+			_mapper = mapper;
 		}
+
+		public Task<PagedResult<WeatherForecastDto>> Handle(GetWeatherForecast request,
+															CancellationToken cancellationToken)
+			=> _database.ReadAsync((db, ct) => db.Context
+				.Set<WeatherForecast>()
+				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
+				.ToPagedResultAsync(request, ct), cancellationToken);
 	}
 }
