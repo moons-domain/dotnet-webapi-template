@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Internal;
 using RichWebApi.Maintenance;
+using RichWebApi.Services;
 using RichWebApi.Startup;
 
 namespace RichWebApi;
@@ -20,6 +21,14 @@ public static class ServiceCollectionExtensions
 	{
 		services.TryAddEnumerable(new ServiceDescriptor(typeof(IAsyncStartupAction), typeof(T),
 			ServiceLifetime.Scoped));
+		return services;
+	}
+
+	public static IServiceCollection AddCronService<T>(this IServiceCollection services)
+		where T : CronScheduleService
+	{
+		services.TryAddSingleton<T>();
+		services.AddHostedService<T>();
 		return services;
 	}
 }

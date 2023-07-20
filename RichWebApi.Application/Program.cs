@@ -72,8 +72,6 @@ services.AddSwaggerGen(s =>
 
 services.AddFluentValidationRulesToSwagger(opt => opt.SetFluentValidationCompatibility());
 
-
-
 services
 	.AddCore();
 
