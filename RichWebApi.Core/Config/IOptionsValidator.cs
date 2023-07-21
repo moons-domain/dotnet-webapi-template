@@ -1,6 +1,6 @@
 ﻿namespace RichWebApi.Config;
 
-public interface IConfigValidator
+public interface IOptionsValidator
 {
 
 }

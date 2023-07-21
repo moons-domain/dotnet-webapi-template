@@ -25,7 +25,7 @@ public class DatabaseConfig
 	public string ConnectionString { get; set; } = null!;
 
 	[UsedImplicitly]
-	public class DevEnvValidator : AbstractValidator<DatabaseConfig>
+	public class DevEnvValidator : OptionsValidator<DatabaseConfig>
 	{
 		public DevEnvValidator()
 		{
@@ -44,7 +44,7 @@ public class DatabaseConfig
 	}
 
 	[UsedImplicitly]
-	public class ProdEnvValidator : AbstractValidator<DatabaseConfig>
+	public class ProdEnvValidator : OptionsValidator<DatabaseConfig>
 	{
 		public ProdEnvValidator()
 		{

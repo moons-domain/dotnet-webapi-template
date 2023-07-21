@@ -16,9 +16,9 @@ public static class ServiceCollectionExtensions
 		var partsAssemblies = partsArray
 			.Select(x => x.PartAssembly)
 			.ToArray();
-		var configValidatorTagType = typeof(IConfigValidator);
+		var optionsValidatorTagType = typeof(IOptionsValidator);
 		services.AddValidatorsFromAssemblies(partsAssemblies, includeInternalTypes: true,
-				filter: result => !result.ValidatorType.IsAssignableTo(configValidatorTagType)) // config validators have their own lifetime
+				filter: result => !result.ValidatorType.IsAssignableTo(optionsValidatorTagType)) // options validators have their own lifetime
 			.AddMediatR(x => x.RegisterServicesFromAssemblies(partsAssemblies))
 			.AddSwaggerGen(s => s.AddSignalRSwaggerGen(options => options.ScanAssemblies(partsAssemblies)))
 			.AddAutoMapper(partsAssemblies)
