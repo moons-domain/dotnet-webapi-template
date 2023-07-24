@@ -1,6 +1,6 @@
 ## About project
 
-The <a href="https://github.com/dotnet/aspnetcore">aspnetcore</a> solution template for implementing WebApi applications  
+The [aspnetcore](https://github.com/dotnet/aspnetcore) solution template for implementing WebApi applications  
 Initial concept creator: **<a href="https://github.com/kuzmenko-oi">kuzmenko-oi</a>**
 
 Template uses:
