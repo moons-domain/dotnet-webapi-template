@@ -20,7 +20,7 @@ public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<Weat
 	}
 
 	[UsedImplicitly]
-	public class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, PagedResult<WeatherForecastDto>>
+	internal class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, PagedResult<WeatherForecastDto>>
 	{
 		private readonly IRichWebApiDatabase _database;
 		private readonly IMapper _mapper;

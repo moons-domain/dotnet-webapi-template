@@ -21,12 +21,12 @@ public record PatchWeatherForecast(WeatherForecastDto WeatherForecast) : IReques
 	}
 
 	[UsedImplicitly]
-	public class PutWeatherForecastHandler : IRequestHandler<PatchWeatherForecast>
+	internal class PatchWeatherForecastHandler : IRequestHandler<PatchWeatherForecast>
 	{
 		private readonly IRichWebApiDatabase _database;
 		private readonly IMapper _mapper;
 
-		public PutWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper)
+		public PatchWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper)
 		{
 			_database = database;
 			_mapper = mapper;
