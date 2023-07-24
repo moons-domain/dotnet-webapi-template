@@ -100,7 +100,7 @@ public class Program
 	private static IAppDependenciesCollection EnrichWithDependencies(IAppDependenciesCollection collection,
 																	 IWebHostEnvironment env)
 		=> collection.AddDatabase(env)
-			.AddSignalR(_ => { });
+			.AddSignalR(c => c.AddWeather());
 
 	public static IAppPartsCollection EnrichWithApplicationParts(IAppPartsCollection collection)
 		=> collection.AddWeather();
