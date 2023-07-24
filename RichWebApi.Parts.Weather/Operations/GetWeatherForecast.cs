@@ -35,6 +35,7 @@ public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<Weat
 															CancellationToken cancellationToken)
 			=> _database.ReadAsync((db, ct) => db.Context
 				.Set<WeatherForecast>()
+				.OrderBy(x => x.Date)
 				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
 				.ToPagedResultAsync(request, ct), cancellationToken);
 	}

@@ -5,7 +5,7 @@ using RichWebApi.Extensions;
 
 namespace RichWebApi.Entities.Configuration;
 
-public class DatabaseConfigurator : IDatabaseConfigurator
+internal class DatabaseConfigurator : IDatabaseConfigurator
 {
 	private readonly IEnumerable<INonGenericEntityConfiguration> _configurations;
 	private readonly ILogger<DatabaseConfigurator> _logger;

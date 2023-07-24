@@ -1,6 +1,9 @@
-﻿namespace RichWebApi.Utilities.Paging;
+﻿using JetBrains.Annotations;
 
-public class PagedResult<T>
+namespace RichWebApi.Utilities.Paging;
+
+[UsedImplicitly(ImplicitUseTargetFlags.Members)]
+public sealed class PagedResult<T>
 {
 	public PagedResult(IReadOnlyCollection<T> items, int page, int size, int total)
 	{
@@ -17,5 +20,4 @@ public class PagedResult<T>
 	public int Size { get; }
 
 	public int Total { get; }
-
 }

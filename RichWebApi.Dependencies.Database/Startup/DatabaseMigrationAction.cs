@@ -9,7 +9,7 @@ public class DatabaseMigrationAction : IAsyncStartupAction
 {
 	private readonly RichWebApiDbContext _context;
 
-	public uint Order => 2;
+	public uint Order => 1;
 
 	public DatabaseMigrationAction(RichWebApiDbContext context) => _context = context;
 

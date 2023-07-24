@@ -25,6 +25,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<RichWebApi
 			.AddEnvironmentVariables()
 			.Build();
 		var env = new DummyEnvironment();
+		var parts = Program.EnrichWithApplicationParts(new AppPartsCollection());
 		var dependencies = new AppDependenciesCollection()
 			.AddDatabase(env);
 		var provider = new ServiceCollection()
@@ -38,7 +39,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<RichWebApi
 			.AddSingleton(configurationRoot)
 			.AddSingleton<IWebHostEnvironment>(env)
 			.AddDependencyServices(dependencies)
-			.EnrichWithApplicationParts(new AppPartsCollection().AddWeather())
+			.EnrichWithApplicationParts(parts)
 			.BuildServiceProvider();
 		return provider.GetRequiredService<RichWebApiDbContext>();
 	}
