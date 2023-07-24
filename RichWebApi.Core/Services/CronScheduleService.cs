@@ -57,14 +57,8 @@ public abstract class CronScheduleService : IHostedService
 		return Task.CompletedTask;
 	}
 
-	protected abstract Task PerformServiceFunctionAsync(IServiceProvider serviceProvider,
+	public abstract Task PerformServiceFunctionAsync(IServiceProvider serviceProvider,
 														CancellationToken cancellationToken);
-
-	public async Task ExecuteFunctionAsync(CancellationToken cancellationToken)
-	{
-		await using var functionScope = _serviceProviderScope.ServiceProvider.CreateAsyncScope();
-		await PerformServiceFunctionAsync(functionScope.ServiceProvider, cancellationToken);
-	}
 
 	protected abstract CrontabSchedule GetSchedule();
 
