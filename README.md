@@ -1,17 +1,17 @@
 ## About project
 
 The [aspnetcore](https://github.com/dotnet/aspnetcore) solution template for implementing WebApi applications  
-Initial concept creator: **<a href="https://github.com/kuzmenko-oi">kuzmenko-oi</a>**
+Initial concept creator: **[kuzmenko-oi](https://github.com/kuzmenko-oi)**
 
 Template uses:
 
--   <a href="https://github.com/jbogard/MediatR">MediatR</a>
--   <a href="https://github.com/FluentValidation/FluentValidation">FluentValidation</a>
--   <a href="https://github.com/AutoMapper/AutoMapper">AutoMapper</a>
--   <a href="https://github.com/dotnet/efcore">EntityFrameworkCore</a>
--   <a href="https://github.com/serilog/serilog">Serilog</a>
--   <a href="https://github.com/atifaziz/NCrontab">NCrontab</a>
--   <a href="https://github.com/App-vNext/Polly">Polly</a>
--   <a href="https://github.com/dotnet/aspnetcore/tree/main/src/SignalR">SignalR</a>
+-   [MediatR](https://github.com/jbogard/MediatR)
+-   [FluentValidation](https://github.com/FluentValidation/FluentValidation)
+-   [AutoMapper](https://github.com/AutoMapper/AutoMapper)
+-   [EntityFrameworkCore](https://github.com/dotnet/efcore)
+-   [Serilog](https://github.com/serilog/serilog)
+-   [NCrontab](https://github.com/atifaziz/NCrontab)
+-   [Polly](https://github.com/App-vNext/Polly)
+-   [SignalR](https://github.com/dotnet/aspnetcore/tree/main/src/SignalR)
 
-Check <a href="https://github.com/mrlldd/template-dotnet-richwebapi/wiki">wiki</a> for more info
+Check [wiki](https://github.com/mrlldd/template-dotnet-richwebapi/wiki) for more info
