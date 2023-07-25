@@ -62,7 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rider", "rider", "{C83E41B2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "layers", "layers", "{B7BD8A50-96CF-47D8-A8DE-6824704EF501}"
 	ProjectSection(SolutionItems) = preProject
-		rider\layers\RichWebApiTemplatesLayer.DotSettings = rider\layers\RichWebApiTemplatesLayer.DotSettings
+		rider\layers\RichTemplatesLayer.DotSettings = rider\layers\RichTemplatesLayer.DotSettings
 	EndProjectSection
 EndProject
 Global
