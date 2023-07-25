@@ -257,7 +257,8 @@ public record $REQUESTNAME$ : IRequest
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/@KeyIndexDefined">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Applicability/=Surround/@EntryIndexedValue">False</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Description/@EntryValue">Creates validator implementation for containing type</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Description/@EntryValue">FluentValidation validator</s:String>
+	
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Field/=CLASSNAME/@KeyIndexDefined">True</s:Boolean>
 	
 	
@@ -270,11 +271,12 @@ public record $REQUESTNAME$ : IRequest
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Shortcut/@EntryValue">vldtor</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Text/@EntryValue">internal class Validator : AbstractValidator&lt;$CLASSNAME$&gt; 
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F00ACDFAAB1FB479F0E892E7B9681B6/Text/@EntryValue">[UsedImplicitly]
+internal class Validator : AbstractValidator&lt;$CLASSNAME$&gt; 
 {
     public Validator()
     {
-        
+       
     }
 }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=8F0E54793F0A314D8075BC893388FA05/@KeyIndexDefined">False</s:Boolean>
@@ -330,6 +332,24 @@ internal sealed class $SERVICENAME$ : CronScheduleService
 	{
 	    throw new NotImplementedException();
 	}
+}</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/@KeyIndexDefined">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Applicability/=Live/@EntryIndexedValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Description/@EntryValue">AutoMapper mapping profile</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Field/=MAPPINGPROFILENAME/@KeyIndexDefined">True</s:Boolean>
+	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Field/=MAPPINGPROFILENAME/Order/@EntryValue">0</s:Int64>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Reformat/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Scope/=C3001E7C0DA78E4487072B7E050D86C5/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Scope/=C3001E7C0DA78E4487072B7E050D86C5/CustomProperties/=minimumLanguageVersion/@EntryIndexedValue">2.0</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Scope/=C3001E7C0DA78E4487072B7E050D86C5/Type/@EntryValue">InCSharpFile</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Shortcut/@EntryValue">mpprof</s:String>
+	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/ShortenQualifiedReferences/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=A7ED203ED9E43C44ABF6F49013830307/Text/@EntryValue">[UsedImplicitly]
+internal class $MAPPINGPROFILENAME$ : Profile
+{
+    public $MAPPINGPROFILENAME$()
+    {
+    }
 }</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=AB3327059BA5FD42B453685D835444A5/@KeyIndexDefined">False</s:Boolean>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B20F39F722283242A1DCC3A37FDE093B/@KeyIndexDefined">False</s:Boolean>
