@@ -63,14 +63,13 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
 		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();
-
 		services.TryAddScoped<IValidator<IPagedRequest>, IPagedRequest.Validator>();
 		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
 		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
 		AddInternalServices(services);
 	}
 
-	private void AddInternalServices(IServiceCollection services)
+	private static void AddInternalServices(IServiceCollection services)
 		=> services.TryAddSingleton<IEntityValidatorsProvider, EntityValidatorsProvider>();
 
 
