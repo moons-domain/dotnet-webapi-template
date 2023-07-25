@@ -43,6 +43,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nix", "nix", "{D6C11702-27B
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{C48A2076-5D0C-4252-9E4D-77D20791F147}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\rename-solution.js = scripts\rename-solution.js
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "win", "win", "{BEB5FEE9-12A5-453C-BA7F-168D7990B0E5}"
 	ProjectSection(SolutionItems) = preProject
