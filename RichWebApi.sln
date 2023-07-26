@@ -58,6 +58,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "rider", "rider", "{C83E41B2-5B74-481F-80C8-5F9772ED5F11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "layers", "layers", "{B7BD8A50-96CF-47D8-A8DE-6824704EF501}"
+	ProjectSection(SolutionItems) = preProject
+		rider\layers\RichTemplatesLayer.DotSettings = rider\layers\RichTemplatesLayer.DotSettings
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,5 +116,7 @@ Global
 		{D6C11702-27B4-4F33-A24F-7DB36F8F8C8A} = {C48A2076-5D0C-4252-9E4D-77D20791F147}
 		{BEB5FEE9-12A5-453C-BA7F-168D7990B0E5} = {C48A2076-5D0C-4252-9E4D-77D20791F147}
 		{40F2321C-99B8-4068-ABED-739FBEE79E21} = {7C0470FC-178E-42F2-983B-7672E0F0B57E}
+		{C83E41B2-5B74-481F-80C8-5F9772ED5F11} = {7C0470FC-178E-42F2-983B-7672E0F0B57E}
+		{B7BD8A50-96CF-47D8-A8DE-6824704EF501} = {C83E41B2-5B74-481F-80C8-5F9772ED5F11}
 	EndGlobalSection
 EndGlobal

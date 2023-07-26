@@ -7,7 +7,7 @@ public class AppPartsCollection : IAppPartsCollection
 	private readonly HashSet<IAppPart> _appParts = new(new TypeEqualityComparer<IAppPart>());
 
 	public IEnumerator<IAppPart> GetEnumerator()
-		=> _appParts.GetEnumerator();
+		=> ((IEnumerable<IAppPart>)_appParts).GetEnumerator();
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 	public void Add(IAppPart item)
