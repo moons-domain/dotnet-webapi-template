@@ -13,6 +13,6 @@ public static class DependencyContainerFixtureExtensions
 		{
 			x.ClearProviders();
 			x.SetMinimumLevel(LogLevel.Information);
-			x.AddProvider(new XUnitLoggerProvider(LogLevel.Trace, testOutputHelper));
+			x.AddProvider(new XunitLoggerProvider(LogLevel.Trace, testOutputHelper));
 		}));
 }

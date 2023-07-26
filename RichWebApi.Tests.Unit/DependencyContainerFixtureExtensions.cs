@@ -7,5 +7,5 @@ namespace RichWebApi.Tests;
 public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture WithSystemClock(this DependencyContainerFixture fixture)
-		=> fixture.ConfigureServices(s => s.TryAddSingleton<ISystemClock, SystemClock>());
+		=> fixture.ConfigureServices(static s => s.TryAddSingleton<ISystemClock, SystemClock>());
 }

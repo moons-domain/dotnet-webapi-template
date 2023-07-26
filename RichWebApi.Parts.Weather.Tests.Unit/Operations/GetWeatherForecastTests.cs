@@ -24,7 +24,7 @@ public class GetWeatherForecastTests : UnitTest
 			.WithXunitLogging(testOutputHelper)
 			.WithTestScopeInMemoryDatabase(this, parts)
 			.WithSystemClock()
-			.ConfigureServices(s => s.ApplyParts(parts));
+			.ConfigureServices(s => s.AddAppParts(parts));
 	}
 
 	[Fact]
@@ -53,12 +53,12 @@ public class GetWeatherForecastTests : UnitTest
 		_resourceScope.CompareWithJsonExpectation(TestOutputHelper, result);
 	}
 
-	private async ValueTask PersistEntitiesAsync<T>(IEnumerable<T> forecasts) where T : class, IEntity
+	private async ValueTask PersistEntitiesAsync<T>(IEnumerable<T> entities) where T : class, IEntity
 	{
 		var db = _serviceProvider.GetRequiredService<IRichWebApiDatabase>();
-		foreach (var wf in forecasts)
+		foreach (var e in entities)
 		{
-			await db.Context.AddAsync(wf);
+			await db.Context.AddAsync(e);
 		}
 
 		await db.PersistAsync();

@@ -5,7 +5,7 @@ namespace RichWebApi;
 
 public static class ServiceCollectionExtensions
 {
-	public static IServiceCollection ApplyParts(this IServiceCollection services, IAppPartsCollection parts)
+	public static IServiceCollection AddAppParts(this IServiceCollection services, IAppPartsCollection parts)
 	{
 		var partsArray = parts.Select(x => new { Part = x, PartAssembly = x.GetType().Assembly }).ToArray();
 		services.TryAddEnumerable(partsArray.Select(x => new ServiceDescriptor(typeof(IAppPart), x.Part)));

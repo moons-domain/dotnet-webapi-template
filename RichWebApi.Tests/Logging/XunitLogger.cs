@@ -3,13 +3,13 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests.Logging;
 
-public sealed class XUnitLogger : ILogger
+public sealed class XunitLogger : ILogger
 {
     private readonly ITestOutputHelper _testOutputHelper;
     private readonly string _name;
     private readonly LogLevel _loggerLevel;
 
-    public XUnitLogger(string name, LogLevel loggerLevel, ITestOutputHelper testOutputHelper)
+    public XunitLogger(string name, LogLevel loggerLevel, ITestOutputHelper testOutputHelper)
     {
         _name = name;
         _loggerLevel = loggerLevel;
