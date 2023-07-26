@@ -5,7 +5,6 @@ using Microsoft.OpenApi.Models;
 using RichWebApi.Maintenance;
 using RichWebApi.MediatR;
 using RichWebApi.Middleware;
-using RichWebApi.Parts;
 using RichWebApi.Startup;
 using Serilog;
 using Serilog.Events;

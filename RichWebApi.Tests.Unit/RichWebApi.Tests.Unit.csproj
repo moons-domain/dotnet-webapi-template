@@ -12,7 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RichWebApi.Core\RichWebApi.Core.csproj" />
-      <ProjectReference Include="..\RichWebApi.Tests.Core\RichWebApi.Tests.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Tests\RichWebApi.Tests.csproj" />
     </ItemGroup>
 
 </Project>

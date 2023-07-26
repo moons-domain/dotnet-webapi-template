@@ -9,7 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj" />
-      <ProjectReference Include="..\RichWebApi.Tests.Core\RichWebApi.Tests.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Tests\RichWebApi.Tests.csproj" />
     </ItemGroup>
 
     <ItemGroup>

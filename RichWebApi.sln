@@ -70,7 +70,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "layers", "layers", "{B7BD8A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8249D0BF-375F-45F6-BCE8-E4BAD1ABE946}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Tests.Core", "RichWebApi.Tests.Core\RichWebApi.Tests.Core.csproj", "{F9F9E945-4F3D-48A8-9CFF-53CE392A71F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Tests", "RichWebApi.Tests\RichWebApi.Tests.csproj", "{F9F9E945-4F3D-48A8-9CFF-53CE392A71F2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit", "Unit", "{D4F5701B-D740-4B39-ACA2-6B9EB6AA3B36}"
 EndProject
@@ -82,7 +82,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts.Weather.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{528E1362-3249-4D82-A206-08C175CFC142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Database.Tests.Core", "RichWebApi.Dependencies.Database.Tests.Core\RichWebApi.Dependencies.Database.Tests.Core.csproj", "{AE55F7DC-A618-40A2-847F-7D5903A3C4DB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Database.Tests", "RichWebApi.Dependencies.Database.Tests\RichWebApi.Dependencies.Database.Tests.csproj", "{AE55F7DC-A618-40A2-847F-7D5903A3C4DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
