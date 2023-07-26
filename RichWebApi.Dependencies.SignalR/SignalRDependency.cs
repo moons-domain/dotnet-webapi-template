@@ -11,7 +11,8 @@ namespace RichWebApi;
 
 internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 {
-	private readonly IList<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators = new List<Action<IEndpointRouteBuilder>>();
+	private readonly IList<Action<IEndpointRouteBuilder>> _hubEndpointsConfigurators =
+		new List<Action<IEndpointRouteBuilder>>();
 
 	public void ConfigureServices(IServiceCollection services)
 	{
@@ -21,6 +22,27 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 		}
 
 		services.AddSignalR(x =>
+			{
+				x.EnableDetailedErrors = true;
+				x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
+			})
+			.AddJsonProtocol(x =>
+				x.PayloadSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase)));
+	}
+
+	public void ConfigureServices(IServiceCollection services, IAppPartsCollection parts)
+	{
+		if (_hubEndpointsConfigurators.Count == 0)
+		{
+			return;
+		}
+
+		services
+			.AddSwaggerGen(options
+				=> options.AddSignalRSwaggerGen(signalROptions
+					=> signalROptions.ScanAssemblies(parts
+						.Select(x => x.GetType().Assembly))))
+			.AddSignalR(x =>
 			{
 				x.EnableDetailedErrors = true;
 				x.ClientTimeoutInterval = TimeSpan.FromMinutes(20);
@@ -47,8 +69,8 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 	}
 
 	public ISignalRConfigurator WithHub<T>(string pattern,
-										   Action<HttpConnectionDispatcherOptions>? configureOptions = null,
-										   Action<HubEndpointConventionBuilder>? configureConventions = null)
+	                                       Action<HttpConnectionDispatcherOptions>? configureOptions = null,
+	                                       Action<HubEndpointConventionBuilder>? configureConventions = null)
 		where T : Hub
 	{
 		_hubEndpointsConfigurators.Add(b =>

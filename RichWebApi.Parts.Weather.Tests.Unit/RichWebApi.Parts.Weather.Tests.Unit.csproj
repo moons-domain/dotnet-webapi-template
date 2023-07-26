@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\RichWebApi.Dependencies.Database.Tests.Core\RichWebApi.Dependencies.Database.Tests.Core.csproj" />
       <ProjectReference Include="..\RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj" />
       <ProjectReference Include="..\RichWebApi.Tests.Unit\RichWebApi.Tests.Unit.csproj" />
     </ItemGroup>
@@ -26,6 +27,10 @@
     <ItemGroup>
       <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.input.json" />
       <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.input.json" />
+      <None Remove="Operations\Resources\GetWeatherForecast.LoadsFirstPage.entities.json" />
+      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.entities.json" />
+      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.expected.json" />
+      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.expected.json" />
     </ItemGroup>
 
 </Project>

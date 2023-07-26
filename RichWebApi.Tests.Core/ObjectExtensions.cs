@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace RichWebApi.Tests.Core;
+namespace RichWebApi.Tests;
 
 public static class ObjectExtensions
 {

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Tests.Core.Logging;
+namespace RichWebApi.Tests.Logging;
 
 [ProviderAlias("XUnit")]
 public sealed class XUnitLoggerProvider : ILoggerProvider

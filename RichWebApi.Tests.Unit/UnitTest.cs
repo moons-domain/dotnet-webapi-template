@@ -1,8 +1,6 @@
-using RichWebApi.Tests.Core;
-using RichWebApi.Tests.Core.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Tests.Unit;
+namespace RichWebApi.Tests;
 
 [Trait("Category", "Unit")]
 public abstract class UnitTest : Test

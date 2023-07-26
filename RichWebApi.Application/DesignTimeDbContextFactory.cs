@@ -38,8 +38,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<RichWebApi
 			.AddSingleton<IConfiguration>(configurationRoot)
 			.AddSingleton(configurationRoot)
 			.AddSingleton<IWebHostEnvironment>(env)
-			.AddDependencyServices(dependencies)
 			.EnrichWithApplicationParts(parts)
+			.AddDependencyServices(dependencies, parts)
 			.BuildServiceProvider();
 		return provider.GetRequiredService<RichWebApiDbContext>();
 	}

@@ -1,13 +1,17 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using JetBrains.Annotations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
-using RichWebApi.Tests.Core.Exceptions;
+using RichWebApi.Tests.Exceptions;
 
-namespace RichWebApi.Tests.Core.DependencyInjection;
+namespace RichWebApi.Tests.DependencyInjection;
 
+[UsedImplicitly]
 public class DependencyContainerFixture : IServiceProvider, IDisposable
 {
 	private readonly IServiceCollection _services = new ServiceCollection();
 	private readonly Lazy<IServiceProvider> _lazyServiceProvider;
+
 	private IServiceProvider ServiceProvider => _lazyServiceProvider.Value;
 
 	public DependencyContainerFixture()
@@ -26,6 +30,7 @@ public class DependencyContainerFixture : IServiceProvider, IDisposable
 			throw new TestConfigurationException(
 				"Services should be configured before service provider is initialized");
 		}
+
 		configure.Invoke(_services);
 		return this;
 	}

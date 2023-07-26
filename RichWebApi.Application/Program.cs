@@ -133,8 +133,8 @@ public class Program
 
 
 		services.AddAutoMapper(x => x.AddCollectionMappers(), typeof(Program).Assembly);
-		services.EnrichWithApplicationParts(parts);
-		services.AddDependencyServices(dependencies);
+		services.ApplyParts(parts);
+		services.AddDependencyServices(dependencies, parts);
 
 		services.AddStartupAction<AutoMapperValidationAction>();
 		return services;

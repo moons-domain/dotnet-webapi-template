@@ -2,10 +2,10 @@
 using FluentAssertions;
 using FluentAssertions.Equivalency;
 using Newtonsoft.Json;
-using RichWebApi.Tests.Core.Exceptions;
+using RichWebApi.Tests.Exceptions;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Tests.Core.Resources;
+namespace RichWebApi.Tests.Resources;
 
 public static class ResourceScopeExtensions
 {

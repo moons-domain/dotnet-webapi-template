@@ -1,13 +1,15 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
-using RichWebApi.Tests.Core.Exceptions;
+using RichWebApi.Tests.Exceptions;
 
-namespace RichWebApi.Tests.Core.Resources;
+namespace RichWebApi.Tests.Resources;
 
 // designed for usage as collection fixture
 // but at the moment of July 26, 2023 - xunit not supports assembly-level fixtures (in other words, xunit scans only executing assembly for collection fixture definitions)
 // so you need to implement collection definitions for every assembly where you want to use it as collection fixture
+[UsedImplicitly]
 public sealed class ResourceRepositoryFixture : IResourceScope
 {
 	private readonly ConcurrentDictionary<Assembly, string[]> _assemblyEmbeddedResources = new();

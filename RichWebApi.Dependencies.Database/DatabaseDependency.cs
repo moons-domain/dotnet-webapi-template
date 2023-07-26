@@ -25,7 +25,7 @@ internal class DatabaseDependency : IAppDependency
 
 	public DatabaseDependency(IWebHostEnvironment environment) => _environment = environment;
 
-	public void ConfigureServices(IServiceCollection services)
+	public void ConfigureServices(IServiceCollection services, IAppPartsCollection parts)
 	{
 		if (_environment.IsDevelopment())
 		{
@@ -67,6 +67,7 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
 		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
 		AddInternalServices(services);
+		services.CollectDatabaseEntities(parts.Select(x => x.GetType().Assembly));
 	}
 
 	private static void AddInternalServices(IServiceCollection services)
@@ -75,5 +76,10 @@ internal class DatabaseDependency : IAppDependency
 
 	public void ConfigureApplication(IApplicationBuilder builder)
 	{
+	}
+
+	public void ScanAppParts(IServiceCollection services, IAppPartsCollection parts)
+	{
+		throw new NotImplementedException();
 	}
 }

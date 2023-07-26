@@ -1,4 +1,4 @@
-﻿namespace RichWebApi.Tests.Core.Resources;
+﻿namespace RichWebApi.Tests.Resources;
 
 internal sealed class ResourceScope : IResourceScope
 {

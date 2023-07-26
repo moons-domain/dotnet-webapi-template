@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace RichWebApi.Tests.Core.Exceptions;
+namespace RichWebApi.Tests.Exceptions;
 
 public class RichWebApiTestException : Exception
 {

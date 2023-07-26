@@ -9,7 +9,7 @@ public class WeatherWeekFillerServiceConfig
 	public string Schedule { get; set; } = null!;
 
 	[UsedImplicitly]
-	public class Validator : OptionsValidator<WeatherWeekFillerServiceConfig>
+	internal class Validator : OptionsValidator<WeatherWeekFillerServiceConfig>
 	{
 		public Validator() => RuleFor(x => x.Schedule).NotNull().NotEmpty().CronExpression();
 	}

@@ -1,0 +1,25 @@
+{
+  "Items": [
+    {
+      "Date": "2023-01-01T00:00:00",
+      "TemperatureC": 14,
+      "TemperatureF": 57,
+      "Summary": "Summary"
+    },
+    {
+      "Date": "2023-01-02T00:00:00",
+      "TemperatureC": 7,
+      "TemperatureF": 44,
+      "Summary": "Cold"
+    },
+    {
+      "Date": "2023-01-03T00:00:00",
+      "TemperatureC": -3,
+      "TemperatureF": 27,
+      "Summary": "Very cold"
+    }
+  ],
+  "Page": 0,
+  "Size": 10,
+  "Total": 3
+}

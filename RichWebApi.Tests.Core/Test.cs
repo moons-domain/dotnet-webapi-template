@@ -1,8 +1,8 @@
-using RichWebApi.Tests.Core.DependencyInjection;
-using RichWebApi.Tests.Core.Resources;
+using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Tests.Core;
+namespace RichWebApi.Tests;
 
 public abstract class Test : IClassFixture<ResourceRepositoryFixture>, IClassFixture<DependencyContainerFixture>
 {

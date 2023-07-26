@@ -4,15 +4,16 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
-        <IsPackable>false</IsPackable>
-        <IsTestProject>true</IsTestProject>
-        <RootNamespace>RichWebApi.Tests</RootNamespace>
+        <RootNamespace>RichWebApi.Dependencies.Database.Tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RichWebApi.Core\RichWebApi.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj" />
       <ProjectReference Include="..\RichWebApi.Tests.Core\RichWebApi.Tests.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.9" />
     </ItemGroup>
 
 </Project>
