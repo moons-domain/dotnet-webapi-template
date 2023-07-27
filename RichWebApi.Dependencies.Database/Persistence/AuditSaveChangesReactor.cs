@@ -23,7 +23,7 @@ public class AuditSaveChangesReactor : ISaveChangesReactor
 
 	public ValueTask ReactAsync(RichWebApiDbContext context, CancellationToken cancellationToken)
 	{
-		_logger.Time(() => OnBeforeSaving(context), "audit tracked db entities");
+		_logger.Time(() => OnBeforeSaving(context), "Audit tracked database entities");
 		return new ValueTask();
 	}
 

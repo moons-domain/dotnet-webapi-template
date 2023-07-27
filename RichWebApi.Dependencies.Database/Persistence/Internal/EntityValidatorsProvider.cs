@@ -22,31 +22,27 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 	public bool AllEntitiesHaveValidators { get; }
 
 	public EntityValidatorsProvider(ILogger<EntityValidatorsProvider> logger, IServiceProvider serviceProvider,
-									IEnumerable<IAppPart> partsToScan)
+	                                IEnumerable<IAppPart> partsToScan)
 	{
 		_logger = logger;
-
-		using (logger.BeginScope("entity validator callers build"))
+		var entityType = typeof(IEntity);
+		var entityTypes = partsToScan
+			.SelectMany(x => x.GetType().Assembly.ExportedTypes
+				.Where(t => t is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false }
+				            && t.IsAssignableTo(entityType)))
+			.ToArray();
+		var validatorsCount = logger.Time(() =>
 		{
-			var entityType = typeof(IEntity);
-			var entityTypes = partsToScan
-				.SelectMany(x => x.GetType().Assembly.ExportedTypes
-					.Where(t => t is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false }
-								&& t.IsAssignableTo(entityType)))
-				.ToArray();
-			var validatorsCount = logger.Time(() =>
-			{
-				using var scope = serviceProvider.CreateScope();
-				var sp = scope.ServiceProvider;
-				return entityTypes.Select(x => GetOrCreateEntityValidator(sp, x)).Count();
-			}, "Build validator callers for entities, count: {Count}", entityTypes.Length);
-			AllEntitiesHaveValidators = entityTypes.Length == validatorsCount;
-		}
+			using var scope = serviceProvider.CreateScope();
+			var sp = scope.ServiceProvider;
+			return entityTypes.Select(x => GetOrCreateEntityValidator(sp, x)).Count();
+		}, "Build validator callers for entities, count: {Count}", entityTypes.Length);
+		AllEntitiesHaveValidators = entityTypes.Length == validatorsCount;
 	}
 
 	private delegate Task<ValidationResult> AsyncValidationExecutor(object validator,
-																	object entity,
-																	CancellationToken cancellationToken);
+	                                                                object entity,
+	                                                                CancellationToken cancellationToken);
 
 
 	public EntityAsyncValidator? GetAsyncValidator(IServiceProvider serviceProvider, Type entityType)

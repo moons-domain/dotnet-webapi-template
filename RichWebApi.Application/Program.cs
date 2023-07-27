@@ -1,9 +1,7 @@
 ﻿using AutoMapper.EquivalencyExpression;
-using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using RichWebApi.Maintenance;
-using RichWebApi.MediatR;
 using RichWebApi.Middleware;
 using RichWebApi.Startup;
 using Serilog;

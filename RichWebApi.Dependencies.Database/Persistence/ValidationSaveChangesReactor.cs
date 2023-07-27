@@ -52,7 +52,7 @@ public class ValidationSaveChangesReactor : ISaveChangesReactor
 			}
 
 			return failures;
-		}, "validate tracked db entities");
+		}, "Validate tracked db entities");
 
 		if (failures.Count != 0)
 		{
