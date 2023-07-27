@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Internal;
 using RichWebApi.Config;
 using RichWebApi.Maintenance;
+using RichWebApi.MediatR;
 using RichWebApi.Services;
 using RichWebApi.Startup;
 
@@ -43,5 +45,13 @@ public static class ServiceCollectionExtensions
 				filter: result => !result.ValidatorType.IsAssignableTo(optionsValidatorTagType)) // options validators have their own lifetime
 			.AddMediatR(x => x.RegisterServicesFromAssemblies(assemblies))
 			.AddAutoMapper(assemblies);
+	}
+
+	public static IServiceCollection AddCoreMediatRBehaviors(this IServiceCollection services)
+	{
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+		return services;
 	}
 }

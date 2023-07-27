@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 namespace RichWebApi.Tests.DependencyInjection;
 
 [UsedImplicitly]
-public class DependencyContainerFixture : IDisposable
+public abstract class DependencyContainerFixture : IDisposable
 {
 	private readonly IServiceCollection _services = new ServiceCollection();
 
@@ -16,8 +16,12 @@ public class DependencyContainerFixture : IDisposable
 		return this;
 	}
 
-	public IServiceProvider BuildServiceProvider()
-		=> _services.BuildServiceProvider();
-	
+	public IServiceProvider BuildServiceProvider() 
+		=> ConfigureSharedServices(_services)
+			.BuildServiceProvider();
+
 	public void Dispose() => _services.Clear();
+
+	protected virtual IServiceCollection ConfigureSharedServices(IServiceCollection services) 
+		=> services;
 }

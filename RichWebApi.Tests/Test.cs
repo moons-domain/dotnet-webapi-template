@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests;
 
-public abstract class Test : IClassFixture<ResourceRepositoryFixture>, IClassFixture<DependencyContainerFixture>
+public abstract class Test : IClassFixture<ResourceRepositoryFixture>
 {
 	protected ITestOutputHelper TestOutputHelper { get; }
 

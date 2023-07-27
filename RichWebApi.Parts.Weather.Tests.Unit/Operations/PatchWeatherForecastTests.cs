@@ -20,7 +20,7 @@ public class PatchWeatherForecastTests : UnitTest, IAsyncLifetime
 	private readonly IServiceProvider _serviceProvider;
 
 	public PatchWeatherForecastTests(ITestOutputHelper testOutputHelper, ResourceRepositoryFixture resourceRepository,
-	                                 DependencyContainerFixture container) : base(testOutputHelper)
+	                                 UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()
@@ -28,7 +28,6 @@ public class PatchWeatherForecastTests : UnitTest, IAsyncLifetime
 		_serviceProvider = container
 			.WithXunitLogging(TestOutputHelper)
 			.WithTestScopeInMemoryDatabase(parts)
-			.WithSystemClock()
 			.WithMockedSignalRHubContext<WeatherHub, IWeatherHubClient>(
 				configureHubClients: (_, mock, client) => mock
 					.Setup(x => x.Group(It.Is<string>(s => s == WeatherHubConstants.GroupName)))

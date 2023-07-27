@@ -18,7 +18,7 @@ public class WeatherForecastDto
 	{
 		public Validator()
 		{
-			RuleFor(x => x.Date).GreaterThan(new DateTime(2023, 1, 1, 0, 0, 0, 0, 0));
+			RuleFor(x => x.Date).GreaterThanOrEqualTo(new DateTime(2023, 1, 1, 0, 0, 0, 0, 0));
 			RuleFor(x => x.TemperatureC).InclusiveBetween(-100, 100);
 			RuleFor(x => x.Summary).NotNull().NotEmpty().MaximumLength(500);
 		}

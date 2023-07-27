@@ -16,7 +16,7 @@ public class GetWeatherForecastTests : UnitTest
 
 	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper,
 	                               ResourceRepositoryFixture resourceRepository,
-	                               DependencyContainerFixture container) : base(testOutputHelper)
+	                               UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()
@@ -24,7 +24,6 @@ public class GetWeatherForecastTests : UnitTest
 		_serviceProvider = container
 			.WithXunitLogging(TestOutputHelper)
 			.WithTestScopeInMemoryDatabase(parts)
-			.WithSystemClock()
 			.ConfigureServices(s => s.AddAppParts(parts))
 			.BuildServiceProvider();
 	}
