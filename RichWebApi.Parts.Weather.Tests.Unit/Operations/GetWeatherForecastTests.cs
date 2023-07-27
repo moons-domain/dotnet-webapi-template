@@ -11,14 +11,14 @@ namespace RichWebApi.Operations;
 
 public class GetWeatherForecastTests : UnitTest
 {
-	private readonly IResourceScope _resourceScope;
+	private readonly IResourceScope _testResources;
 	private readonly IServiceProvider _serviceProvider;
 
 	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper,
 	                               ResourceRepositoryFixture resourceRepository,
 	                               DependencyContainerFixture container) : base(testOutputHelper)
 	{
-		_resourceScope = resourceRepository.BeginTestScope(this);
+		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()
 			.AddWeather();
 		_serviceProvider = container
@@ -32,38 +32,32 @@ public class GetWeatherForecastTests : UnitTest
 	[Fact]
 	public async Task LoadsFirstPage()
 	{
-		var entities = _resourceScope.GetJsonInputResource<WeatherForecast[]>("entities");
-		await PersistEntitiesAsync(entities);
+		using var resources = _testResources.CreateMethodScope(); 
+		var entities = resources.GetJsonInputResource<WeatherForecast[]>("entities");
+		await _serviceProvider
+			.GetRequiredService<IRichWebApiDatabase>()
+			.PersistEntitiesAsync(entities);
 
-		var input = _resourceScope.GetJsonInputResource<GetWeatherForecast>();
+		var input = resources.GetJsonInputResource<GetWeatherForecast>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		_resourceScope.CompareWithJsonExpectation(TestOutputHelper, result);
+		resources.CompareWithJsonExpectation(TestOutputHelper, result);
 	}
 
 	[Fact]
 	public async Task LoadsOne()
 	{
-		var entities = _resourceScope.GetJsonInputResource<WeatherForecast[]>("entities");
-		await PersistEntitiesAsync(entities);
+		using var resources = _testResources.CreateMethodScope(); 
+		var entities = resources.GetJsonInputResource<WeatherForecast[]>("entities");
+		await _serviceProvider
+			.GetRequiredService<IRichWebApiDatabase>()
+			.PersistEntitiesAsync(entities);
 
-		var input = _resourceScope.GetJsonInputResource<GetWeatherForecast>();
+		var input = resources.GetJsonInputResource<GetWeatherForecast>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		_resourceScope.CompareWithJsonExpectation(TestOutputHelper, result);
-	}
-
-	private async ValueTask PersistEntitiesAsync<T>(IEnumerable<T> entities) where T : class, IEntity
-	{
-		var db = _serviceProvider.GetRequiredService<IRichWebApiDatabase>();
-
-		foreach (var e in entities)
-		{
-			await db.Context.AddAsync(e);
-		}
-
-		await db.PersistAsync();
+		resources.CompareWithJsonExpectation(TestOutputHelper, result);
 	}
 }

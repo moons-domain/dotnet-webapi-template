@@ -2,7 +2,9 @@
 
 public interface IResourceScope : IDisposable
 {
-	IResourceScope BeginScope(string scope);
+	IResourceScope CreateScope(string scope);
+	
+	string Scope { get; }
 
 	Stream GetResourceStream(string nameSubstring);
 }

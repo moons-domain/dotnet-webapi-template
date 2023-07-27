@@ -4,25 +4,26 @@ internal sealed class ResourceScope : IResourceScope
 {
 	private readonly ResourceRepositoryFixture _resourceRepository;
 
-	private readonly string _scope;
 
 	private readonly List<ResourceScope> _innerScopes = new();
+
+	public string Scope { get; }
 
 	public ResourceScope(string scope, ResourceRepositoryFixture resourceRepository)
 	{
 		_resourceRepository = resourceRepository;
-		_scope = scope;
+		Scope = scope;
 	}
 
-	public IResourceScope BeginScope(string scope)
+	public IResourceScope CreateScope(string scope)
 	{
-		var newScope = new ResourceScope($"{_scope}.{scope}", _resourceRepository);
+		var newScope = new ResourceScope(Scope.ConcatScopeString(scope), _resourceRepository);
 		_innerScopes.Add(newScope);
 		return newScope;
 	}
 
 	public Stream GetResourceStream(string nameSubstring)
-		=> _resourceRepository.GetResourceStream($"{_scope}.{nameSubstring}");
+		=> _resourceRepository.GetResourceStream($"{Scope}.{nameSubstring}");
 
 	public void Dispose()
 	{

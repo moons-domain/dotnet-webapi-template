@@ -13,7 +13,10 @@ namespace RichWebApi.Tests.Resources;
 public sealed class ResourceRepositoryFixture : IResourceScope
 {
 	private readonly ConcurrentDictionary<Assembly, string[]> _assemblyEmbeddedResources = new();
+
 	private readonly List<ResourceScope> _innerScopes = new();
+
+	public string Scope => string.Empty;
 
 	public Stream GetResourceStream(string nameSubstring)
 	{
@@ -56,11 +59,11 @@ public sealed class ResourceRepositoryFixture : IResourceScope
 		var stream = match.Assembly.GetManifestResourceStream(match.ResourceNames[0])!;
 		return stream;
 	}
-	
-	public IResourceScope BeginTestScope<T>(T test) where T : Test
+
+	public IResourceScope CreateTestScope<T>(T test) where T : Test
 	{
 		ReadFromAssembly<T>();
-		return BeginScope(test.GetType().Name);
+		return CreateScope(test.GetType().Name);
 	}
 
 	public void Dispose()
@@ -73,7 +76,7 @@ public sealed class ResourceRepositoryFixture : IResourceScope
 		}
 	}
 
-	public IResourceScope BeginScope(string scope)
+	public IResourceScope CreateScope(string scope)
 	{
 		var newScope = new ResourceScope(scope, this);
 		_innerScopes.Add(newScope);

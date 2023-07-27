@@ -11,7 +11,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -19,24 +19,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RichWebApi.Dependencies.Database.Tests\RichWebApi.Dependencies.Database.Tests.csproj" />
-      <ProjectReference Include="..\RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj" />
-      <ProjectReference Include="..\RichWebApi.Tests.Unit\RichWebApi.Tests.Unit.csproj" />
+        <ProjectReference Include="..\RichWebApi.Dependencies.Database.Tests\RichWebApi.Dependencies.Database.Tests.csproj"/>
+        <ProjectReference Include="..\RichWebApi.Dependencies.SignalR.Tests\RichWebApi.Dependencies.SignalR.Tests.csproj"/>
+        <ProjectReference Include="..\RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj"/>
+        <ProjectReference Include="..\RichWebApi.Tests.Unit\RichWebApi.Tests.Unit.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.input.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.input.json" />
-      <None Remove="Operations\Resources\GetWeatherForecast.LoadsFirstPage.entities.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.entities.json" />
-      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.expected.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.expected.json" />
-      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsOne.input.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.input.json" />
-      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsOne.entities.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.entities.json" />
-      <None Remove="Operations\Resources\GetWeatherForecastTests.LoadsOne.expected.json" />
-      <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.expected.json" />
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.input.json"/>
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.entities.json"/>
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsFirstPage.expected.json"/>
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.input.json"/>
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.entities.json"/>
+        <EmbeddedResource Include="Operations\Resources\GetWeatherForecastTests.LoadsOne.expected.json"/>
+        <EmbeddedResource Include="Operations\Resources\PatchWeatherForecastTests.entity.json"/>
+        <EmbeddedResource Include="Operations\Resources\PatchWeatherForecastTests.input.json"/>
+        <EmbeddedResource Include="Operations\Resources\PatchWeatherForecastTests.UpdatesOne.expected.json"/>
     </ItemGroup>
 
 </Project>
