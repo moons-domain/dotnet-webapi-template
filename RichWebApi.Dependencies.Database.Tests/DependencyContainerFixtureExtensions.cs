@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
 
-namespace RichWebApi.Dependencies.Database.Tests;
+namespace RichWebApi.Tests;
 
 public static class DependencyContainerFixtureExtensions
 {

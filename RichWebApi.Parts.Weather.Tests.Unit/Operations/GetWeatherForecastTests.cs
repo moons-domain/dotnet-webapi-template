@@ -1,14 +1,13 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using RichWebApi.Dependencies.Database.Tests;
 using RichWebApi.Entities;
+using RichWebApi.Operations;
 using RichWebApi.Persistence;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Operations;
+namespace RichWebApi.Tests.Operations;
 
 public class GetWeatherForecastTests : UnitTest
 {

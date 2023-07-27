@@ -1,6 +1,5 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 
 namespace RichWebApi.Tests.DependencyInjection;
 
