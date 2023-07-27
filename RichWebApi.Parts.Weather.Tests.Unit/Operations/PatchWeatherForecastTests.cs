@@ -41,12 +41,12 @@ public class PatchWeatherForecastTests : UnitTest, IAsyncLifetime
 	public async Task UpdatesOne()
 	{
 		var sharedInput = _testResources.GetJsonInputResource<PatchWeatherForecast>();
-		using var resources = _testResources.CreateMethodScope();
+		using var caseResources = _testResources.CreateMethodScope();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		await mediator.Send(sharedInput);
 		var expected = await mediator.Send(new GetWeatherForecast(0, 1));
-		resources.CompareWithJsonExpectation(TestOutputHelper, expected);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, expected);
 	}
 
 	[Fact]
