@@ -15,16 +15,19 @@ public class GetWeatherForecastTests : UnitTest
 	private readonly IResourceScope _resourceScope;
 	private readonly IServiceProvider _serviceProvider;
 
-	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper, ResourceRepositoryFixture resourceRepository, DependencyContainerFixture dependencyContainerFixture) : base(testOutputHelper)
+	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper,
+	                               ResourceRepositoryFixture resourceRepository,
+	                               DependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_resourceScope = resourceRepository.BeginTestScope(this);
 		var parts = new AppPartsCollection()
 			.AddWeather();
-		_serviceProvider = dependencyContainerFixture
-			.WithXunitLogging(testOutputHelper)
-			.WithTestScopeInMemoryDatabase(this, parts)
+		_serviceProvider = container
+			.WithXunitLogging(TestOutputHelper)
+			.WithTestScopeInMemoryDatabase(parts)
 			.WithSystemClock()
-			.ConfigureServices(s => s.AddAppParts(parts));
+			.ConfigureServices(s => s.AddAppParts(parts))
+			.BuildServiceProvider();
 	}
 
 	[Fact]
@@ -32,23 +35,23 @@ public class GetWeatherForecastTests : UnitTest
 	{
 		var entities = _resourceScope.GetJsonInputResource<WeatherForecast[]>("entities");
 		await PersistEntitiesAsync(entities);
-		
+
 		var input = _resourceScope.GetJsonInputResource<GetWeatherForecast>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
-		
+
 		var result = await mediator.Send(input);
 		_resourceScope.CompareWithJsonExpectation(TestOutputHelper, result);
 	}
-	
+
 	[Fact]
 	public async Task LoadsOne()
 	{
 		var entities = _resourceScope.GetJsonInputResource<WeatherForecast[]>("entities");
 		await PersistEntitiesAsync(entities);
-		
+
 		var input = _resourceScope.GetJsonInputResource<GetWeatherForecast>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
-		
+
 		var result = await mediator.Send(input);
 		_resourceScope.CompareWithJsonExpectation(TestOutputHelper, result);
 	}
@@ -56,6 +59,7 @@ public class GetWeatherForecastTests : UnitTest
 	private async ValueTask PersistEntitiesAsync<T>(IEnumerable<T> entities) where T : class, IEntity
 	{
 		var db = _serviceProvider.GetRequiredService<IRichWebApiDatabase>();
+
 		foreach (var e in entities)
 		{
 			await db.Context.AddAsync(e);
