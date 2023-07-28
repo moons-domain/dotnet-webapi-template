@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using FluentValidation;
-using FluentValidation.Results;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -9,7 +7,6 @@ using RichWebApi.Entities;
 using RichWebApi.Exceptions;
 using RichWebApi.Extensions;
 using static System.Linq.Expressions.Expression;
-
 
 namespace RichWebApi.Persistence.Internal;
 
@@ -89,8 +86,6 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 			var validatorParameterExpr = Parameter(typeof(object), "validator");
 			var method = validatorType.GetMethod(nameof(IValidator<object>.ValidateAsync),
 				System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-
-			Debug.Assert(method != null && method.ReturnType == typeof(Task<ValidationResult>));
 
 			var entityParameterExpr = Parameter(typeof(object), "entity");
 
