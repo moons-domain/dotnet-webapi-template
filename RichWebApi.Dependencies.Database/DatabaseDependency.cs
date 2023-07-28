@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System.Runtime.CompilerServices;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ using RichWebApi.Utilities;
 using RichWebApi.Utilities.Paging;
 using RichWebApi.Validation;
 
+[assembly: InternalsVisibleTo("RichWebApi.Dependencies.Database.Tests.Unit")]
 namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
@@ -35,6 +37,8 @@ internal class DatabaseDependency : IAppDependency
 		{
 			services.AddOptionsWithValidator<DatabaseConfig, DatabaseConfig.ProdEnvValidator>(ConfigurationSection);
 		}
+
+		services.AddOptionsWithValidator<DatabaseEntitiesConfig, DatabaseEntitiesConfig.Validator>($"{ConfigurationSection}:Entities");
 
 		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.GetName().Name}.Migrations";
 		services.AddDbContext<RichWebApiDbContext>((sp, dbContextOptionsBuilder) =>

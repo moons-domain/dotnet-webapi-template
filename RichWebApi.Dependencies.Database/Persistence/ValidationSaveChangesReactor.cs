@@ -3,6 +3,8 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using RichWebApi.Config;
 using RichWebApi.Extensions;
 using RichWebApi.Persistence.Internal;
 
@@ -13,17 +15,25 @@ public class ValidationSaveChangesReactor : ISaveChangesReactor
 {
 	private readonly ILogger<ValidationSaveChangesReactor> _logger;
 	private readonly IServiceProvider _serviceProvider;
+	private readonly IOptionsMonitor<DatabaseEntitiesConfig> _configMonitor;
 
-	public ValidationSaveChangesReactor(ILogger<ValidationSaveChangesReactor> logger, IServiceProvider serviceProvider)
+	public ValidationSaveChangesReactor(ILogger<ValidationSaveChangesReactor> logger, IServiceProvider serviceProvider, IOptionsMonitor<DatabaseEntitiesConfig> configMonitor)
 	{
 		_logger = logger;
 		_serviceProvider = serviceProvider;
+		_configMonitor = configMonitor;
 	}
 
 	public uint Order => 2;
 
 	public async ValueTask ReactAsync(RichWebApiDbContext context, CancellationToken cancellationToken = default)
 	{
+		var validationOption = _configMonitor.CurrentValue.Validation; 
+		if (validationOption == EntitiesValidationOption.None)
+		{
+			return;
+		}
+		
 		var failures = await _logger.TimeAsync(async () =>
 		{
 			var validatorsProvider = _serviceProvider.GetRequiredService<IEntityValidatorsProvider>();
@@ -35,12 +45,7 @@ public class ValidationSaveChangesReactor : ISaveChangesReactor
 			foreach (var group in entriesByType)
 			{
 				var asyncValidator = validatorsProvider.GetAsyncValidator(_serviceProvider, group.Key);
-
-				if (asyncValidator is null)
-				{
-					continue;
-				}
-
+				
 				var tasks = group.Value.Select(x => asyncValidator(x, cancellationToken));
 				var groupResult = await Task.WhenAll(tasks);
 				var groupFailures = groupResult.Where(x => !x.IsValid).ToArray();

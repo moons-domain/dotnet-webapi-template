@@ -14,7 +14,7 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Operations;
 
-public class PatchWeatherForecastTests : UnitTest, IAsyncLifetime
+public class PatchWeatherForecastTests : UnitTest
 {
 	private readonly IResourceScope _testResources;
 	private readonly IServiceProvider _serviceProvider;
@@ -65,15 +65,12 @@ public class PatchWeatherForecastTests : UnitTest, IAsyncLifetime
 		groupManagerMock.Verify(x => x.Group(It.Is<string>(s => s == WeatherHubConstants.GroupName)), Times.Once());
 	}
 
-	public Task InitializeAsync()
+	public override async Task InitializeAsync()
 	{
+		await base.InitializeAsync();
 		var sharedEntity = _testResources.GetJsonInputResource<WeatherForecast>("entity");
-		return _serviceProvider
+		await _serviceProvider
 			.GetRequiredService<IRichWebApiDatabase>()
-			.PersistEntityAsync(sharedEntity)
-			.AsTask();
+			.PersistEntityAsync(sharedEntity);
 	}
-
-	public Task DisposeAsync()
-		=> Task.CompletedTask;
 }
