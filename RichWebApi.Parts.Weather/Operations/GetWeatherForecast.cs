@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using RichWebApi.Entities;
 using RichWebApi.Models;
 using RichWebApi.Persistence;
@@ -36,6 +37,7 @@ public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<Weat
 			=> _database.ReadAsync((db, ct) => db.Context
 				.Set<WeatherForecast>()
 				.OrderBy(x => x.Date)
+				.AsNoTracking()
 				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
 				.ToPagedResultAsync(request, ct), cancellationToken);
 	}

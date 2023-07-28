@@ -1,9 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.Extensions.DependencyInjection;
 using RichWebApi.Config;
 using RichWebApi.Services;
 using RichWebApi.Startup;
 using RichWebApi.Validation;
 
+[assembly: InternalsVisibleTo("RichWebApi.Parts.Weather.Tests.Unit")]
 namespace RichWebApi;
 
 internal class WeatherPart : IAppPart

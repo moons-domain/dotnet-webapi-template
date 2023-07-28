@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
 		return services;
 	}
 
-	public static IServiceCollection CollectDatabaseEntities(this IServiceCollection services, Assembly[] assemblies)
+	internal static IServiceCollection CollectDatabaseEntities(this IServiceCollection services, IEnumerable<Assembly> assemblies)
 	{
 		var entityConfigurationType = typeof(INonGenericEntityConfiguration);
 		foreach (var assembly in assemblies)
