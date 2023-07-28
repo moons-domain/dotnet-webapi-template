@@ -7,6 +7,7 @@ using RichWebApi.Hubs;
 using RichWebApi.Models;
 using RichWebApi.Persistence;
 using RichWebApi.Tests;
+using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using RichWebApi.Tests.Resources;

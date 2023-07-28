@@ -1,3 +1,4 @@
+using RichWebApi.Tests.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace RichWebApi.Tests;
