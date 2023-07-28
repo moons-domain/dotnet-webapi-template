@@ -20,10 +20,10 @@ namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
 {
-	private readonly IWebHostEnvironment _environment;
+	private readonly IHostEnvironment _environment;
 	private const string ConfigurationSection = "Database";
 
-	public DatabaseDependency(IWebHostEnvironment environment) => _environment = environment;
+	public DatabaseDependency(IHostEnvironment environment) => _environment = environment;
 
 	public void ConfigureServices(IServiceCollection services, IAppPartsCollection parts)
 	{
@@ -76,10 +76,5 @@ internal class DatabaseDependency : IAppDependency
 
 	public void ConfigureApplication(IApplicationBuilder builder)
 	{
-	}
-
-	public void ScanAppParts(IServiceCollection services, IAppPartsCollection parts)
-	{
-		throw new NotImplementedException();
 	}
 }
