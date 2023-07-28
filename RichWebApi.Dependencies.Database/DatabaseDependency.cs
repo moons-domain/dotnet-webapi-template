@@ -60,7 +60,6 @@ internal class DatabaseDependency : IAppDependency
 						.CommandTimeout(dbConfig.Timeout)
 						.MigrationsAssembly(migrationsAssemblyName));
 		}, ServiceLifetime.Transient);
-		services.AddStartupAction<AssertEntityValidatorsAction>();
 		services.AddStartupAction<DatabaseMigrationAction>();
 		services.AddSaveChangesReactor<AuditSaveChangesReactor>();
 		services.AddSaveChangesReactor<ValidationSaveChangesReactor>();
