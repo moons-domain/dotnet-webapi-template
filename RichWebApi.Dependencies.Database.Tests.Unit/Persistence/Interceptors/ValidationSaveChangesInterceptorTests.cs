@@ -21,7 +21,7 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 	private readonly DependencyContainerFixture _container;
 
 	public ValidationSaveChangesInterceptorTests(ITestOutputHelper testOutputHelper,
-	                                             UnitDependencyContainerFixture container) : base(testOutputHelper)
+												 UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		var parts = new AppPartsCollection
 		{
@@ -92,13 +92,15 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 		var interceptor = new ValidationSaveChangesInterceptor(sp,
 			sp.GetRequiredService<ILogger<ValidationSaveChangesInterceptor>>(),
 			sp.GetRequiredService<IOptionsMonitor<DatabaseEntitiesConfig>>());
-		
+
 		await interceptor.SavingChangesAsync(eventData, default);
-		
+
 		var validatorMock = sp.GetRequiredService<Mock<IValidator<UnitAuditableEntity>>>();
-		validatorMock.Verify(x => x.ValidateAsync(It.Is<UnitAuditableEntity>(e => e == entity), It.IsAny<CancellationToken>()), Times.Once());
+		validatorMock.Verify(
+			x => x.ValidateAsync(It.Is<UnitAuditableEntity>(e => e == entity), It.IsAny<CancellationToken>()),
+			Times.Once());
 	}
-	
+
 	[Fact]
 	public async Task ThrowsIfSomeOfEntitiesAreInvalid()
 	{
@@ -115,10 +117,28 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 		var interceptor = new ValidationSaveChangesInterceptor(sp,
 			sp.GetRequiredService<ILogger<ValidationSaveChangesInterceptor>>(),
 			sp.GetRequiredService<IOptionsMonitor<DatabaseEntitiesConfig>>());
-		
+
 		var intercept = () => interceptor.SavingChangesAsync(eventData, default).AsTask();
-		var assertions = await intercept.Should()
+		var exceptionAssert = await intercept.Should()
 			.ThrowExactlyAsync<AggregateException>();
-		//todo
+		exceptionAssert.And.InnerExceptions
+			.Should().AllBeAssignableTo<ValidationException>()
+			.And.ContainSingle()
+			.And.BeEquivalentTo(new object[]
+			{
+				new
+				{
+					Errors = new[]
+					{
+						new
+						{
+							AttemptedValue = true,
+							PropertyName = nameof(UnitAuditableEntity.Invalid),
+							Severity = Severity.Error,
+							ErrorCode = "EqualValidator"
+						}
+					}
+				}
+			});
 	}
 }

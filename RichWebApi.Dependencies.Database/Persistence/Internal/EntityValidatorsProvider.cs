@@ -16,21 +16,22 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 
 	public IReadOnlyDictionary<Type, (Func<IServiceProvider, object> ValidatorProvider, AsyncValidationExecutor
 		ValidationExecutor
-		)> AsyncValidators { get; }
+		)> AsyncValidators
+	{ get; }
 
 	public bool AllEntitiesHaveValidators { get; }
 
 	public EntityValidatorsProvider(ILogger<EntityValidatorsProvider> logger,
-	                                IServiceProvider serviceProvider,
-	                                IOptionsMonitor<DatabaseEntitiesConfig> configMonitor,
-	                                IEnumerable<IAppPart> partsToScan)
+									IServiceProvider serviceProvider,
+									IOptionsMonitor<DatabaseEntitiesConfig> configMonitor,
+									IEnumerable<IAppPart> partsToScan)
 	{
 		_logger = logger;
 		var entityType = typeof(IEntity);
 		var entityTypes = partsToScan
 			.SelectMany(x => x.GetType().Assembly.ExportedTypes
 				.Where(t => t is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false }
-				            && t.IsAssignableTo(entityType)))
+							&& t.IsAssignableTo(entityType)))
 			.ToArray();
 		var validators = logger.Time(() =>
 		{
@@ -51,7 +52,7 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 			throw new MissingEntitiesValidatorsException(missingValidatorTypes);
 		}
 	}
-	
+
 	public EntityAsyncValidator GetAsyncValidator(IServiceProvider serviceProvider, Type entityType)
 	{
 		if (!AsyncValidators.TryGetValue(entityType, out var entityValidator))
@@ -86,6 +87,12 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 			var validatorParameterExpr = Parameter(typeof(object), "validator");
 			var method = validatorType.GetMethod(nameof(IValidator<object>.ValidateAsync),
 				System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+			if (method is null)
+			{
+				throw new InvalidOperationException(
+					$"Type '{validatorType.Name}' doesn't contain method '{nameof(IValidator<object>.ValidateAsync)}' which should be used in validation delegate.");
+			}
 
 			var entityParameterExpr = Parameter(typeof(object), "entity");
 
