@@ -20,14 +20,21 @@ public class EntityValidatorsProviderTests : UnitTest
 	public EntityValidatorsProviderTests(ITestOutputHelper testOutputHelper, UnitDependencyContainerFixture container) :
 		base(testOutputHelper)
 	{
-		_container = container;
+		var parts = new AppPartsCollection
+		{
+			new DatabaseUnitTestsPart()
+		};
+		_container = container
+			.WithXunitLogging(TestOutputHelper)
+			.WithTestScopeInMemoryDatabase(parts)
+			.ConfigureServices(s => s.AddAppParts(parts));
 	}
 
 	[Fact]
 	public void ThrowsIfValidationRequiredWithNoValidators()
 	{
-		_container.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required);
-		var sp = EnrichWithSharedServices(_container)
+		var sp = _container
+			.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required)
 			.BuildServiceProvider();
 		var getter = () => sp.GetRequiredService<IEntityValidatorsProvider>();
 		getter.Should()
@@ -40,8 +47,8 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public void NotThrowsIfValidationNotRequired()
 	{
-		_container.SetDatabaseEntitiesConfig(EntitiesValidationOption.None);
-		var sp = EnrichWithSharedServices(_container)
+		var sp = _container
+			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
 			.BuildServiceProvider();
 		var getter = () => sp.GetRequiredService<IEntityValidatorsProvider>();
 		getter.Should().NotThrow();
@@ -50,11 +57,10 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public void NotThrowsIfHaveAllValidators()
 	{
-		_container
+		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required)
-			.AddEmptyMockedService<IValidator<ConfigurableEntity>>()
-			.AddEmptyMockedService<IValidator<IgnoredEntity>>();
-		var sp = EnrichWithSharedServices(_container)
+			.ReplaceWithEmptyMock<IValidator<ConfigurableEntity>>()
+			.ReplaceWithEmptyMock<IValidator<IgnoredEntity>>()
 			.BuildServiceProvider();
 		var getter = () => sp.GetRequiredService<IEntityValidatorsProvider>();
 		getter.Should().NotThrow();
@@ -63,10 +69,9 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public void ProvidesValidatorForEntity()
 	{
-		_container
+		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.AddEmptyMockedService<IValidator<ConfigurableEntity>>();
-		var sp = EnrichWithSharedServices(_container)
+			.ReplaceWithEmptyMock<IValidator<ConfigurableEntity>>()
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 		var validator = validatorsProvider.GetAsyncValidator(sp, typeof(ConfigurableEntity));
@@ -78,13 +83,11 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public async Task ProvidedValidatorCallsFluentValidationValidator()
 	{
-		_container
+		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.AddMockedService<IValidator<ConfigurableEntity>>(configure: (_, mock) => mock
+			.ReplaceWithMock<IValidator<ConfigurableEntity>>(configure: (_, mock) => mock
 				.Setup(x => x.ValidateAsync(It.IsAny<ConfigurableEntity>(), It.IsAny<CancellationToken>()))
-				.Verifiable()
-			);
-		var sp = EnrichWithSharedServices(_container)
+				.Verifiable())
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 		var validator = validatorsProvider.GetAsyncValidator(sp, typeof(ConfigurableEntity));
@@ -97,10 +100,9 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public Task ThrowsIfWrongEntityPassedToProvidedValidator()
 	{
-		_container
+		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.AddEmptyMockedService<IValidator<ConfigurableEntity>>();
-		var sp = EnrichWithSharedServices(_container)
+			.ReplaceWithEmptyMock<IValidator<ConfigurableEntity>>()
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 		var validator = validatorsProvider.GetAsyncValidator(sp, typeof(ConfigurableEntity));
@@ -112,8 +114,8 @@ public class EntityValidatorsProviderTests : UnitTest
 	[Fact]
 	public void ThrowsIfTriesToProvideMissingValidator()
 	{
-		_container.SetDatabaseEntitiesConfig(EntitiesValidationOption.None);
-		var sp = EnrichWithSharedServices(_container)
+		var sp = _container
+			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 		var entityType = typeof(ConfigurableEntity);
@@ -124,21 +126,9 @@ public class EntityValidatorsProviderTests : UnitTest
 			.Contain(entityType);
 	}
 
-	private DependencyContainerFixture EnrichWithSharedServices(DependencyContainerFixture container)
-	{
-		var parts = new AppPartsCollection
-		{
-			new DatabaseUnitTestsPart()
-		};
-		return container
-			.WithXunitLogging(TestOutputHelper)
-			.WithTestScopeInMemoryDatabase(parts)
-			.ConfigureServices(s => s.AddAppParts(parts));
-	}
-
 	public override async Task DisposeAsync()
 	{
 		await base.DisposeAsync();
-		_container.ConfigureServices(s => s.Clear());
+		_container.Clear();
 	}
 }

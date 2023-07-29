@@ -17,16 +17,16 @@ public static class DependencyContainerFixtureExtensions
 		Action<IServiceProvider, Mock<IClientProxy<T>>>? configureProxy = null)
 		where T : Hub
 		=> fixture
-			.AddMockedService(defaultMockBehavior, args, configureProxy)
-			.AddMockedService<IProxyHubClients<T>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(defaultMockBehavior, args, configureProxy)
+			.ReplaceWithMock<IProxyHubClients<T>>(defaultMockBehavior, args, (sp, mock) =>
 			{
 				var client = sp.GetRequiredService<IClientProxy<T>>();
 				mock.Setup(x => x.All)
 					.Returns(client);
 				configureHubClients?.Invoke(sp, mock, client);
 			})
-			.AddMockedService(defaultMockBehavior, args, configureGroupManager)
-			.AddMockedService<IHubContext<T>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(defaultMockBehavior, args, configureGroupManager)
+			.ReplaceWithMock<IHubContext<T>>(defaultMockBehavior, args, (sp, mock) =>
 			{
 				mock.Setup(x => x.Clients)
 					.Returns(sp.GetRequiredService<IProxyHubClients<T>>());
@@ -46,16 +46,16 @@ public static class DependencyContainerFixtureExtensions
 		where T : Hub<TClient>
 		where TClient : class
 		=> fixture
-			.AddMockedService(defaultMockBehavior, args, configureClient)
-			.AddMockedService<IHubClients<TClient>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(defaultMockBehavior, args, configureClient)
+			.ReplaceWithMock<IHubClients<TClient>>(defaultMockBehavior, args, (sp, mock) =>
 			{
 				var client = sp.GetRequiredService<TClient>();
 				mock.Setup(x => x.All)
 					.Returns(client);
 				configureHubClients?.Invoke(sp, mock, client);
 			})
-			.AddMockedService(defaultMockBehavior, args, configureGroupManager)
-			.AddMockedService<IHubContext<T, TClient>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(defaultMockBehavior, args, configureGroupManager)
+			.ReplaceWithMock<IHubContext<T, TClient>>(defaultMockBehavior, args, (sp, mock) =>
 			{
 				mock.Setup(x => x.Clients)
 					.Returns(sp.GetRequiredService<IHubClients<TClient>>());

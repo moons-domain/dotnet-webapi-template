@@ -14,7 +14,7 @@ public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture SetDatabaseEntitiesConfig(this DependencyContainerFixture container,
 	                                                             EntitiesValidationOption option)
-		=> container.AddMockedService<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) => mock.Setup(x => x.CurrentValue)
+		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) => mock.Setup(x => x.CurrentValue)
 			.Returns(new DatabaseEntitiesConfig
 			{
 				Validation = option
@@ -26,7 +26,7 @@ public static class DependencyContainerFixtureExtensions
 		var dependencies = new AppDependenciesCollection()
 			.AddDatabase(new DummyEnvironment());
 		return fixture
-			.AddMockedService<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) =>
+			.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) =>
 				mock.Setup(x => x.CurrentValue)
 					.Returns(new DatabaseEntitiesConfig
 					{

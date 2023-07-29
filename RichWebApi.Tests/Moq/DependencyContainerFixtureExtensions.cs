@@ -11,7 +11,7 @@ public static class DependencyContainerFixtureExtensions
 	                                                        MockBehavior defaultMockBehavior = MockBehavior.Default)
 		=> fixture.ConfigureServices(services => services.TryAddSingleton(new MockRepository(defaultMockBehavior)));
 
-	public static DependencyContainerFixture AddMockedService<TService>(
+	public static DependencyContainerFixture ReplaceWithMock<TService>(
 		this DependencyContainerFixture fixture,
 		MockBehavior defaultMockBehavior = MockBehavior.Default,
 		object[]? args = null,
@@ -20,28 +20,29 @@ public static class DependencyContainerFixtureExtensions
 			.AddMoqServices()
 			.ConfigureServices(services =>
 			{
-				services.TryAddSingleton(sp =>
+				services.Replace(ServiceDescriptor.Singleton(sp =>
 				{
 					var mockRepository = sp.GetRequiredService<MockRepository>();
 					var mock = mockRepository.Create<TService>(defaultMockBehavior, args ?? Array.Empty<object>());
 					configure?.Invoke(sp, mock);
 					return mock;
-				});
-				services.TryAddSingleton(sp => sp.GetRequiredService<Mock<TService>>().Object);
+				}));
+				services.Replace(
+					ServiceDescriptor.Singleton(sp => sp.GetRequiredService<Mock<TService>>().Object));
 			});
 
-	public static DependencyContainerFixture AddMockedService<TService>(
+	public static DependencyContainerFixture ReplaceWithMock<TService>(
 		this DependencyContainerFixture fixture,
 		MockBehavior defaultMockBehavior = MockBehavior.Default,
 		object[]? args = null,
 		Action<Mock<TService>>? configure = null) where TService : class
 		=> fixture
-			.AddMockedService<TService>(defaultMockBehavior, args, (_, mock) => configure?.Invoke(mock));
+			.ReplaceWithMock<TService>(defaultMockBehavior, args, (_, mock) => configure?.Invoke(mock));
 	
-	public static DependencyContainerFixture AddEmptyMockedService<TService>(
+	public static DependencyContainerFixture ReplaceWithEmptyMock<TService>(
 		this DependencyContainerFixture fixture,
 		MockBehavior defaultMockBehavior = MockBehavior.Default,
 		object[]? args = null) where TService : class
 		=> fixture
-			.AddMockedService<TService>(defaultMockBehavior, args, (_, _) => { });
+			.ReplaceWithMock<TService>(defaultMockBehavior, args, (_, _) => { });
 }

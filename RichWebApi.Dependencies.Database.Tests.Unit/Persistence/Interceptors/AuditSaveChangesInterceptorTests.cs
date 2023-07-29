@@ -27,7 +27,24 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 		};
 		_container = container
 			.WithXunitLogging(testOutputHelper)
+			.ReplaceWithEmptyMock<ILoggingOptions>()
 			.WithTestScopeInMemoryDatabase(parts);
+	}
+
+	[Fact]
+	public async Task DontDoAnythingIfUnknownDbContext()
+	{
+		var now = DateTimeOffset.UtcNow;
+		var sp = _container
+			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.BuildServiceProvider();
+		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
+		var eventData = new UnitTestDbContextEventData(sp.GetRequiredService<ILoggingOptions>(), null);
+
+		var interceptor = new AuditSaveChangesInterceptor(sp.GetRequiredService<ILogger<AuditSaveChangesInterceptor>>(),
+			clockMock.Object);
+		await interceptor.SavingChangesAsync(eventData, default);
+		clockMock.Verify(x => x.UtcNow, Times.Never());
 	}
 
 	[Fact]
@@ -35,14 +52,13 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.AddEmptyMockedService<ILoggingOptions>()
-			.AddMockedService<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
 		var dbContext = sp.GetRequiredService<RichWebApiDbContext>();
 		var eventData = new UnitTestDbContextEventData(sp.GetRequiredService<ILoggingOptions>(), dbContext);
-		
+
 		await dbContext.AddAsync(entity);
 		var interceptor = new AuditSaveChangesInterceptor(sp.GetRequiredService<ILogger<AuditSaveChangesInterceptor>>(),
 			clockMock.Object);
@@ -62,14 +78,13 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.AddEmptyMockedService<ILoggingOptions>()
-			.AddMockedService<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
 		var dbContext = sp.GetRequiredService<RichWebApiDbContext>();
 		var eventData = new UnitTestDbContextEventData(sp.GetRequiredService<ILoggingOptions>(), dbContext);
-		
+
 		var entry = await dbContext.AddAsync(entity);
 		var interceptor = new AuditSaveChangesInterceptor(sp.GetRequiredService<ILogger<AuditSaveChangesInterceptor>>(),
 			clockMock.Object);
@@ -96,8 +111,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.AddEmptyMockedService<ILoggingOptions>()
-			.AddMockedService<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
@@ -107,7 +121,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 		var entry = await dbContext.AddAsync(entity);
 		var interceptor = new AuditSaveChangesInterceptor(sp.GetRequiredService<ILogger<AuditSaveChangesInterceptor>>(),
 			clockMock.Object);
-		
+
 		await interceptor.SavingChangesAsync(eventData, default);
 		entry.State = EntityState.Deleted;
 
@@ -121,13 +135,6 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 			DeletedAt = now.DateTime
 		});
 		clockMock.Verify(x => x.UtcNow, Times.Exactly(2));
-		
-	}
-
-	public override async Task DisposeAsync()
-	{
-		await base.DisposeAsync();
-		_container.Clear();
 	}
 
 	private static void SetupClock(Mock<ISystemClock> mock, DateTimeOffset now)

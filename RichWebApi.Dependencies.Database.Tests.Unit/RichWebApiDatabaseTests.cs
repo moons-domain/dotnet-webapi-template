@@ -27,12 +27,12 @@ public class RichWebApiDatabaseTests : UnitTest
 	public async Task CallsReadPolicyOnRead()
 	{
 		var sp = _container
-			.AddMockedService<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task<IEntity>>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.AddMockedService<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
 				mock.Setup(x => x.DatabaseReadPolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())
@@ -55,12 +55,12 @@ public class RichWebApiDatabaseTests : UnitTest
 	public async Task CallsWritePolicyOnWrite()
 	{
 		var sp = _container
-			.AddMockedService<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.AddMockedService<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
 				mock.Setup(x => x.DatabaseWritePolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())
@@ -83,12 +83,12 @@ public class RichWebApiDatabaseTests : UnitTest
 	public async Task CallsWritePolicyOnPersist()
 	{
 		var sp = _container
-			.AddMockedService<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.AddMockedService<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
 				mock.Setup(x => x.DatabaseWritePolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())
@@ -105,11 +105,5 @@ public class RichWebApiDatabaseTests : UnitTest
 				It.IsAny<Func<CancellationToken, Task>>(),
 				It.IsAny<CancellationToken>()),
 			Times.Once());
-	}
-
-	public override async Task DisposeAsync()
-	{
-		await base.DisposeAsync();
-		_container.Clear();
 	}
 }

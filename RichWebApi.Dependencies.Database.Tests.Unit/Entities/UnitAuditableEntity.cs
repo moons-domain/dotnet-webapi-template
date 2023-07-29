@@ -1,5 +1,4 @@
-﻿
-using FluentValidation;
+﻿using FluentValidation;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RichWebApi.Entities.Configuration;
@@ -14,6 +13,8 @@ public class UnitAuditableEntity : IAuditableEntity, ISoftDeletableEntity
 	public DateTime ModifiedAt { get; set; }
 
 	public DateTime? DeletedAt { get; set; }
+	
+	public bool Invalid { get; set; }
 
 	public class Configurator : EntityConfiguration<UnitAuditableEntity>
 	{
@@ -27,6 +28,9 @@ public class UnitAuditableEntity : IAuditableEntity, ISoftDeletableEntity
 	[UsedImplicitly]
 	public class Validator : AbstractValidator<UnitAuditableEntity>
 	{
-		
+		public Validator()
+		{
+			RuleFor(x => x.Invalid).Equal(false);
+		}
 	}
 }
