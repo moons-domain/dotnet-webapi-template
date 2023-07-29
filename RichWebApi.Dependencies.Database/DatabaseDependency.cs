@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +12,7 @@ using RichWebApi.Config;
 using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Persistence.Internal;
 using RichWebApi.Startup;
 using RichWebApi.Utilities;
@@ -43,10 +45,11 @@ internal class DatabaseDependency : IAppDependency
 		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.GetName().Name}.Migrations";
 		services.AddDbContext<RichWebApiDbContext>((sp, dbContextOptionsBuilder) =>
 		{
+			dbContextOptionsBuilder.AddInterceptors(sp.GetServices<IOrderedInterceptor>().OrderBy(x => x.Order));
 			var host = sp.GetRequiredService<IWebHostEnvironment>();
 			var dbConfig = sp.GetRequiredService<IOptionsMonitor<DatabaseConfig>>()
 				.CurrentValue;
-
+			
 			if (host.IsDevelopment())
 			{
 				dbContextOptionsBuilder.EnableSensitiveDataLogging();
@@ -61,8 +64,8 @@ internal class DatabaseDependency : IAppDependency
 						.MigrationsAssembly(migrationsAssemblyName));
 		}, ServiceLifetime.Transient);
 		services.AddStartupAction<DatabaseMigrationAction>();
-		services.AddSaveChangesReactor<AuditSaveChangesReactor>();
-		services.AddSaveChangesReactor<ValidationSaveChangesReactor>();
+		services.AddSaveChangesInterceptor<ValidationSaveChangesInterceptor>();
+		services.AddSaveChangesInterceptor<AuditSaveChangesInterceptor>();
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
 		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();

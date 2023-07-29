@@ -52,8 +52,8 @@ public class EntityValidatorsProviderTests : UnitTest
 	{
 		_container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required)
-			.AddMockedService<IValidator<ConfigurableEntity>>()
-			.AddMockedService<IValidator<IgnoredEntity>>();
+			.AddEmptyMockedService<IValidator<ConfigurableEntity>>()
+			.AddEmptyMockedService<IValidator<IgnoredEntity>>();
 		var sp = EnrichWithSharedServices(_container)
 			.BuildServiceProvider();
 		var getter = () => sp.GetRequiredService<IEntityValidatorsProvider>();
@@ -65,7 +65,7 @@ public class EntityValidatorsProviderTests : UnitTest
 	{
 		_container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.AddMockedService<IValidator<ConfigurableEntity>>();
+			.AddEmptyMockedService<IValidator<ConfigurableEntity>>();
 		var sp = EnrichWithSharedServices(_container)
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
@@ -99,7 +99,7 @@ public class EntityValidatorsProviderTests : UnitTest
 	{
 		_container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.AddMockedService<IValidator<ConfigurableEntity>>();
+			.AddEmptyMockedService<IValidator<ConfigurableEntity>>();
 		var sp = EnrichWithSharedServices(_container)
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();

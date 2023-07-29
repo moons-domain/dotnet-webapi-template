@@ -15,9 +15,8 @@ public interface IAuditableEntity : IEntity
 	{
 		public Validator()
 		{
-			var defaultDateTime = new DateTime(2022, 1, 1, 0, 0, 0, 0, 0);
-			RuleFor(x => x.CreatedAt).GreaterThan(defaultDateTime);
-			RuleFor(x => x.ModifiedAt).GreaterThan(defaultDateTime);
+			RuleFor(x => x.CreatedAt).GreaterThanOrEqualTo(EntityValidatorConstants.DefaultDateTime);
+			RuleFor(x => x.ModifiedAt).GreaterThanOrEqualTo(EntityValidatorConstants.DefaultDateTime);
 		}
 	}
 }

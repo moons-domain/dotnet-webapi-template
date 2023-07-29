@@ -15,19 +15,19 @@ public static class DependencyContainerFixtureExtensions
 		var serilogLogger = new LoggerConfiguration()
 			.MinimumLevel.Verbose()
 			.Enrich.FromLogContext()
-			.WriteTo.TestOutput(testOutputHelper, outputTemplate:"[{Timestamp:HH:mm:ss.fff}] "
-			                                                     + "[{RequestId}] "
-			                                                     + "[{SourceContext:l}] "
-			                                                     + "[{Level:u3}] "
-			                                                     + "{Message:lj}{NewLine}"
-			                                                     + "{Properties:j}{NewLine}"
-			                                                     + "{Exception}")
+			.WriteTo.TestOutput(testOutputHelper, outputTemplate: "[{Timestamp:HH:mm:ss.fff}] "
+			                                                      + "[{RequestId}] "
+			                                                      + "[{SourceContext:l}] "
+			                                                      + "[{Level:u3}] "
+			                                                      + "{Message:lj}{NewLine}"
+			                                                      + "{Properties:j}{NewLine}"
+			                                                      + "{Exception}")
 			.CreateLogger();
 		return container.ConfigureServices(services => services.AddLogging(x =>
 		{
 			x.ClearProviders();
 			x.SetMinimumLevel(LogLevel.Information);
-			x.AddProvider(new SerilogLoggerProvider(serilogLogger));;
+			x.AddProvider(new SerilogLoggerProvider(serilogLogger));
 		}));
 	}
 }

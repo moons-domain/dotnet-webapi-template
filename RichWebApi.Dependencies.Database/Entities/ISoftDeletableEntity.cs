@@ -11,10 +11,8 @@ public interface ISoftDeletableEntity : IEntity
 	public class Validator : AbstractValidator<ISoftDeletableEntity>
 	{
 		public Validator()
-		{
-			RuleFor(x => x.DeletedAt)
-				.GreaterThan(new DateTime(2022, 1, 1, 0, 0, 0, 0, 0, 0))
+			=> RuleFor(x => x.DeletedAt)
+				.GreaterThanOrEqualTo(EntityValidatorConstants.DefaultDateTime)
 				.When(x => x.DeletedAt is not null);
-		}
 	}
 }
