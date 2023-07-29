@@ -19,7 +19,9 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 
 	public uint Order => 1;
 
-	public ValidationSaveChangesInterceptor(IServiceProvider serviceProvider, ILogger<ValidationSaveChangesInterceptor> logger, IOptionsMonitor<DatabaseEntitiesConfig> configMonitor)
+	public ValidationSaveChangesInterceptor(IServiceProvider serviceProvider,
+											ILogger<ValidationSaveChangesInterceptor> logger,
+											IOptionsMonitor<DatabaseEntitiesConfig> configMonitor)
 	{
 		_logger = logger;
 		_configMonitor = configMonitor;
@@ -27,7 +29,7 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 	}
 
 	public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
-	                                                                            CancellationToken cancellationToken = default)
+																				CancellationToken cancellationToken = default)
 	{
 		await base.SavingChangesAsync(eventData, result, cancellationToken);
 		var context = eventData.Context;
@@ -36,8 +38,8 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 			_logger.LogWarning("Database context is null");
 			return result;
 		}
-		
-		var validationOption = _configMonitor.CurrentValue.Validation; 
+
+		var validationOption = _configMonitor.CurrentValue.Validation;
 		if (validationOption == EntitiesValidationOption.None)
 		{
 			return result;
@@ -56,14 +58,14 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 	public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
 		=> throw new NotSupportedException();
 
-	public override void SaveChangesCanceled(DbContextEventData eventData) 
+	public override void SaveChangesCanceled(DbContextEventData eventData)
 		=> throw new NotSupportedException();
 
-	public override void SaveChangesFailed(DbContextErrorEventData eventData) 
+	public override void SaveChangesFailed(DbContextErrorEventData eventData)
 		=> throw new NotSupportedException();
 
 	public override InterceptionResult ThrowingConcurrencyException(ConcurrencyExceptionEventData eventData,
-	                                                                InterceptionResult result)
+																	InterceptionResult result)
 		=> throw new NotSupportedException();
 
 	private async Task ValidateTrackedEntitiesAsync(ChangeTracker changeTracker, CancellationToken cancellationToken)
@@ -80,7 +82,7 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 			foreach (var group in entriesByType)
 			{
 				var asyncValidator = validatorsProvider.GetAsyncValidator(sp, group.Key);
-				
+
 				var tasks = group.Value.Select(x => asyncValidator(x, cancellationToken));
 				var groupResult = await Task.WhenAll(tasks);
 				var groupFailures = groupResult.Where(x => !x.IsValid).ToArray();
