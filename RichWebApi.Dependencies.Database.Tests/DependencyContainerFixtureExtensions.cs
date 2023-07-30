@@ -5,6 +5,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Moq;
 
@@ -33,11 +34,12 @@ public static class DependencyContainerFixtureExtensions
 						Validation = EntitiesValidationOption.None
 					}))
 			.ConfigureServices(services => services
-				.AddDbContext<RichWebApiDbContext>(builder =>
+				.AddDbContext<RichWebApiDbContext>((sp, builder) =>
 				{
 					builder.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
 						.EnableDetailedErrors()
-						.EnableSensitiveDataLogging();
+						.EnableSensitiveDataLogging()
+						.AddInterceptors(sp.GetServices<IOrderedInterceptor>().OrderBy(x => x.Order));
 					configure?.Invoke(builder);
 				}, ServiceLifetime.Transient, ServiceLifetime.Transient)
 				.AddDependencyServices(dependencies, partsToScan));
