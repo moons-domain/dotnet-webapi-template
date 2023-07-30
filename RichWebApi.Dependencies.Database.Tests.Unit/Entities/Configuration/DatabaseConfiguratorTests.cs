@@ -23,7 +23,7 @@ public class DatabaseConfiguratorTests : UnitTest
 		};
 		_container = container
 			.WithXunitLogging(testOutputHelper)
-			.WithTestScopeInMemoryDatabase(parts, b => b.EnableServiceProviderCaching(false)) // as we need to reset model state
+			.WithTestScopeInMemoryDatabase(parts, b => b.EnableServiceProviderCaching(false)) // as we need to reset model state which impacts on condition whether OnModelCreating will be called
 			.ConfigureServices(s => s.RemoveAll<INonGenericEntityConfiguration>());
 	}
 
