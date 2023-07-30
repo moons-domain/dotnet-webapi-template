@@ -5,7 +5,7 @@ using RichWebApi.Validation;
 
 namespace RichWebApi.Config;
 
-public class DatabaseConfig
+internal class DatabaseConfig
 {
 	public string Password { get; set; } = null!;
 
@@ -23,7 +23,7 @@ public class DatabaseConfig
 
 	// should have value in development environment
 	public string ConnectionString { get; set; } = null!;
-	
+
 	[UsedImplicitly]
 	public class DevEnvValidator : OptionsValidator<DatabaseConfig>
 	{

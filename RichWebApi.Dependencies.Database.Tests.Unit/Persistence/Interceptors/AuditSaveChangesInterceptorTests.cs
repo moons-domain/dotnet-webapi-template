@@ -19,7 +19,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	private readonly DependencyContainerFixture _container;
 
 	public AuditSaveChangesInterceptorTests(ITestOutputHelper testOutputHelper,
-	                                        UnitDependencyContainerFixture container) : base(testOutputHelper)
+											UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		var parts = new AppPartsCollection
 		{
@@ -36,7 +36,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(mock => SetupClockMock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var eventData = new UnitTestDbContextEventData(sp.GetRequiredService<ILoggingOptions>(), null);
@@ -52,7 +52,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(mock => SetupClockMock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
@@ -78,7 +78,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(mock => SetupClockMock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
@@ -111,7 +111,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 	{
 		var now = DateTimeOffset.UtcNow;
 		var sp = _container
-			.ReplaceWithMock<ISystemClock>(configure: mock => SetupClock(mock, now))
+			.ReplaceWithMock<ISystemClock>(mock => SetupClockMock(mock, now))
 			.BuildServiceProvider();
 		var clockMock = sp.GetRequiredService<Mock<ISystemClock>>();
 		var entity = new UnitAuditableEntity();
@@ -137,7 +137,7 @@ public class AuditSaveChangesInterceptorTests : UnitTest
 		clockMock.Verify(x => x.UtcNow, Times.Exactly(2));
 	}
 
-	private static void SetupClock(Mock<ISystemClock> mock, DateTimeOffset now)
+	private static void SetupClockMock(Mock<ISystemClock> mock, DateTimeOffset now)
 		=> mock.Setup(x => x.UtcNow)
 			.Returns(now);
 }

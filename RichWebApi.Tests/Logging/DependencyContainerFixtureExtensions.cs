@@ -10,18 +10,18 @@ namespace RichWebApi.Tests.Logging;
 public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture WithXunitLogging(this DependencyContainerFixture container,
-	                                                          ITestOutputHelper testOutputHelper)
+															  ITestOutputHelper testOutputHelper)
 	{
 		var serilogLogger = new LoggerConfiguration()
 			.MinimumLevel.Verbose()
 			.Enrich.FromLogContext()
 			.WriteTo.TestOutput(testOutputHelper, outputTemplate: "[{Timestamp:HH:mm:ss.fff}] "
-			                                                      + "[{RequestId}] "
-			                                                      + "[{SourceContext:l}] "
-			                                                      + "[{Level:u3}] "
-			                                                      + "{Message:lj}{NewLine}"
-			                                                      + "{Properties:j}{NewLine}"
-			                                                      + "{Exception}")
+																  + "[{RequestId}] "
+																  + "[{SourceContext:l}] "
+																  + "[{Level:u3}] "
+																  + "{Message:lj}{NewLine}"
+																  + "{Properties:j}{NewLine}"
+																  + "{Exception}")
 			.CreateLogger();
 		return container.ConfigureServices(services => services.AddLogging(x =>
 		{

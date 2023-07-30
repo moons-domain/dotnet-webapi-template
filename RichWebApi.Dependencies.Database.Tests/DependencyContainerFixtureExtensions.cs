@@ -13,20 +13,20 @@ namespace RichWebApi.Tests;
 public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture SetDatabaseEntitiesConfig(this DependencyContainerFixture container,
-	                                                             EntitiesValidationOption option)
-		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) => mock.Setup(x => x.CurrentValue)
+																 EntitiesValidationOption option)
+		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) => mock.Setup(x => x.CurrentValue)
 			.Returns(new DatabaseEntitiesConfig
 			{
 				Validation = option
 			}));
-	
+
 	public static DependencyContainerFixture WithTestScopeInMemoryDatabase(
 		this DependencyContainerFixture fixture, IAppPartsCollection partsToScan, Action<DbContextOptionsBuilder>? configure = null)
 	{
 		var dependencies = new AppDependenciesCollection()
 			.AddDatabase(new DummyEnvironment());
 		return fixture
-			.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) =>
+			.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) =>
 				mock.Setup(x => x.CurrentValue)
 					.Returns(new DatabaseEntitiesConfig
 					{
@@ -34,7 +34,7 @@ public static class DependencyContainerFixtureExtensions
 					}))
 			.ConfigureServices(services => services
 				.AddDbContext<RichWebApiDbContext>(builder =>
-				{ 
+				{
 					builder.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
 						.EnableDetailedErrors()
 						.EnableSensitiveDataLogging();

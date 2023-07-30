@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
 	}
 
 	public static IServiceCollection CollectCoreServicesFromAssemblies(this IServiceCollection services,
-	                                                                   Assembly[] assemblies)
+																	   Assembly[] assemblies)
 	{
 		var optionsValidatorTagType = typeof(IOptionsValidator);
 		return services.AddValidatorsFromAssemblies(assemblies, includeInternalTypes: true,

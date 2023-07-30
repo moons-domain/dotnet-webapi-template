@@ -27,7 +27,7 @@ public class DatabaseConfiguratorTests : UnitTest
 			{
 				// as we need to reset model state which impacts on condition whether OnModelCreating will be called or not
 				b.EnableServiceProviderCaching(false);
-			}) 
+			})
 			.ConfigureServices(s => s.RemoveAll<INonGenericEntityConfiguration>());
 	}
 
@@ -35,7 +35,7 @@ public class DatabaseConfiguratorTests : UnitTest
 	public async Task IgnoresIgnoredConfigurations()
 	{
 		var sp = _container
-			.ReplaceWithMock<INonGenericEntityConfiguration>(configure: mock => mock
+			.ReplaceWithMock<INonGenericEntityConfiguration>(mock => mock
 				.As<IIgnoredEntityConfiguration>()
 				.As<IEntityConfiguration<IgnoredEntity>>()
 				.Setup(x => x.Configure(It.IsAny<EntityTypeBuilder<IgnoredEntity>>()))
@@ -48,12 +48,12 @@ public class DatabaseConfiguratorTests : UnitTest
 			.As<IEntityConfiguration<IgnoredEntity>>()
 			.Verify(x => x.Configure(It.IsAny<EntityTypeBuilder<IgnoredEntity>>()), Times.Never());
 	}
-	
+
 	[Fact]
 	public async Task CallsEntityConfiguration()
 	{
 		var sp = _container
-			.ReplaceWithMock<INonGenericEntityConfiguration>(configure: mock => mock
+			.ReplaceWithMock<INonGenericEntityConfiguration>(mock => mock
 				.As<IEntityConfiguration<ConfigurableEntity>>()
 				.Setup(x => x.Configure(It.IsAny<EntityTypeBuilder<ConfigurableEntity>>()))
 				.Callback<EntityTypeBuilder<ConfigurableEntity>>(b => b.HasNoKey())

@@ -34,15 +34,15 @@ public sealed class ResourceRepositoryFixture : IResourceScope
 		switch (foundMatches.Length)
 		{
 			case 0:
-			{
-				var formattedAssemblies = _assemblyEmbeddedResources
-					.Select(x => x.Key.FullName)
-					.ToJson(Formatting.Indented);
-				throw new TestConfigurationException(
-					$"Resources with [{nameSubstring}] in it's name have not been found across assemblies: {formattedAssemblies}"
-					+ $"{Environment.NewLine}"
-					+ $"Check if you've marked it as EmbeddedResource");
-			}
+				{
+					var formattedAssemblies = _assemblyEmbeddedResources
+						.Select(x => x.Key.FullName)
+						.ToJson(Formatting.Indented);
+					throw new TestConfigurationException(
+						$"Resources with [{nameSubstring}] in it's name have not been found across assemblies: {formattedAssemblies}"
+						+ $"{Environment.NewLine}"
+						+ $"Check if you've marked it as EmbeddedResource");
+				}
 			case > 1:
 				throw new TestConfigurationException(
 					$"Resources with [{nameSubstring}] in it's name have been found in more than one assembly: {foundMatches.ToJson(Formatting.Indented)}");

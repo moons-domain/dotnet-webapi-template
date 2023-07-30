@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -69,8 +68,8 @@ internal class SignalRDependency : IAppDependency, ISignalRConfigurator
 	}
 
 	public ISignalRConfigurator WithHub<T>(string pattern,
-	                                       Action<HttpConnectionDispatcherOptions>? configureOptions = null,
-	                                       Action<HubEndpointConventionBuilder>? configureConventions = null)
+										   Action<HttpConnectionDispatcherOptions>? configureOptions = null,
+										   Action<HubEndpointConventionBuilder>? configureConventions = null)
 		where T : Hub
 	{
 		_hubEndpointsConfigurators.Add(b =>

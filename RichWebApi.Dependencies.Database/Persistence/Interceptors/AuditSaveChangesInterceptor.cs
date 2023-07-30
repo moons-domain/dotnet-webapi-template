@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
@@ -23,8 +22,8 @@ internal class AuditSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInt
 	}
 
 	public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
-	                                                                            InterceptionResult<int> result,
-	                                                                            CancellationToken cancellationToken = default)
+																				InterceptionResult<int> result,
+																				CancellationToken cancellationToken = default)
 	{
 		await base.SavingChangesAsync(eventData, result, cancellationToken);
 
@@ -46,14 +45,14 @@ internal class AuditSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInt
 	public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
 		=> throw new NotSupportedException();
 
-	public override void SaveChangesCanceled(DbContextEventData eventData) 
+	public override void SaveChangesCanceled(DbContextEventData eventData)
 		=> throw new NotSupportedException();
 
-	public override void SaveChangesFailed(DbContextErrorEventData eventData) 
+	public override void SaveChangesFailed(DbContextErrorEventData eventData)
 		=> throw new NotSupportedException();
 
 	public override InterceptionResult ThrowingConcurrencyException(ConcurrencyExceptionEventData eventData,
-	                                                                InterceptionResult result)
+																	InterceptionResult result)
 		=> throw new NotSupportedException();
 
 	private void AuditEntities(ChangeTracker changeTracker)

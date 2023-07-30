@@ -27,12 +27,12 @@ public class RichWebApiDatabaseTests : UnitTest
 	public async Task CallsReadPolicyOnRead()
 	{
 		var sp = _container
-			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(mock =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task<IEntity>>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
 				mock.Setup(x => x.DatabaseReadPolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())
@@ -55,12 +55,12 @@ public class RichWebApiDatabaseTests : UnitTest
 	public async Task CallsWritePolicyOnWrite()
 	{
 		var sp = _container
-			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(mock =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
 				mock.Setup(x => x.DatabaseWritePolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())
@@ -78,17 +78,17 @@ public class RichWebApiDatabaseTests : UnitTest
 				It.IsAny<CancellationToken>()),
 			Times.Once());
 	}
-	
+
 	[Fact]
 	public async Task CallsWritePolicyOnPersist()
 	{
 		var sp = _container
-			.ReplaceWithMock<IAsyncPolicy>(configure: (_, mock) =>
+			.ReplaceWithMock<IAsyncPolicy>(mock =>
 				mock.Setup(x
 						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
 							It.IsAny<CancellationToken>()))
 					.Verifiable())
-			.ReplaceWithMock<IDatabasePolicySet>(configure: (sp, mock) =>
+			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
 				mock.Setup(x => x.DatabaseWritePolicy)
 					.Returns(sp.GetRequiredService<IAsyncPolicy>)
 					.Verifiable())

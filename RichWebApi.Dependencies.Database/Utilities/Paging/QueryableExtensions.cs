@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RichWebApi.Utilities.Paging;
+﻿namespace RichWebApi.Utilities.Paging;
 
 public static class QueryableExtensions
 {

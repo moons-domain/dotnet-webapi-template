@@ -17,23 +17,23 @@ public static class DependencyContainerFixtureExtensions
 		Action<IServiceProvider, Mock<IClientProxy<T>>>? configureProxy = null)
 		where T : Hub
 		=> fixture
-			.ReplaceWithMock(defaultMockBehavior, args, configureProxy)
-			.ReplaceWithMock<IProxyHubClients<T>>(defaultMockBehavior, args, (sp, mock) =>
-			{
-				var client = sp.GetRequiredService<IClientProxy<T>>();
-				mock.Setup(x => x.All)
-					.Returns(client);
-				configureHubClients?.Invoke(sp, mock, client);
-			})
-			.ReplaceWithMock(defaultMockBehavior, args, configureGroupManager)
-			.ReplaceWithMock<IHubContext<T>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(configureProxy, defaultMockBehavior, args)
+			.ReplaceWithMock<IProxyHubClients<T>>((sp, mock) =>
+		   {
+			   var client = sp.GetRequiredService<IClientProxy<T>>();
+			   mock.Setup(x => x.All)
+				   .Returns(client);
+			   configureHubClients?.Invoke(sp, mock, client);
+		   }, defaultMockBehavior, args)
+			.ReplaceWithMock(configureGroupManager, defaultMockBehavior, args)
+			.ReplaceWithMock<IHubContext<T>>((sp, mock) =>
 			{
 				mock.Setup(x => x.Clients)
 					.Returns(sp.GetRequiredService<IProxyHubClients<T>>());
 				mock.Setup(x => x.Groups)
 					.Returns(sp.GetRequiredService<IGroupManager<T>>());
 				configureHubContext?.Invoke(sp, mock);
-			});
+			}, defaultMockBehavior, args);
 
 	public static DependencyContainerFixture WithMockedSignalRHubContext<T, TClient>(
 		this DependencyContainerFixture fixture,
@@ -46,21 +46,21 @@ public static class DependencyContainerFixtureExtensions
 		where T : Hub<TClient>
 		where TClient : class
 		=> fixture
-			.ReplaceWithMock(defaultMockBehavior, args, configureClient)
-			.ReplaceWithMock<IHubClients<TClient>>(defaultMockBehavior, args, (sp, mock) =>
-			{
-				var client = sp.GetRequiredService<TClient>();
-				mock.Setup(x => x.All)
-					.Returns(client);
-				configureHubClients?.Invoke(sp, mock, client);
-			})
-			.ReplaceWithMock(defaultMockBehavior, args, configureGroupManager)
-			.ReplaceWithMock<IHubContext<T, TClient>>(defaultMockBehavior, args, (sp, mock) =>
+			.ReplaceWithMock(configureClient, defaultMockBehavior, args)
+			.ReplaceWithMock<IHubClients<TClient>>((sp, mock) =>
+		   {
+			   var client = sp.GetRequiredService<TClient>();
+			   mock.Setup(x => x.All)
+				   .Returns(client);
+			   configureHubClients?.Invoke(sp, mock, client);
+		   }, defaultMockBehavior, args)
+			.ReplaceWithMock(configureGroupManager, defaultMockBehavior, args)
+			.ReplaceWithMock<IHubContext<T, TClient>>((sp, mock) =>
 			{
 				mock.Setup(x => x.Clients)
 					.Returns(sp.GetRequiredService<IHubClients<TClient>>());
 				mock.Setup(x => x.Groups)
 					.Returns(sp.GetRequiredService<IGroupManager<T>>());
 				configureHubContext?.Invoke(sp, mock);
-			});
+			}, defaultMockBehavior, args);
 }

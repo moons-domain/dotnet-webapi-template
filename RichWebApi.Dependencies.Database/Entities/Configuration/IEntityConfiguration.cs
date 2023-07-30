@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RichWebApi.Entities.Configuration;
+﻿namespace RichWebApi.Entities.Configuration;
 
 public interface INonGenericEntityConfiguration
 {

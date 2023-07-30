@@ -4,7 +4,7 @@ public class MissingEntitiesValidatorsException : DatabaseDependencyException
 {
 	public IReadOnlyCollection<Type> MissingTypes { get; }
 
-	public MissingEntitiesValidatorsException(IReadOnlyCollection<Type> missingTypes) : base(FormatMissingTypesMessage(missingTypes)) 
+	public MissingEntitiesValidatorsException(IReadOnlyCollection<Type> missingTypes) : base(FormatMissingTypesMessage(missingTypes))
 		=> MissingTypes = missingTypes;
 
 	private static string FormatMissingTypesMessage(IEnumerable<Type> missingTypes)

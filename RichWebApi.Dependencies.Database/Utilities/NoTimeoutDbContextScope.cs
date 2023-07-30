@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace RichWebApi.Utilities;
+﻿namespace RichWebApi.Utilities;
 
 internal sealed class NoTimeoutDbContextScope : IDisposable
 {

@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RichWebApi.Entities.Configuration;
-using RichWebApi.Persistence;
+﻿using RichWebApi.Entities.Configuration;
 
 namespace RichWebApi;
 
@@ -9,7 +7,7 @@ public sealed class RichWebApiDbContext : DbContext
 	private readonly IDatabaseConfigurator _databaseConfigurator;
 
 	public RichWebApiDbContext(IDatabaseConfigurator databaseConfigurator,
-	                           DbContextOptions<RichWebApiDbContext> options) : base(options)
+							   DbContextOptions<RichWebApiDbContext> options) : base(options)
 	{
 		_databaseConfigurator = databaseConfigurator;
 	}

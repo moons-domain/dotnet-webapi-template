@@ -85,7 +85,7 @@ public class EntityValidatorsProviderTests : UnitTest
 	{
 		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.ReplaceWithMock<IValidator<ConfigurableEntity>>(configure: (_, mock) => mock
+			.ReplaceWithMock<IValidator<ConfigurableEntity>>(mock => mock
 				.Setup(x => x.ValidateAsync(It.IsAny<ConfigurableEntity>(), It.IsAny<CancellationToken>()))
 				.Verifiable())
 			.BuildServiceProvider();

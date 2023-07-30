@@ -2,8 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -49,7 +47,7 @@ internal class DatabaseDependency : IAppDependency
 			var host = sp.GetRequiredService<IWebHostEnvironment>();
 			var dbConfig = sp.GetRequiredService<IOptionsMonitor<DatabaseConfig>>()
 				.CurrentValue;
-			
+
 			if (host.IsDevelopment())
 			{
 				dbContextOptionsBuilder.EnableSensitiveDataLogging();

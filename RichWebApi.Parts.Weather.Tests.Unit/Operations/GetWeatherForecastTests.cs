@@ -16,8 +16,8 @@ public class GetWeatherForecastTests : UnitTest
 	private readonly IServiceProvider _serviceProvider;
 
 	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper,
-	                               ResourceRepositoryFixture resourceRepository,
-	                               UnitDependencyContainerFixture container) : base(testOutputHelper)
+								   ResourceRepositoryFixture resourceRepository,
+								   UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()
@@ -32,7 +32,7 @@ public class GetWeatherForecastTests : UnitTest
 	[Fact]
 	public async Task LoadsFirstPage()
 	{
-		using var caseResources = _testResources.CreateMethodScope(); 
+		using var caseResources = _testResources.CreateMethodScope();
 		var entities = caseResources.GetJsonInputResource<WeatherForecast[]>("entities");
 		await _serviceProvider
 			.GetRequiredService<IRichWebApiDatabase>()
@@ -48,7 +48,7 @@ public class GetWeatherForecastTests : UnitTest
 	[Fact]
 	public async Task LoadsOne()
 	{
-		using var caseResources = _testResources.CreateMethodScope(); 
+		using var caseResources = _testResources.CreateMethodScope();
 		var entities = caseResources.GetJsonInputResource<WeatherForecast[]>("entities");
 		await _serviceProvider
 			.GetRequiredService<IRichWebApiDatabase>()

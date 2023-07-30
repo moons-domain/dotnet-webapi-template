@@ -21,7 +21,7 @@ public class PatchWeatherForecastTests : UnitTest
 	private readonly IServiceProvider _serviceProvider;
 
 	public PatchWeatherForecastTests(ITestOutputHelper testOutputHelper, ResourceRepositoryFixture resourceRepository,
-	                                 UnitDependencyContainerFixture container) : base(testOutputHelper)
+									 UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()

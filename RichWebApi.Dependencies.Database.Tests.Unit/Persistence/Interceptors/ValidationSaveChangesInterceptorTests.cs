@@ -81,7 +81,7 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 		var entity = new UnitAuditableEntity();
 		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required)
-			.ReplaceWithMock<IValidator<UnitAuditableEntity>>(configure: mock => mock
+			.ReplaceWithMock<IValidator<UnitAuditableEntity>>(mock => mock
 				.Setup(x => x.ValidateAsync(It.Is<UnitAuditableEntity>(e => e == entity),
 					It.IsAny<CancellationToken>()))
 				.ReturnsAsync(new ValidationResult()))
