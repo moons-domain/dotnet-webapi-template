@@ -21,7 +21,7 @@ public static class DependencyContainerFixtureExtensions
 			}));
 	
 	public static DependencyContainerFixture WithTestScopeInMemoryDatabase(
-		this DependencyContainerFixture fixture, IAppPartsCollection partsToScan)
+		this DependencyContainerFixture fixture, IAppPartsCollection partsToScan, Action<DbContextOptionsBuilder>? configure = null)
 	{
 		var dependencies = new AppDependenciesCollection()
 			.AddDatabase(new DummyEnvironment());
@@ -33,10 +33,13 @@ public static class DependencyContainerFixtureExtensions
 						Validation = EntitiesValidationOption.None
 					}))
 			.ConfigureServices(services => services
-				.AddDbContext<RichWebApiDbContext>(x => x
-					.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
-					.EnableDetailedErrors()
-					.EnableSensitiveDataLogging(), ServiceLifetime.Transient)
+				.AddDbContext<RichWebApiDbContext>(builder =>
+				{ 
+					builder.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
+						.EnableDetailedErrors()
+						.EnableSensitiveDataLogging();
+					configure?.Invoke(builder);
+				}, ServiceLifetime.Transient, ServiceLifetime.Transient)
 				.AddDependencyServices(dependencies, partsToScan));
 	}
 
