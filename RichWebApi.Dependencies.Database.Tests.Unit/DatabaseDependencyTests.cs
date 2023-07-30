@@ -4,15 +4,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moq;
 using RichWebApi.Config;
-using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using Xunit.Abstractions;
 
-namespace RichWebApi;
+namespace RichWebApi.Tests;
 
 public class DatabaseDependencyTests : UnitTest
 {

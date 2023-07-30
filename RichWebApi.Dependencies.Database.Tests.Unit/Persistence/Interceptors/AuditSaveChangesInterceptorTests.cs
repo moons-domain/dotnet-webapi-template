@@ -5,14 +5,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 using Moq;
-using RichWebApi.Entities;
-using RichWebApi.Tests;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Persistence.Interceptors;
+namespace RichWebApi.Tests.Persistence.Interceptors;
 
 public class AuditSaveChangesInterceptorTests : UnitTest
 {

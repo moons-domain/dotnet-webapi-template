@@ -6,10 +6,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
 using RichWebApi.Persistence.Interceptors;
-using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Moq;
 
-namespace RichWebApi.Tests;
+namespace RichWebApi.Tests.DependencyInjection;
 
 public static class DependencyContainerFixtureExtensions
 {

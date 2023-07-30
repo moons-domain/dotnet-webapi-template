@@ -3,15 +3,15 @@ using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using RichWebApi.Config;
-using RichWebApi.Entities;
 using RichWebApi.Exceptions;
-using RichWebApi.Tests;
+using RichWebApi.Persistence.Internal;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Persistence.Internal;
+namespace RichWebApi.Tests.Persistence.Internal;
 
 public class EntityValidatorsProviderTests : UnitTest
 {

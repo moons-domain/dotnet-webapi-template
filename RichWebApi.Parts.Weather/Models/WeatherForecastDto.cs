@@ -1,9 +1,10 @@
 ﻿using FluentValidation;
 using JetBrains.Annotations;
+using RichWebApi.Entities;
 
 namespace RichWebApi.Models;
 
-public class WeatherForecastDto
+public class WeatherForecastDto : IAuditableDto
 {
 	public DateTime Date { get; set; }
 
@@ -12,6 +13,10 @@ public class WeatherForecastDto
 	public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
 
 	public string Summary { get; set; } = null!;
+
+	public DateTime CreatedAt { get; set; }
+
+	public DateTime ModifiedAt { get; set; }
 
 	[UsedImplicitly]
 	public class Validator : AbstractValidator<WeatherForecastDto>

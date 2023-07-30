@@ -38,7 +38,7 @@ public static class ResourceScopeExtensions
 													 string suffix = "expected",
 													 TestJsonSerializerSettings? jsonSettings = null,
 													 Func<EquivalencyAssertionOptions<T>,
-														 EquivalencyAssertionOptions<T>>? config = null)
+														 EquivalencyAssertionOptions<T>>? configure = null)
 		where T : class
 	{
 		var definedJsonSettings = jsonSettings
@@ -53,7 +53,7 @@ public static class ResourceScopeExtensions
 		{
 			actualCopy.Should().BeEquivalentTo(expectation, x =>
 			{
-				config?.Invoke(x);
+				configure?.Invoke(x);
 				x.RespectingRuntimeTypes();
 				return x;
 			});

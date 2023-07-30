@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 
-namespace RichWebApi.Entities;
+namespace RichWebApi.Tests.Entities;
 
 public class ConfigurableEntity : IEntity
 {

@@ -5,15 +5,17 @@ using Moq;
 using RichWebApi.Entities;
 using RichWebApi.Hubs;
 using RichWebApi.Models;
+using RichWebApi.Operations;
 using RichWebApi.Persistence;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.FluentAssertions;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.Persistence;
 using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Operations;
+namespace RichWebApi.Tests.Operations;
 
 public class PatchWeatherForecastTests : UnitTest
 {
@@ -47,7 +49,7 @@ public class PatchWeatherForecastTests : UnitTest
 
 		await mediator.Send(sharedInput);
 		var expected = await mediator.Send(new GetWeatherForecast(0, 1));
-		caseResources.CompareWithJsonExpectation(TestOutputHelper, expected);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, expected, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 
 	[Fact]

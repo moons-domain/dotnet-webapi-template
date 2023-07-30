@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 
-namespace RichWebApi.Persistence.Interceptors;
+namespace RichWebApi.Tests.Persistence.Interceptors;
 
 public class UnitTestDbContextEventData : DbContextEventData
 {

@@ -7,14 +7,14 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RichWebApi.Config;
-using RichWebApi.Entities;
-using RichWebApi.Tests;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Persistence.Interceptors;
+namespace RichWebApi.Tests.Persistence.Interceptors;
 
 public class ValidationSaveChangesInterceptorTests : UnitTest
 {

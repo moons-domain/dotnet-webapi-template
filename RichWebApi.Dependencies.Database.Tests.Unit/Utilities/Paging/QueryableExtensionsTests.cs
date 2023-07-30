@@ -1,15 +1,14 @@
-﻿using System.Linq.Expressions;
-using FluentAssertions;
-using FluentAssertions.Equivalency;
+﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using RichWebApi.Entities;
 using RichWebApi.Persistence;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
+using RichWebApi.Tests.Persistence;
+using RichWebApi.Utilities.Paging;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Utilities.Paging;
+namespace RichWebApi.Tests.Utilities.Paging;
 
 public class QueryableExtensionsTests : UnitTest
 {

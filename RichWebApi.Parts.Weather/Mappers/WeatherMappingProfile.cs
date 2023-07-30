@@ -11,5 +11,6 @@ public class WeatherMappingProfile : Profile
 	public WeatherMappingProfile()
 		=> CreateMap<WeatherForecast, WeatherForecastDto>(MemberList.Destination)
 			.ForMember(x => x.TemperatureF, x => x.Ignore())
-			.ReverseMap();
+			.ReverseMap()
+			.IgnoreAuditableProperties();
 }

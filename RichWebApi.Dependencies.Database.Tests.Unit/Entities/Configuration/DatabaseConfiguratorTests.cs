@@ -3,13 +3,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Moq;
-using RichWebApi.Tests;
+using RichWebApi.Entities.Configuration;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.Moq;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Entities.Configuration;
+namespace RichWebApi.Tests.Entities.Configuration;
 
 public class DatabaseConfiguratorTests : UnitTest
 {

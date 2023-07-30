@@ -1,7 +1,7 @@
 ﻿using RichWebApi.Entities;
 using RichWebApi.Persistence;
 
-namespace RichWebApi.Tests;
+namespace RichWebApi.Tests.Persistence;
 
 public static class RichWebApiDatabaseExtensions
 {

@@ -1,14 +1,16 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RichWebApi.Entities;
+using RichWebApi.Operations;
 using RichWebApi.Persistence;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.FluentAssertions;
 using RichWebApi.Tests.Logging;
+using RichWebApi.Tests.Persistence;
 using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Operations;
+namespace RichWebApi.Tests.Operations;
 
 public class GetWeatherForecastTests : UnitTest
 {
@@ -42,7 +44,7 @@ public class GetWeatherForecastTests : UnitTest
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		caseResources.CompareWithJsonExpectation(TestOutputHelper, result);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, result, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 
 	[Fact]
@@ -58,6 +60,6 @@ public class GetWeatherForecastTests : UnitTest
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		caseResources.CompareWithJsonExpectation(TestOutputHelper, result);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, result, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 }
