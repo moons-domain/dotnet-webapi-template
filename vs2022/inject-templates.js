@@ -10,9 +10,7 @@ function createZipArchive(inputFolder, outputFolder) {
 }
 
 (async function main() {
-	if (!process.argv.slice(2)[0]) {
-		throw new Error('The entered parameter is empty');
-	}
+	const outputFolder = process.argv.slice(2)[0] || '.';
 	const source = path.join(__dirname, './templates');
 	const sourceTemplates = await fs.readdir(source);
 
@@ -21,7 +19,7 @@ function createZipArchive(inputFolder, outputFolder) {
 		.forEach((sourceFolder) => {
 			console.log(`Found template to move: ${sourceFolder}`);
 			const archiveName = path.basename(sourceFolder) + '.zip';
-			const outputZipPath = path.join(process.argv.slice(2)[0], archiveName);
+			const outputZipPath = path.join(outputFolder, archiveName);
 			createZipArchive(sourceFolder, outputZipPath);
 		});
 })();

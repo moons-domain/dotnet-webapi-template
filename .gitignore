@@ -4,3 +4,4 @@ node_modules
 .idea
 *.DotSettings.user
 .vs
+vs2022/*.zip
