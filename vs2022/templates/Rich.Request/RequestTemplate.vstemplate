@@ -1,0 +1,15 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+<TemplateData>
+    <TemplateID>Microsoft.CSharp.Class</TemplateID>
+    <DefaultName>Request.cs</DefaultName>
+    <Name>Request</Name>
+    <Description>Rich request</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+    <Icon>RequestTemplateIcon.ico</Icon>
+</TemplateData>
+<TemplateContent>
+    <ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.cs">Request.cs</ProjectItem>
+</TemplateContent>
+</VSTemplate>

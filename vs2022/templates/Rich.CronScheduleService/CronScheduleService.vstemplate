@@ -1,0 +1,16 @@
+<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+	<TemplateID>Microsoft.CSharp.Class</TemplateID>
+    <DefaultName>CronScheduleService.cs</DefaultName>
+    <Name>CronScheduleService</Name>
+    <Description>Rich - CronScheduleService</Description>
+    <ProjectType>CSharp</ProjectType>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+    <SortOrder>10</SortOrder>
+    <Icon>CronScheduleServiceIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <References />
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">CronScheduleService.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>

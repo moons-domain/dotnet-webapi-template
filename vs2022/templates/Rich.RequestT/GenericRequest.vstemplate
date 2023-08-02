@@ -1,0 +1,15 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+	<TemplateID>Microsoft.CSharp.Class</TemplateID>
+    <DefaultName>GenericRequest.cs</DefaultName>
+    <Name>Request&lt;T&gt;</Name>
+    <Description>Rich generic request</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>GenericRequest.ico</Icon>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+  </TemplateData>
+  <TemplateContent>
+	  <ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.cs">GenericRequest.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
