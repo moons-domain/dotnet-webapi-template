@@ -1,0 +1,13 @@
+﻿{
+  "Items": [
+    {
+      "Date": "2023-01-01T00:00:00",
+      "TemperatureC": 25,
+      "TemperatureF": 76,
+      "Summary": "Warm"
+    }
+  ],
+  "Page": 0,
+  "Size": 1,
+  "Total": 1
+}

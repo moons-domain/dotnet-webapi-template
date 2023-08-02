@@ -1,7 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.FileProviders;
-using RichWebApi.Parts;
 
 namespace RichWebApi;
 
@@ -38,8 +37,8 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<RichWebApi
 			.AddSingleton<IConfiguration>(configurationRoot)
 			.AddSingleton(configurationRoot)
 			.AddSingleton<IWebHostEnvironment>(env)
-			.AddDependencyServices(dependencies)
-			.EnrichWithApplicationParts(parts)
+			.AddAppParts(parts)
+			.AddDependencyServices(dependencies, parts)
 			.BuildServiceProvider();
 		return provider.GetRequiredService<RichWebApiDbContext>();
 	}
