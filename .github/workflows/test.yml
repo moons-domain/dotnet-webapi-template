@@ -1,4 +1,4 @@
-name: Test
+name: Run unit-tests
 
 on:
     push:
@@ -7,7 +7,7 @@ on:
         branches: ['main']
 
 jobs:
-    build:
+    dotnet-test:
         runs-on: ubuntu-latest
 
         steps:
