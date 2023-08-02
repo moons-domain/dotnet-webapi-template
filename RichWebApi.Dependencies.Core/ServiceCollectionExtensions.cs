@@ -11,6 +11,8 @@ public static class ServiceCollectionExtensions
 			d.ConfigureServices(services, parts);
 		}
 
+		services.CollectCoreServicesFromAssemblies(dependencies.Select(x => x.GetType().Assembly).ToArray());
+
 		return services;
 	}
 }

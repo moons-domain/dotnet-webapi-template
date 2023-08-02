@@ -47,6 +47,10 @@ public static class ServiceCollectionExtensions
 			.AddAutoMapper(assemblies);
 	}
 
+	public static IServiceCollection CollectCoreServicesFromAssembly(this IServiceCollection services,
+																	   Assembly assembly)
+		=> services.CollectCoreServicesFromAssemblies(new[] { assembly });
+
 	public static IServiceCollection AddCoreMediatRBehaviors(this IServiceCollection services)
 	{
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));

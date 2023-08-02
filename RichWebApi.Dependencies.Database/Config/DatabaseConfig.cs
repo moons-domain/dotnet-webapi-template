@@ -29,17 +29,9 @@ internal class DatabaseConfig
 	{
 		public DevEnvValidator()
 		{
-			Include(new CommonValidator());
-			RuleFor(x => x.ConnectionString).NotNull().NotEmpty().SqlServerConnectionString();
-		}
-	}
-
-	private class CommonValidator : AbstractValidator<DatabaseConfig>
-	{
-		public CommonValidator()
-		{
 			RuleFor(x => x.Retries).GreaterThan(0);
 			RuleFor(x => x.Timeout).GreaterThan(0);
+			RuleFor(x => x.ConnectionString).NotNull().NotEmpty().SqlServerConnectionString();
 		}
 	}
 
@@ -53,7 +45,8 @@ internal class DatabaseConfig
 					.Must(x => !string.IsNullOrEmpty(x) && !x.Contains(';'))
 					.WithMessage("Should be real and not contain restricted characters");
 
-			Include(new CommonValidator());
+			RuleFor(x => x.Retries).GreaterThan(0);
+			RuleFor(x => x.Timeout).GreaterThan(0);
 			RuleFor(x => x.Port).GreaterThan((ushort)0);
 			ConnectionStringPart(x => x.Host);
 			ConnectionStringPart(x => x.Password);

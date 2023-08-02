@@ -2,9 +2,12 @@
 
 namespace RichWebApi;
 
-public class AppDependenciesCollection : IAppDependenciesCollection
+public sealed class AppDependenciesCollection : IAppDependenciesCollection
 {
-	private readonly HashSet<IAppDependency> _dependencies = new(new TypeEqualityComparer<IAppDependency>());
+	private readonly HashSet<IAppDependency> _dependencies = new(new TypeEqualityComparer<IAppDependency>())
+	{
+		new DependenciesCore()
+	};
 
 	public IEnumerator<IAppDependency> GetEnumerator() => _dependencies.GetEnumerator();
 

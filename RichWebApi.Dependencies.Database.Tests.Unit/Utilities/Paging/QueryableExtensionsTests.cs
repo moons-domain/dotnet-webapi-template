@@ -1,9 +1,11 @@
 ﻿using FluentAssertions;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using RichWebApi.Persistence;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
+using RichWebApi.Tests.Moq;
 using RichWebApi.Tests.Persistence;
 using RichWebApi.Utilities.Paging;
 using Xunit.Abstractions;
@@ -24,6 +26,9 @@ public class QueryableExtensionsTests : UnitTest
 		_serviceProvider = container
 			.WithXunitLogging(TestOutputHelper)
 			.WithTestScopeInMemoryDatabase(parts)
+			.ReplaceWithEmptyMock<IValidator<ConfigurableEntity>>()
+			.ReplaceWithEmptyMock<IValidator<IgnoredEntity>>()
+			.ConfigureServices(s => s.AddAppParts(parts))
 			.BuildServiceProvider();
 	}
 

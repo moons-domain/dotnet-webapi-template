@@ -18,6 +18,7 @@ using RichWebApi.Utilities.Paging;
 using RichWebApi.Validation;
 
 [assembly: InternalsVisibleTo("RichWebApi.Dependencies.Database.Tests.Unit")]
+
 namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
@@ -38,7 +39,8 @@ internal class DatabaseDependency : IAppDependency
 			services.AddOptionsWithValidator<DatabaseConfig, DatabaseConfig.ProdEnvValidator>(ConfigurationSection);
 		}
 
-		services.AddOptionsWithValidator<DatabaseEntitiesConfig, DatabaseEntitiesConfig.Validator>($"{ConfigurationSection}:Entities");
+		services.AddOptionsWithValidator<DatabaseEntitiesConfig, DatabaseEntitiesConfig.Validator>(
+			$"{ConfigurationSection}:Entities");
 
 		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.GetName().Name}.Migrations";
 		services.AddDbContext<RichWebApiDbContext>((sp, dbContextOptionsBuilder) =>
@@ -52,6 +54,7 @@ internal class DatabaseDependency : IAppDependency
 			{
 				dbContextOptionsBuilder.EnableSensitiveDataLogging();
 			}
+
 			dbContextOptionsBuilder
 				.UseSqlServer(host.IsDevelopment()
 						? dbConfig.ConnectionString
@@ -71,7 +74,12 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
 		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
 		AddInternalServices(services);
-		services.CollectDatabaseEntities(parts.Select(x => x.GetType().Assembly));
+
+		var dependenciesToScan = parts
+			.Select(x => x.GetType().Assembly)
+			.ToList();
+		dependenciesToScan.Add(typeof(DatabaseDependency).Assembly);
+		services.CollectDatabaseEntities(dependenciesToScan);
 	}
 
 	private static void AddInternalServices(IServiceCollection services)

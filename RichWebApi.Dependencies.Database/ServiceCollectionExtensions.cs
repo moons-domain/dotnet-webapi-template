@@ -9,7 +9,6 @@ namespace RichWebApi;
 
 public static class ServiceCollectionExtensions
 {
-
 	public static IServiceCollection AddSaveChangesInterceptor<T>(this IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
 		where T : class, ISaveChangesInterceptor, IOrderedInterceptor
 	{
@@ -25,7 +24,7 @@ public static class ServiceCollectionExtensions
 		foreach (var assembly in assemblies)
 		{
 			var configurations = assembly.GetExportedTypes()
-				.Where(x => x.IsAssignableTo(entityConfigurationType))
+				.Where(x => x is { IsAbstract: false, IsClass: true } && x.IsAssignableTo(entityConfigurationType))
 				.Select(c => new ServiceDescriptor(entityConfigurationType, c, ServiceLifetime.Scoped));
 			services.TryAddEnumerable(configurations);
 		}

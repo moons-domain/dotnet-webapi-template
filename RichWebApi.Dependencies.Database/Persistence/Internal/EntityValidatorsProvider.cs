@@ -27,9 +27,13 @@ internal class EntityValidatorsProvider : IEntityValidatorsProvider
 									IEnumerable<IAppPart> partsToScan)
 	{
 		_logger = logger;
+		var typeMarkersToScan = partsToScan
+			.Select(x => x.GetType())
+			.ToList();
+		typeMarkersToScan.Add(typeof(EntityValidatorsProvider));
 		var entityType = typeof(IEntity);
-		var entityTypes = partsToScan
-			.SelectMany(x => x.GetType().Assembly.ExportedTypes
+		var entityTypes = typeMarkersToScan
+			.SelectMany(x => x.Assembly.ExportedTypes
 				.Where(t => t is { IsClass: true, IsAbstract: false, IsGenericTypeDefinition: false }
 							&& t.IsAssignableTo(entityType)))
 			.ToArray();
