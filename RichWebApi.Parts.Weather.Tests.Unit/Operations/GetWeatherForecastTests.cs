@@ -1,13 +1,16 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using RichWebApi.Entities;
+using RichWebApi.Operations;
 using RichWebApi.Persistence;
-using RichWebApi.Tests;
+using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Tests.FluentAssertions;
 using RichWebApi.Tests.Logging;
+using RichWebApi.Tests.Persistence;
 using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Operations;
+namespace RichWebApi.Tests.Operations;
 
 public class GetWeatherForecastTests : UnitTest
 {
@@ -15,8 +18,8 @@ public class GetWeatherForecastTests : UnitTest
 	private readonly IServiceProvider _serviceProvider;
 
 	public GetWeatherForecastTests(ITestOutputHelper testOutputHelper,
-	                               ResourceRepositoryFixture resourceRepository,
-	                               UnitDependencyContainerFixture container) : base(testOutputHelper)
+								   ResourceRepositoryFixture resourceRepository,
+								   UnitDependencyContainerFixture container) : base(testOutputHelper)
 	{
 		_testResources = resourceRepository.CreateTestScope(this);
 		var parts = new AppPartsCollection()
@@ -31,7 +34,7 @@ public class GetWeatherForecastTests : UnitTest
 	[Fact]
 	public async Task LoadsFirstPage()
 	{
-		using var caseResources = _testResources.CreateMethodScope(); 
+		using var caseResources = _testResources.CreateMethodScope();
 		var entities = caseResources.GetJsonInputResource<WeatherForecast[]>("entities");
 		await _serviceProvider
 			.GetRequiredService<IRichWebApiDatabase>()
@@ -41,13 +44,13 @@ public class GetWeatherForecastTests : UnitTest
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		caseResources.CompareWithJsonExpectation(TestOutputHelper, result);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, result, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 
 	[Fact]
 	public async Task LoadsOne()
 	{
-		using var caseResources = _testResources.CreateMethodScope(); 
+		using var caseResources = _testResources.CreateMethodScope();
 		var entities = caseResources.GetJsonInputResource<WeatherForecast[]>("entities");
 		await _serviceProvider
 			.GetRequiredService<IRichWebApiDatabase>()
@@ -57,6 +60,6 @@ public class GetWeatherForecastTests : UnitTest
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
-		caseResources.CompareWithJsonExpectation(TestOutputHelper, result);
+		caseResources.CompareWithJsonExpectation(TestOutputHelper, result, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 }

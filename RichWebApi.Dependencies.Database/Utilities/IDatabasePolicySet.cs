@@ -2,7 +2,7 @@
 
 namespace RichWebApi.Utilities;
 
-internal interface IDatabasePolicySet
+public interface IDatabasePolicySet
 {
 	IAsyncPolicy DatabaseReadPolicy { get; }
 	IAsyncPolicy DatabaseWritePolicy { get; }

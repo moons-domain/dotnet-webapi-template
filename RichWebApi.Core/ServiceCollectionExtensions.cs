@@ -38,7 +38,7 @@ public static class ServiceCollectionExtensions
 	}
 
 	public static IServiceCollection CollectCoreServicesFromAssemblies(this IServiceCollection services,
-	                                                                   Assembly[] assemblies)
+																	   Assembly[] assemblies)
 	{
 		var optionsValidatorTagType = typeof(IOptionsValidator);
 		return services.AddValidatorsFromAssemblies(assemblies, includeInternalTypes: true,
@@ -46,6 +46,10 @@ public static class ServiceCollectionExtensions
 			.AddMediatR(x => x.RegisterServicesFromAssemblies(assemblies))
 			.AddAutoMapper(assemblies);
 	}
+
+	public static IServiceCollection CollectCoreServicesFromAssembly(this IServiceCollection services,
+																	   Assembly assembly)
+		=> services.CollectCoreServicesFromAssemblies(new[] { assembly });
 
 	public static IServiceCollection AddCoreMediatRBehaviors(this IServiceCollection services)
 	{

@@ -5,15 +5,15 @@ namespace RichWebApi.Tests.Exceptions;
 [Serializable]
 public class TestConfigurationException : RichWebApiTestException
 {
-    public TestConfigurationException()
-    {
-    }
+	public TestConfigurationException()
+	{
+	}
 
-    public TestConfigurationException(string? message) : base(message)
-    {
-    }
+	public TestConfigurationException(string? message) : base(message)
+	{
+	}
 
-    protected TestConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
-    {
-    }
+	protected TestConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
+	{
+	}
 }

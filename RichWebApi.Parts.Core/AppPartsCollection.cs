@@ -2,9 +2,12 @@
 
 namespace RichWebApi;
 
-public class AppPartsCollection : IAppPartsCollection
+public sealed class AppPartsCollection : IAppPartsCollection
 {
-	private readonly HashSet<IAppPart> _appParts = new(new TypeEqualityComparer<IAppPart>());
+	private readonly HashSet<IAppPart> _appParts = new(new TypeEqualityComparer<IAppPart>())
+	{
+		new PartsCore()
+	};
 
 	public IEnumerator<IAppPart> GetEnumerator()
 		=> ((IEnumerable<IAppPart>)_appParts).GetEnumerator();

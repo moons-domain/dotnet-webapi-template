@@ -1,6 +1,5 @@
 ﻿using System.Linq.Expressions;
 using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using RichWebApi.Exceptions;
 
 namespace RichWebApi.Extensions;

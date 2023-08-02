@@ -1,4 +1,4 @@
-using RichWebApi.Tests.Resources;
+﻿using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;
 
 namespace RichWebApi.Tests;
@@ -7,7 +7,7 @@ public abstract class Test : IClassFixture<ResourceRepositoryFixture>, IAsyncLif
 {
 	protected ITestOutputHelper TestOutputHelper { get; }
 
-	protected Test(ITestOutputHelper testOutputHelper) 
+	protected Test(ITestOutputHelper testOutputHelper)
 		=> TestOutputHelper = testOutputHelper;
 
 	public virtual Task InitializeAsync() => Task.CompletedTask;
