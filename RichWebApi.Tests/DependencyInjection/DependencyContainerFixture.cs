@@ -16,12 +16,12 @@ public abstract class DependencyContainerFixture : IDisposable
 		return this;
 	}
 
-	public IServiceProvider BuildServiceProvider() 
+	public IServiceProvider BuildServiceProvider()
 		=> ConfigureSharedServices(_services)
 			.BuildServiceProvider();
 
 	public void Dispose() => _services.Clear();
 
-	protected virtual IServiceCollection ConfigureSharedServices(IServiceCollection services) 
+	protected virtual IServiceCollection ConfigureSharedServices(IServiceCollection services)
 		=> services;
 }

@@ -5,38 +5,42 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
-using RichWebApi.Tests.DependencyInjection;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.Moq;
 
-namespace RichWebApi.Tests;
+namespace RichWebApi.Tests.DependencyInjection;
 
 public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture SetDatabaseEntitiesConfig(this DependencyContainerFixture container,
-	                                                             EntitiesValidationOption option)
-		=> container.AddMockedService<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) => mock.Setup(x => x.CurrentValue)
+																 EntitiesValidationOption option)
+		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) => mock.Setup(x => x.CurrentValue)
 			.Returns(new DatabaseEntitiesConfig
 			{
 				Validation = option
 			}));
-	
+
 	public static DependencyContainerFixture WithTestScopeInMemoryDatabase(
-		this DependencyContainerFixture fixture, IAppPartsCollection partsToScan)
+		this DependencyContainerFixture fixture, IAppPartsCollection partsToScan, Action<DbContextOptionsBuilder>? configure = null)
 	{
 		var dependencies = new AppDependenciesCollection()
 			.AddDatabase(new DummyEnvironment());
 		return fixture
-			.AddMockedService<IOptionsMonitor<DatabaseEntitiesConfig>>(configure: (sp, mock) =>
+			.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) =>
 				mock.Setup(x => x.CurrentValue)
 					.Returns(new DatabaseEntitiesConfig
 					{
 						Validation = EntitiesValidationOption.None
 					}))
 			.ConfigureServices(services => services
-				.AddDbContext<RichWebApiDbContext>(x => x
-					.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
-					.EnableDetailedErrors()
-					.EnableSensitiveDataLogging(), ServiceLifetime.Transient)
+				.AddDbContext<RichWebApiDbContext>((sp, builder) =>
+				{
+					builder.UseInMemoryDatabase(Guid.NewGuid().ToString("N"))
+						.EnableDetailedErrors()
+						.EnableSensitiveDataLogging()
+						.AddInterceptors(sp.GetServices<IOrderedInterceptor>().OrderBy(x => x.Order));
+					configure?.Invoke(builder);
+				}, ServiceLifetime.Transient, ServiceLifetime.Transient)
 				.AddDependencyServices(dependencies, partsToScan));
 	}
 

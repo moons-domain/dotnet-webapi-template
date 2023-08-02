@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace RichWebApi;
+namespace RichWebApi.Tests;
 
 internal class DatabaseUnitTestsPart : IAppPart
 {

@@ -2,7 +2,6 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
@@ -11,6 +10,7 @@ using RichWebApi.Config;
 using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 using RichWebApi.Persistence;
+using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Persistence.Internal;
 using RichWebApi.Startup;
 using RichWebApi.Utilities;
@@ -18,6 +18,7 @@ using RichWebApi.Utilities.Paging;
 using RichWebApi.Validation;
 
 [assembly: InternalsVisibleTo("RichWebApi.Dependencies.Database.Tests.Unit")]
+
 namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
@@ -38,11 +39,13 @@ internal class DatabaseDependency : IAppDependency
 			services.AddOptionsWithValidator<DatabaseConfig, DatabaseConfig.ProdEnvValidator>(ConfigurationSection);
 		}
 
-		services.AddOptionsWithValidator<DatabaseEntitiesConfig, DatabaseEntitiesConfig.Validator>($"{ConfigurationSection}:Entities");
+		services.AddOptionsWithValidator<DatabaseEntitiesConfig, DatabaseEntitiesConfig.Validator>(
+			$"{ConfigurationSection}:Entities");
 
 		var migrationsAssemblyName = $"{typeof(DatabaseDependency).Assembly.GetName().Name}.Migrations";
 		services.AddDbContext<RichWebApiDbContext>((sp, dbContextOptionsBuilder) =>
 		{
+			dbContextOptionsBuilder.AddInterceptors(sp.GetServices<IOrderedInterceptor>().OrderBy(x => x.Order));
 			var host = sp.GetRequiredService<IWebHostEnvironment>();
 			var dbConfig = sp.GetRequiredService<IOptionsMonitor<DatabaseConfig>>()
 				.CurrentValue;
@@ -51,6 +54,7 @@ internal class DatabaseDependency : IAppDependency
 			{
 				dbContextOptionsBuilder.EnableSensitiveDataLogging();
 			}
+
 			dbContextOptionsBuilder
 				.UseSqlServer(host.IsDevelopment()
 						? dbConfig.ConnectionString
@@ -61,8 +65,8 @@ internal class DatabaseDependency : IAppDependency
 						.MigrationsAssembly(migrationsAssemblyName));
 		}, ServiceLifetime.Transient);
 		services.AddStartupAction<DatabaseMigrationAction>();
-		services.AddSaveChangesReactor<AuditSaveChangesReactor>();
-		services.AddSaveChangesReactor<ValidationSaveChangesReactor>();
+		services.AddSaveChangesInterceptor<ValidationSaveChangesInterceptor>();
+		services.AddSaveChangesInterceptor<AuditSaveChangesInterceptor>();
 		services.TryAddScoped<IRichWebApiDatabase, RichWebApiDatabase>();
 		services.TryAddScoped<IDatabasePolicySet, DatabasePolicySet>();
 		services.TryAddScoped<IDatabaseConfigurator, DatabaseConfigurator>();
@@ -70,7 +74,12 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
 		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
 		AddInternalServices(services);
-		services.CollectDatabaseEntities(parts.Select(x => x.GetType().Assembly));
+
+		var dependenciesToScan = parts
+			.Select(x => x.GetType().Assembly)
+			.ToList();
+		dependenciesToScan.Add(typeof(DatabaseDependency).Assembly);
+		services.CollectDatabaseEntities(dependenciesToScan);
 	}
 
 	private static void AddInternalServices(IServiceCollection services)

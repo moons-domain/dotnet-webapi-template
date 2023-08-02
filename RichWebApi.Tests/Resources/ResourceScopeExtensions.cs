@@ -10,7 +10,7 @@ namespace RichWebApi.Tests.Resources;
 public static class ResourceScopeExtensions
 {
 	public static IResourceScope CreateMethodScope(this IResourceScope scope,
-	                                               [CallerMemberName] string? callerMemberName = null)
+												   [CallerMemberName] string? callerMemberName = null)
 	{
 		if (string.IsNullOrEmpty(callerMemberName))
 		{
@@ -26,26 +26,26 @@ public static class ResourceScopeExtensions
 	}
 
 	public static T GetJsonInputResource<T>(this IResourceScope resourceScope, string suffix = "input",
-	                                        TestJsonSerializerSettings? jsonSettings = null)
+											TestJsonSerializerSettings? jsonSettings = null)
 		=> GetJsonResource<T>(resourceScope, suffix, jsonSettings);
 
 	public static Stream GetInputResourceStream(this IResourceScope resourceScope, string suffix = "input")
 		=> resourceScope.GetResourceStream(suffix);
 
 	public static void CompareWithJsonExpectation<T>(this IResourceScope resourceScope,
-	                                                 ITestOutputHelper testOutputHelper,
-	                                                 T actual,
-	                                                 string suffix = "expected",
-	                                                 TestJsonSerializerSettings? jsonSettings = null,
-	                                                 Func<EquivalencyAssertionOptions<T?>,
-		                                                 EquivalencyAssertionOptions<T?>>? config = null)
+													 ITestOutputHelper testOutputHelper,
+													 T actual,
+													 string suffix = "expected",
+													 TestJsonSerializerSettings? jsonSettings = null,
+													 Func<EquivalencyAssertionOptions<T>,
+														 EquivalencyAssertionOptions<T>>? configure = null)
 		where T : class
 	{
 		var definedJsonSettings = jsonSettings
-		                          ?? new TestJsonSerializerSettings
-		                          {
-			                          Formatting = Formatting.Indented
-		                          };
+								  ?? new TestJsonSerializerSettings
+								  {
+									  Formatting = Formatting.Indented
+								  };
 		var expectation = GetJsonResource<T>(resourceScope, suffix);
 		var actualCopy = actual.JsonCopy(definedJsonSettings);
 
@@ -53,7 +53,7 @@ public static class ResourceScopeExtensions
 		{
 			actualCopy.Should().BeEquivalentTo(expectation, x =>
 			{
-				config?.Invoke(x);
+				configure?.Invoke(x);
 				x.RespectingRuntimeTypes();
 				return x;
 			});
@@ -68,15 +68,15 @@ public static class ResourceScopeExtensions
 
 
 	private static T GetJsonResource<T>(IResourceScope resourceScope, string suffix,
-	                                    TestJsonSerializerSettings? jsonSettings = null)
+										TestJsonSerializerSettings? jsonSettings = null)
 	{
 		var stream = resourceScope.GetResourceStream(suffix);
 		using var sr = new StreamReader(stream);
 		using var reader = new JsonTextReader(sr);
 		return JsonSerializer
-			       .Create(jsonSettings ?? new TestJsonSerializerSettings())
-			       .Deserialize<T>(reader)
-		       ?? throw new TestDataException(
-			       $"Failed to deserialize JSON object with {resourceScope.Scope.ConcatScopeString(suffix)} in it's name");
+				   .Create(jsonSettings ?? new TestJsonSerializerSettings())
+				   .Deserialize<T>(reader)
+			   ?? throw new TestDataException(
+				   $"Failed to deserialize JSON object with {resourceScope.Scope.ConcatScopeString(suffix)} in it's name");
 	}
 }

@@ -10,7 +10,7 @@ public class DatabaseEntitiesConfig
 	[UsedImplicitly]
 	public class Validator : OptionsValidator<DatabaseEntitiesConfig>
 	{
-		public Validator() 
+		public Validator()
 			=> RuleFor(x => x.Validation).IsInEnum();
 	}
 }

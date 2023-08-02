@@ -1,7 +1,8 @@
 ﻿using JetBrains.Annotations;
+using RichWebApi.Entities;
 using RichWebApi.Entities.Configuration;
 
-namespace RichWebApi.Entities;
+namespace RichWebApi.Tests.Entities;
 
 [UsedImplicitly]
 public class IgnoredEntity : IEntity

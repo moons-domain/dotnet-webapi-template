@@ -1,5 +1,4 @@
 ﻿using JetBrains.Annotations;
-using Microsoft.EntityFrameworkCore;
 using RichWebApi.Utilities;
 
 namespace RichWebApi.Startup;

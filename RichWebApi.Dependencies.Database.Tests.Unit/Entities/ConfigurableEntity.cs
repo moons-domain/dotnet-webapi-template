@@ -1,10 +1,17 @@
-﻿using RichWebApi.Entities.Configuration;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using RichWebApi.Entities;
+using RichWebApi.Entities.Configuration;
 
-namespace RichWebApi.Entities;
+namespace RichWebApi.Tests.Entities;
 
 public class ConfigurableEntity : IEntity
 {
 	public class Configurator : EntityConfiguration<ConfigurableEntity>
 	{
+		public override void Configure(EntityTypeBuilder<ConfigurableEntity> builder)
+		{
+			base.Configure(builder);
+			builder.HasNoKey();
+		}
 	}
 }

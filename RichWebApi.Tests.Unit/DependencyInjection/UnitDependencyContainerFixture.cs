@@ -1,8 +1,7 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.DependencyInjection;
-using RichWebApi.Tests.DependencyInjection;
 
-namespace RichWebApi.Tests;
+namespace RichWebApi.Tests.DependencyInjection;
 
 [UsedImplicitly]
 public class UnitDependencyContainerFixture : DependencyContainerFixture

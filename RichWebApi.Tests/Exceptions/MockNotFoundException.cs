@@ -5,13 +5,13 @@ namespace RichWebApi.Tests.Exceptions;
 [Serializable]
 public class MockNotFoundException : TestConfigurationException
 {
-    public MockNotFoundException(Type type) : base($"Mock for type {type.Name} was not found.")
-    {
-    }
+	public MockNotFoundException(Type type) : base($"Mock for type {type.Name} was not found.")
+	{
+	}
 
-    protected MockNotFoundException(
-        SerializationInfo info,
-        StreamingContext context) : base(info, context)
-    {
-    }
+	protected MockNotFoundException(
+		SerializationInfo info,
+		StreamingContext context) : base(info, context)
+	{
+	}
 }
