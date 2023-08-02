@@ -1,11 +1,8 @@
 ﻿using AutoMapper.EquivalencyExpression;
-using MediatR;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using RichWebApi.Maintenance;
-using RichWebApi.MediatR;
 using RichWebApi.Middleware;
-using RichWebApi.Parts;
 using RichWebApi.Startup;
 using Serilog;
 using Serilog.Events;
@@ -127,14 +124,11 @@ public class Program
 
 		services.AddHealthChecks();
 
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
-
+		services.AddCoreMediatRBehaviors();
 
 		services.AddAutoMapper(x => x.AddCollectionMappers(), typeof(Program).Assembly);
-		services.EnrichWithApplicationParts(parts);
-		services.AddDependencyServices(dependencies);
+		services.AddAppParts(parts);
+		services.AddDependencyServices(dependencies, parts);
 
 		services.AddStartupAction<AutoMapperValidationAction>();
 		return services;

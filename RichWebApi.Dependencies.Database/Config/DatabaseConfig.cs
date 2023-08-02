@@ -23,7 +23,7 @@ public class DatabaseConfig
 
 	// should have value in development environment
 	public string ConnectionString { get; set; } = null!;
-
+	
 	[UsedImplicitly]
 	public class DevEnvValidator : OptionsValidator<DatabaseConfig>
 	{

@@ -2,7 +2,7 @@
 
 namespace RichWebApi.Exceptions;
 
-public class CouldNotFindEntityException : RichWebApiException
+public class CouldNotFindEntityException : DatabaseDependencyException
 {
 	public CouldNotFindEntityException(MemberInfo entity, long id) : this(entity.Name.ToLowerInvariant(), id)
 	{

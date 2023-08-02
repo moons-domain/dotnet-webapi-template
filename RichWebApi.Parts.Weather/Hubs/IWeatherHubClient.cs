@@ -4,7 +4,7 @@ using SignalRSwaggerGen.Attributes;
 namespace RichWebApi.Hubs;
 
 [SignalRHub("/ws/weather", description: "SignalR hub")]
-internal interface IWeatherHubClient
+public interface IWeatherHubClient
 {
 	[SignalRHidden]
 	Task OnWeatherUpdate(WeatherForecastDto weatherForecast);

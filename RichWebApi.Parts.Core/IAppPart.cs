@@ -1,5 +1,8 @@
-﻿namespace RichWebApi;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-public interface IAppPart : IServiceCollectionConfigurator
+namespace RichWebApi;
+
+public interface IAppPart
 {
+	void ConfigureServices(IServiceCollection services);
 }

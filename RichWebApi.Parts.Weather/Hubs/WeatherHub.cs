@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace RichWebApi.Hubs;
 
 [UsedImplicitly]
-internal class WeatherHub : Hub<IWeatherHubClient>
+public class WeatherHub : Hub<IWeatherHubClient>
 {
 	public override async Task OnConnectedAsync()
 	{
