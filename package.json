@@ -5,14 +5,14 @@
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mrlldd/dotnet-richtemplate.git"
+		"url": "git+https://github.com/mrlldd/template-dotnet-richwebapi.git"
 	},
 	"author": "mrlldd",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/mrlldd/dotnet-richtemplate/issues"
+		"url": "https://github.com/mrlldd/template-dotnet-richwebapi/issues"
 	},
-	"homepage": "https://github.com/mrlldd/dotnet-richtemplate#readme",
+	"homepage": "https://github.com/mrlldd/template-dotnet-richwebapi#readme",
 	"private": true,
 	"scripts": {
 		"preinstall": "dotnet tool restore && dotnet restore -f",
