@@ -112,7 +112,7 @@ public class $MAPPINGPROFILENAME$ : Profile
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/CustomProperties/=FileName/@EntryIndexedValue">Request</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/Description/@EntryValue">Request&lt;T&gt;</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/Description/@EntryValue">Request</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/Field/=NAMESPACE/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/Field/=NAMESPACE/Expression/@EntryValue">fileDefaultNamespace()</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=B0DEB8B12745314585599EB2CCFDD533/Field/=NAMESPACE/InitialRange/@EntryValue">-1</s:Int64>
@@ -160,7 +160,7 @@ public record $REQUESTNAME$ : IRequest
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/CustomProperties/=FileName/@EntryIndexedValue">CronScheduleSerivice</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/Description/@EntryValue">Rich - CronScheduleService</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/Description/@EntryValue">Rich - Cron Schedule Service</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/Field/=NAMESPACE/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/Field/=NAMESPACE/Expression/@EntryValue">fileDefaultNamespace()</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=BAC4867AE5828F40801781453225D574/Field/=NAMESPACE/InitialRange/@EntryValue">-1</s:Int64>
@@ -204,7 +204,7 @@ internal sealed class $SERVICENAME$ : CronScheduleService
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/CustomProperties/=Extension/@EntryIndexedValue">cs</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/CustomProperties/=FileName/@EntryIndexedValue">Request</s:String>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/CustomProperties/=ValidateFileName/@EntryIndexedValue">True</s:String>
-	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/Description/@EntryValue">Request</s:String>
+	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/Description/@EntryValue">Request&lt;T&gt;</s:String>
 	<s:Boolean x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/Field/=NAMESPACE/@KeyIndexDefined">True</s:Boolean>
 	<s:String x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/Field/=NAMESPACE/Expression/@EntryValue">fileDefaultNamespace()</s:String>
 	<s:Int64 x:Key="/Default/PatternsAndTemplates/LiveTemplates/Template/=E177DF70D3657F46A57E3779E750D398/Field/=NAMESPACE/InitialRange/@EntryValue">-1</s:Int64>
