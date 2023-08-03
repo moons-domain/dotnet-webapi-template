@@ -1,8 +1,8 @@
-<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
   <TemplateData>
 	<TemplateID>Microsoft.CSharp.Class</TemplateID>
     <DefaultName>AsyncStartupAction.cs</DefaultName>
-    <Name>AsyncStartupAction</Name>
+    <Name>Rich - Startup Action</Name>
     <Description>Rich - AsyncStartupAction</Description>
     <ProjectType>CSharp</ProjectType>
     <TemplateGroupID>AspNetCore</TemplateGroupID>

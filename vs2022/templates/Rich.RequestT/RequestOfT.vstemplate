@@ -2,7 +2,7 @@
   <TemplateData>
 	<TemplateID>Microsoft.CSharp.Class</TemplateID>
     <DefaultName>RequestOfT.cs</DefaultName>
-    <Name>Request&lt;T&gt;</Name>
+    <Name>Rich - MediatR Request&lt;T&gt;</Name>
     <Description>Rich - Request Of T</Description>
     <ProjectType>CSharp</ProjectType>
     <SortOrder>10</SortOrder>
