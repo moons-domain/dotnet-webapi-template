@@ -10,7 +10,9 @@
     <Icon>CronScheduleServiceIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <References />
     <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">CronScheduleService.cs</ProjectItem>
+      <CustomParameters>
+          <CustomParameter Name="$solution$" Value="RichWebApi"/>
+      </CustomParameters>
   </TemplateContent>
 </VSTemplate>

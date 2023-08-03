@@ -10,7 +10,6 @@
     <Icon>MappingProfileIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <References />
     <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">MappingProfile.cs</ProjectItem>
   </TemplateContent>
 </VSTemplate>

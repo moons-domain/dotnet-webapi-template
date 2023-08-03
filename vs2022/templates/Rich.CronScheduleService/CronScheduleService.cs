@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using NCrontab;
+using $solution$.Services;
 
 namespace $rootnamespace$;
 
@@ -8,7 +9,7 @@ internal sealed class $safeitemname$ : CronScheduleService
 {
     public $safeitemname$(IServiceProvider serviceProvider) : base(serviceProvider)
 	{
-}
+	}
 
     public override Task PerformServiceFunctionAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
     {

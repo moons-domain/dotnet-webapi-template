@@ -3,7 +3,7 @@
     <TemplateID>Microsoft.CSharp.Class</TemplateID>
     <DefaultName>Request.cs</DefaultName>
     <Name>Request</Name>
-    <Description>Rich request</Description>
+    <Description>Rich - Request</Description>
     <ProjectType>CSharp</ProjectType>
     <SortOrder>10</SortOrder>
     <TemplateGroupID>AspNetCore</TemplateGroupID>

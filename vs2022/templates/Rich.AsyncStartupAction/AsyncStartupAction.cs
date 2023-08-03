@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using $solution$.Startup;
 
 namespace $rootnamespace$;
 
