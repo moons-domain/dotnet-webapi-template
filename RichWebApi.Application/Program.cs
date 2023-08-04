@@ -119,14 +119,12 @@ public class Program
 		});
 
 		services.AddFluentValidationRulesToSwagger(opt => opt.SetFluentValidationCompatibility());
-
-		services.AddCore();
-
 		services.AddHealthChecks();
 
-		services.AddCoreMediatRBehaviors();
-
 		services.AddAutoMapper(x => x.AddCollectionMappers(), typeof(Program).Assembly);
+
+
+		services.AddCore();
 		services.AddAppParts(parts);
 		services.AddDependencyServices(dependencies, parts);
 

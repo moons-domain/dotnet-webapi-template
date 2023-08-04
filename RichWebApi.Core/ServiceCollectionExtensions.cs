@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Runtime.CompilerServices;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using RichWebApi.MediatR;
 using RichWebApi.Services;
 using RichWebApi.Startup;
 
+[assembly: InternalsVisibleTo("RichWebApi.Core.Tests.Unit")]
+
 namespace RichWebApi;
 
 public static class ServiceCollectionExtensions
@@ -19,6 +22,12 @@ public static class ServiceCollectionExtensions
 		services.TryAddTransient<IStartupActionCoordinator, StartupActionCoordinator>();
 		services.TryAddSingleton<IApplicationMaintenance, ApplicationMaintenance>();
 		services.TryAddSingleton<ISystemClock, SystemClock>();
+
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
+
+		services.CollectCoreServicesFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
 		return services;
 	}
 
@@ -33,29 +42,36 @@ public static class ServiceCollectionExtensions
 		where T : CronScheduleService
 	{
 		services.TryAddSingleton<T>();
-		services.AddHostedService<T>();
+		services.AddHostedService<T>(sp => sp.GetRequiredService<T>());
 		return services;
 	}
 
 	public static IServiceCollection CollectCoreServicesFromAssemblies(this IServiceCollection services,
 																	   Assembly[] assemblies)
 	{
-		var optionsValidatorTagType = typeof(IOptionsValidator);
+		var appConfig = typeof(IAppConfig);
 		return services.AddValidatorsFromAssemblies(assemblies, includeInternalTypes: true,
-				filter: result => !result.ValidatorType.IsAssignableTo(optionsValidatorTagType)) // options validators have their own lifetime
+				filter: result =>
+				{
+					var validatorInterface = result.InterfaceType;
+					if (validatorInterface is not { IsInterface: true, IsConstructedGenericType: true })
+					{
+						return true;
+					}
+
+					if (validatorInterface.GetGenericTypeDefinition() != typeof(IValidator<>))
+					{
+						return true;
+					}
+
+					var parameter = validatorInterface.GetGenericArguments()[0];
+					return !parameter.IsAssignableTo(appConfig);
+				}) // app config validators have their own lifetime
 			.AddMediatR(x => x.RegisterServicesFromAssemblies(assemblies))
 			.AddAutoMapper(assemblies);
 	}
 
 	public static IServiceCollection CollectCoreServicesFromAssembly(this IServiceCollection services,
-																	   Assembly assembly)
+																	 Assembly assembly)
 		=> services.CollectCoreServicesFromAssemblies(new[] { assembly });
-
-	public static IServiceCollection AddCoreMediatRBehaviors(this IServiceCollection services)
-	{
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(PerformanceLoggingBehavior<,>));
-		return services;
-	}
 }

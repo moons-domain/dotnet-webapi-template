@@ -8,6 +8,5 @@ public class UnitDependencyContainerFixture : DependencyContainerFixture
 {
 	protected override IServiceCollection ConfigureSharedServices(IServiceCollection services)
 		=> base.ConfigureSharedServices(services)
-			.AddCore()
-			.AddCoreMediatRBehaviors();
+			.AddCore();
 }
