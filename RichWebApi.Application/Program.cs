@@ -12,42 +12,22 @@ namespace RichWebApi;
 
 public class Program
 {
-	public static Task Main(string[] args)
+	public static async Task Main(string[] args)
 	{
-		var builder = WebApplication.CreateBuilder(args);
-
-		ConfigureConfiguration(builder.Configuration);
-		ConfigureHost(builder.Host);
-
-		var dependencies = EnrichWithDependencies(new AppDependenciesCollection(), builder.Environment);
-		var parts = EnrichWithApplicationParts(new AppPartsCollection());
-
-		ConfigureServices(builder.Services, parts, dependencies);
-
-		var app = Configure(builder.Build(), dependencies);
-		return RunAsync(app);
-	}
-
-	private static async Task RunAsync(WebApplication app)
-	{
-		var lifetime = app.Lifetime;
-
 		try
 		{
-			var appRunner = app.RunAsync();
-			lifetime.ApplicationStarted.WaitHandle.WaitOne();
+			var builder = WebApplication.CreateBuilder(args);
 
-			await using (var scope = app.Services.CreateAsyncScope())
-			{
-				var sp = scope.ServiceProvider;
-				var maintenance = sp.GetRequiredService<IApplicationMaintenance>();
-				maintenance.Enable("startup");
-				await sp.GetRequiredService<IStartupActionCoordinator>()
-					.PerformStartupActionsAsync(lifetime.ApplicationStopping);
-				maintenance.Disable();
-			}
+			ConfigureConfiguration(builder.Configuration);
+			ConfigureHost(builder.Host);
 
-			await appRunner;
+			var dependencies = EnrichWithDependencies(new AppDependenciesCollection(), builder.Environment);
+			var parts = EnrichWithApplicationParts(new AppPartsCollection());
+
+			ConfigureServices(builder.Services, parts, dependencies);
+
+			var app = Configure(builder.Build(), dependencies);
+			await RunAsync(app);
 		}
 		catch (Exception e)
 		{
@@ -57,6 +37,27 @@ public class Program
 		{
 			await Log.CloseAndFlushAsync();
 		}
+	}
+
+	private static async Task RunAsync(WebApplication app)
+	{
+		var lifetime = app.Lifetime;
+
+
+		var appRunner = app.RunAsync();
+		lifetime.ApplicationStarted.WaitHandle.WaitOne();
+
+		await using (var scope = app.Services.CreateAsyncScope())
+		{
+			var sp = scope.ServiceProvider;
+			var maintenance = sp.GetRequiredService<ApplicationMaintenance>();
+			await maintenance.ExecuteInScopeAsync(() => sp
+					.GetRequiredService<IStartupActionCoordinator>()
+					.PerformStartupActionsAsync(lifetime.ApplicationStopping),
+				new MaintenanceReason("Startup"));
+		}
+
+		await appRunner;
 	}
 
 	private static IConfigurationBuilder ConfigureConfiguration(IConfigurationBuilder configuration)

@@ -1,34 +1,49 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
 
 namespace RichWebApi.Maintenance;
 
-internal sealed class ApplicationMaintenance : IApplicationMaintenance
+public sealed class ApplicationMaintenance
 {
 	private readonly ILogger<ApplicationMaintenance> _logger;
+	private readonly ISystemClock _clock;
 
-	public bool IsEnabled { get; private set; }
+	public bool IsEnabled => _info != null;
 
-	[MemberNotNullWhen(true, nameof(IsEnabled))] public string? Reason { get; private set; }
+	private MaintenanceInfo? _info;
 
-	public ApplicationMaintenance(ILogger<ApplicationMaintenance> logger) => _logger = logger;
-
-	public void Enable(string reason)
+	public MaintenanceInfo Info
 	{
-		if (string.IsNullOrEmpty(reason))
+		get
 		{
-			throw new ArgumentException("Reason should be real value", nameof(reason));
-		}
+			if (!IsEnabled)
+			{
+				throw new InvalidOperationException(
+					$"Maintenance is disabled{Environment.NewLine}If you want to check whether it's enabled, use IsEnabled property");
+			}
 
-		IsEnabled = true;
-		Reason = reason;
-		_logger.LogInformation("Maintenance mode enabled, reason: {Reason}", reason);
+			return _info!;
+		}
+	}
+
+	public ApplicationMaintenance(ILogger<ApplicationMaintenance> logger, ISystemClock clock)
+	{
+		_logger = logger;
+		_clock = clock;
+	}
+
+	public void Enable(MaintenanceReason reason)
+	{
+		_info = new MaintenanceInfo(reason)
+		{
+			StartedAt = _clock.UtcNow.DateTime
+		};
+		_logger.LogInformation("Maintenance mode enabled, reason: {@Reason}", reason);
 	}
 
 	public void Disable()
 	{
-		IsEnabled = false;
-		Reason = null;
+		_info = null;
 		_logger.LogInformation("Maintenance mode disabled");
 	}
 }

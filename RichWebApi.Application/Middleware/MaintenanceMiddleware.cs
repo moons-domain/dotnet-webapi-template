@@ -1,4 +1,5 @@
-﻿using RichWebApi.Maintenance;
+﻿using System.Text.Json;
+using RichWebApi.Maintenance;
 
 namespace RichWebApi.Middleware;
 
@@ -10,12 +11,12 @@ public class MaintenanceMiddleware
 
 	public async Task Invoke(HttpContext context)
 	{
-		var maintenance = context.RequestServices.GetRequiredService<IApplicationMaintenance>();
+		var maintenance = context.RequestServices.GetRequiredService<ApplicationMaintenance>();
 		if (maintenance.IsEnabled)
 		{
-			context.Response.ContentType = "text/plain";
+			context.Response.ContentType = "application/json";
 			context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
-			await context.Response.WriteAsync($"Maintenance mode is enabled. Reason: {maintenance.Reason}");
+			await context.Response.WriteAsync(JsonSerializer.Serialize(maintenance.Info));
 			return;
 		}
 

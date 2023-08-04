@@ -20,7 +20,7 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddCore(this IServiceCollection services)
 	{
 		services.TryAddTransient<IStartupActionCoordinator, StartupActionCoordinator>();
-		services.TryAddSingleton<IApplicationMaintenance, ApplicationMaintenance>();
+		services.TryAddSingleton<ApplicationMaintenance>();
 		services.TryAddSingleton<ISystemClock, SystemClock>();
 
 		services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
