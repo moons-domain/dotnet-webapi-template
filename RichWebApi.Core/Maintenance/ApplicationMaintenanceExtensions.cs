@@ -1,4 +1,6 @@
-﻿namespace RichWebApi.Maintenance;
+﻿using RichWebApi.Maintenance.Exceptions;
+
+namespace RichWebApi.Maintenance;
 
 public static class ApplicationMaintenanceExtensions
 {
@@ -12,8 +14,9 @@ public static class ApplicationMaintenanceExtensions
 		catch (Exception e)
 		{
 			var lastOperationInfo = maintenance.Info;
-			maintenance.Enable(new MaintenanceFailedReason(lastOperationInfo));
-			throw new MaintenanceFailedException(lastOperationInfo, e);
+			maintenance.Disable();
+			maintenance.Enable(new MaintenanceScopeFailedReason(lastOperationInfo));
+			throw new MaintenanceScopeFailedException(lastOperationInfo, e);
 		}
 		maintenance.Disable();
 	}
@@ -29,8 +32,10 @@ public static class ApplicationMaintenanceExtensions
 		catch (Exception e)
 		{
 			var lastOperationInfo = maintenance.Info;
-			maintenance.Enable(new MaintenanceFailedReason(lastOperationInfo));
-			throw new MaintenanceFailedException(lastOperationInfo, e);
+			maintenance.Disable();
+			maintenance.Enable(new MaintenanceScopeFailedReason(lastOperationInfo));
+			throw new MaintenanceScopeFailedException(lastOperationInfo, e);
 		}
+		maintenance.Disable();
 	}
 }

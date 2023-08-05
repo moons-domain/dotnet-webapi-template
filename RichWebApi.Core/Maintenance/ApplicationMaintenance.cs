@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Internal;
 using Microsoft.Extensions.Logging;
+using RichWebApi.Maintenance.Exceptions;
 
 namespace RichWebApi.Maintenance;
 
@@ -19,7 +20,7 @@ public sealed class ApplicationMaintenance
 			if (!IsEnabled)
 			{
 				throw new InvalidOperationException(
-					$"Maintenance is disabled{Environment.NewLine}If you want to check whether it's enabled, use IsEnabled property");
+					$"Maintenance is disabled{Environment.NewLine}If you want to check whether it's enabled, use '{nameof(IsEnabled)}' property");
 			}
 
 			return _info!;
@@ -34,6 +35,11 @@ public sealed class ApplicationMaintenance
 
 	public void Enable(MaintenanceReason reason)
 	{
+		if (IsEnabled)
+		{
+			throw new MaintenanceAlreadyEnabledException(_info!);
+		}
+
 		_info = new MaintenanceInfo(reason)
 		{
 			StartedAt = _clock.UtcNow.DateTime
@@ -43,6 +49,10 @@ public sealed class ApplicationMaintenance
 
 	public void Disable()
 	{
+		if (!IsEnabled)
+		{
+			throw new MaintenanceAlreadyDisabledException();
+		}
 		_info = null;
 		_logger.LogInformation("Maintenance mode disabled");
 	}

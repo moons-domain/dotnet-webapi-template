@@ -21,8 +21,4 @@
       <ProjectReference Include="..\RichWebApi.Tests.Unit\RichWebApi.Tests.Unit.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Maintenance\" />
-    </ItemGroup>
-
 </Project>
