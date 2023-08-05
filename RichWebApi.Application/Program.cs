@@ -1,6 +1,8 @@
 ﻿using AutoMapper.EquivalencyExpression;
 using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
+using RichWebApi.HealthChecks;
 using RichWebApi.Maintenance;
 using RichWebApi.Middleware;
 using RichWebApi.Startup;
@@ -42,7 +44,6 @@ public class Program
 	private static async Task RunAsync(WebApplication app)
 	{
 		var lifetime = app.Lifetime;
-
 
 		var appRunner = app.RunAsync();
 		lifetime.ApplicationStarted.WaitHandle.WaitOne();
@@ -142,7 +143,10 @@ public class Program
 			app.UseSwaggerUI();
 		}
 
-		app.UseHealthChecks(new PathString("/api/health"));
+		app.UseHealthChecks(new PathString("/api/health"), new HealthCheckOptions
+		{
+			ResponseWriter = HealthChecksResponseWriter.WriteAsync
+		});
 		app.UseMiddleware<MaintenanceMiddleware>();
 
 		app.UseHttpsRedirection();

@@ -1,9 +1,11 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Data.Common;
+using System.Runtime.CompilerServices;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using RichWebApi.Config;
@@ -18,7 +20,6 @@ using RichWebApi.Utilities.Paging;
 using RichWebApi.Validation;
 
 [assembly: InternalsVisibleTo("RichWebApi.Dependencies.Database.Tests.Unit")]
-
 namespace RichWebApi;
 
 internal class DatabaseDependency : IAppDependency
@@ -56,9 +57,7 @@ internal class DatabaseDependency : IAppDependency
 			}
 
 			dbContextOptionsBuilder
-				.UseSqlServer(host.IsDevelopment()
-						? dbConfig.ConnectionString
-						: $"Server=tcp:{dbConfig.Host},{dbConfig.Port};Initial Catalog={dbConfig.DbInstanceIdentifier};Persist Security Info=False;User ID={dbConfig.Username};Password={dbConfig.Password};MultipleActiveResultSets=True;",
+				.UseSqlServer(GetConnectionString(sp),
 					builder => builder
 						.EnableRetryOnFailure(dbConfig.Retries)
 						.CommandTimeout(dbConfig.Timeout)
@@ -74,6 +73,8 @@ internal class DatabaseDependency : IAppDependency
 		services.TryAddScoped<IValidator<IAuditableEntity>, IAuditableEntity.Validator>();
 		services.TryAddScoped<IValidator<ISoftDeletableEntity>, ISoftDeletableEntity.Validator>();
 		AddInternalServices(services);
+		services.AddHealthChecks()
+			.AddSqlServer(GetConnectionString);
 
 		var dependenciesToScan = parts
 			.Select(x => x.GetType().Assembly)
@@ -84,6 +85,17 @@ internal class DatabaseDependency : IAppDependency
 
 	private static void AddInternalServices(IServiceCollection services)
 		=> services.TryAddSingleton<IEntityValidatorsProvider, EntityValidatorsProvider>();
+
+	private static string GetConnectionString(IServiceProvider sp)
+	{
+		var host = sp.GetRequiredService<IWebHostEnvironment>();
+		var dbConfig = sp.GetRequiredService<IOptionsMonitor<DatabaseConfig>>()
+			.CurrentValue;
+
+		return host.IsDevelopment()
+			? dbConfig.ConnectionString
+			: $"Server=tcp:{dbConfig.Host},{dbConfig.Port};Initial Catalog={dbConfig.DbInstanceIdentifier};Persist Security Info=False;User ID={dbConfig.Username};Password={dbConfig.Password};MultipleActiveResultSets=True;";
+	}
 
 
 	public void ConfigureApplication(IApplicationBuilder builder)
