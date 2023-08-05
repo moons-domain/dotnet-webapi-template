@@ -1,0 +1,18 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+	<TemplateID>Microsoft.CSharp.Class</TemplateID>
+    <DefaultName>AsyncStartupAction.cs</DefaultName>
+    <Name>Rich - Startup Action</Name>
+    <Description>Rich - AsyncStartupAction</Description>
+    <ProjectType>CSharp</ProjectType>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+    <SortOrder>10</SortOrder>
+    <Icon>AsyncStartupActionIcon.ico</Icon>
+  </TemplateData>
+  <TemplateContent>
+    <ProjectItem SubType="" TargetFileName="$fileinputname$.cs" ReplaceParameters="true">AsyncStartupAction.cs</ProjectItem>
+          <CustomParameters>
+              <CustomParameter Name="$solution$" Value="RichWebApi"/>
+          </CustomParameters>
+  </TemplateContent>
+</VSTemplate>

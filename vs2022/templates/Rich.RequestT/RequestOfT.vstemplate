@@ -1,0 +1,15 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Item">
+  <TemplateData>
+	<TemplateID>Microsoft.CSharp.Class</TemplateID>
+    <DefaultName>RequestOfT.cs</DefaultName>
+    <Name>Rich - MediatR Request&lt;T&gt;</Name>
+    <Description>Rich - Request Of T</Description>
+    <ProjectType>CSharp</ProjectType>
+    <SortOrder>10</SortOrder>
+    <Icon>RequestOfT.ico</Icon>
+    <TemplateGroupID>AspNetCore</TemplateGroupID>
+  </TemplateData>
+  <TemplateContent>
+	  <ProjectItem ReplaceParameters="true" TargetFileName="$safeitemname$.cs">RequestOfT.cs</ProjectItem>
+  </TemplateContent>
+</VSTemplate>
