@@ -26,11 +26,6 @@ public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 		services.TryAddSingleton<IConfiguration>(configuration);
 		services.AddOptions<IntegrationTestsConfig>()
 			.BindConfiguration("Config");
-		services.AddHttpClient<IWeatherForecastClient, WeatherForecastClient>(static (sp, client) =>
-		{
-			var options = sp.GetRequiredService<IOptions<IntegrationTestsConfig>>();
-			client.BaseAddress = new Uri(options.Value.BaseUrl);
-		});
 		foreach (var descriptor in apiClientsToRegister)
 		{
 			descriptor.AddClientToServices(services, static (sp, client) =>
