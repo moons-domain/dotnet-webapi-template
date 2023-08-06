@@ -14,7 +14,7 @@ public class WeatherForecastController : ControllerBase
 
 	public WeatherForecastController(IMediator mediator) => _mediator = mediator;
 
-	[HttpGet(Name = "GetWeatherForecast")]
+	[HttpGet(Name = "GetWeatherForecasts")]
 	public Task<PagedResult<WeatherForecastDto>> Get([FromQuery(Name = "page")] int page,
 													 [FromQuery(Name = "size")] int size, CancellationToken ct)
 		=> _mediator.Send(new GetWeatherForecast(page, size), ct);

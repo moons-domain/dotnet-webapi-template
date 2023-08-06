@@ -6,11 +6,18 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
-        <IsTestProject>false</IsTestProject>
+        <IsTestProject>true</IsTestProject>
         <RootNamespace>RichWebApi.Tests</RootNamespace>
+        <OutputType>Library</OutputType>
+        <LangVersion>latest</LangVersion>
+        <UserSecretsId>6647a4e2-c666-4b32-81d0-11b93b74439b</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,7 +26,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RichWebApi.Dependencies.SignalR\RichWebApi.Dependencies.SignalR.csproj" />
       <ProjectReference Include="..\RichWebApi.Tests\RichWebApi.Tests.csproj" />
     </ItemGroup>
 
