@@ -4,7 +4,7 @@ namespace RichWebApi.Tests.Client;
 
 internal abstract class RichWebApiClient : IRichWebApiClient
 {
-	protected void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
+	public virtual void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
 	{
 
 	}

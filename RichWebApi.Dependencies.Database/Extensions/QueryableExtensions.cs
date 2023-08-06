@@ -37,4 +37,17 @@ public static class QueryableExtensions
 				   ? throw new CouldNotFindEntityException(customEntityName)
 				   : throw new CouldNotFindEntityException(typeof(T)));
 	}
+
+	public static IQueryable<T> MaybeWhere<T>(this IQueryable<T> query, bool condition,
+											  Expression<Func<T, bool>> predicate)
+	{
+		if (query is null)
+		{
+			throw new ArgumentNullException(nameof(query));
+		}
+
+		return condition
+			? query.Where(predicate)
+			: query;
+	}
 }
