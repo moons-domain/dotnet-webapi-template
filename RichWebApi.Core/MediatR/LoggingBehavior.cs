@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using RichWebApi.Extensions;
 
 namespace RichWebApi.MediatR;
 
@@ -10,20 +11,6 @@ public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
 
 	public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger) => _logger = logger;
 
-	public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-	{
-		var requestName = typeof(TRequest).Name;
-		using (_logger.BeginScope(requestName))
-		{
-			try
-			{
-				return await next();
-			}
-			catch (Exception e)
-			{
-				_logger.LogError(e, "Request execution failed");
-				throw;
-			}
-		}
-	}
+	public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+		=> _logger.TimeAsync(new Func<Task<TResponse>>(next), typeof(TRequest).Name);
 }

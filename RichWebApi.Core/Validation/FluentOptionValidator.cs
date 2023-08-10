@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using RichWebApi.Config;
 
 namespace RichWebApi.Validation;
 
-public class FluentOptionValidator<T> : IValidateOptions<T>
-	where T : class
+internal class FluentOptionValidator<T> : IValidateOptions<T>
+	where T : class, IAppConfig
 {
 	private readonly string _configurationSection;
 	private readonly IValidator<T> _validator;
