@@ -1,0 +1,30 @@
+{
+	"Rich - Cron Schedule": {
+		"prefix": "RCron",
+		"body": [
+			"using JetBrains.Annotations;",
+			"using NCrontab;",
+			"using RichWebApi.Services;",
+			"",
+			"namespace RichWebApi;",
+			"",
+			"[UsedImplicitly]",
+			"internal sealed class ${TM_FILENAME_BASE} : CronScheduleService",
+			"{",
+			"	public ${TM_FILENAME_BASE}(IServiceProvider serviceProvider) : base(serviceProvider)",
+			"	{}",
+			"",
+			"	public override Task PerformServiceFunctionAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)",
+			"	{",
+			"		throw new NotImplementedException();",
+			"	}",
+			"",
+			"	protected override CrontabSchedule GetSchedule() ",
+			"	{",
+			"	    throw new NotImplementedException();",
+			"	}",
+			"}"
+		],
+		"description": "Rich - Cron Schedule Service"
+	}
+}

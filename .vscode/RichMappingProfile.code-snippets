@@ -1,0 +1,20 @@
+{
+	"Rich - Mapping Profile": {
+		"prefix": "RMappingProfile",
+		"body": [
+			"using AutoMapper;",
+			"using JetBrains.Annotations;",
+			"",
+			"namespace RichWebApi;",
+			"",
+			"[UsedImplicitly]",
+			"public class ${TM_FILENAME_BASE} : Profile ",
+			"{",
+			"    public ${TM_FILENAME_BASE}() ",
+			"    {",
+			"    }",
+			"}"
+		],
+		"description": "Rich - Mapping Profile"
+	}
+}

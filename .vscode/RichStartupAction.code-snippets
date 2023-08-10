@@ -1,0 +1,27 @@
+{
+	"Rich - Startup Action": {
+		"prefix": "RStartupAction",
+		"body": [
+			"using JetBrains.Annotations;",
+			"using RichWebApi.Startup;",
+			"",
+			"namespace RichWebApi;",
+			"",
+			"[UsedImplicitly]",
+			"internal sealed class ${TM_FILENAME_BASE} : IAsyncStartupAction",
+			"{",
+			"	public uint Order => 0;",
+			"",
+			"	public ${TM_FILENAME_BASE}()",
+			"	{",
+			"	}",
+			"",
+			"	public Task PerformActionAsync(CancellationToken cancellationToken = default)",
+			"	{",
+			"	    throw new NotImplementedException();",
+			"	}",
+			"}"
+		],
+		"description": "Rich - Startup Action"
+	}
+}
