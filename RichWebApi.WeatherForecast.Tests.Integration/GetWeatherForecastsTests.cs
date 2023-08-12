@@ -1,24 +1,24 @@
-﻿using System.Net;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using RichWebApi.Tests;
 using RichWebApi.Tests.Client;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
 using Xunit.Abstractions;
 
-namespace RichWebApi;
+namespace RichWebApi.Tests;
 
 public class GetWeatherForecastsTests : IntegrationTest
 {
 	private readonly IServiceProvider _serviceProvider;
 
-	public GetWeatherForecastsTests(ITestOutputHelper testOutputHelper, IntegrationDependencyContainerFixture container) : base(testOutputHelper) => _serviceProvider = container
-		.WithXunitLogging(TestOutputHelper)
-		.BuildServiceProvider();
+	public GetWeatherForecastsTests(ITestOutputHelper testOutputHelper, IntegrationDependencyContainerFixture container)
+		: base(testOutputHelper)
+		=> _serviceProvider = container
+			.WithXunitLogging(TestOutputHelper)
+			.BuildServiceProvider();
 
 	[Fact]
-	public async Task ShouldReturnCurrentWeekForecasts()
+	public async Task ReturnsCurrentWeekForecasts()
 	{
 		var now = DateTime.UtcNow;
 		var client = _serviceProvider.GetRequiredService<IWeatherForecastClient>();

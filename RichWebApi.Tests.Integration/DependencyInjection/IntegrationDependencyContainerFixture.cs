@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using RichWebApi.Tests.Client;
 using RichWebApi.Tests.Config;
+using RichWebApi.Tests.Exceptions;
 
 namespace RichWebApi.Tests.DependencyInjection;
 
@@ -13,9 +14,27 @@ namespace RichWebApi.Tests.DependencyInjection;
 public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 {
 	private static readonly IReadOnlyList<ClientDescriptor> apiClientsToRegister;
+	private readonly IDictionary<Type, List<Action<IServiceProvider, HttpClient>>> _clientConfigurators;
 
 	static IntegrationDependencyContainerFixture()
 		=> apiClientsToRegister = ScanForClients(typeof(IntegrationTest).Assembly);
+
+	public IntegrationDependencyContainerFixture()
+		=> _clientConfigurators = apiClientsToRegister
+			.ToDictionary(x => x.ServiceType, _ => new List<Action<IServiceProvider, HttpClient>> { ConfigureBaseUrl });
+
+	public IntegrationDependencyContainerFixture ConfigureClient<TClient>(
+		Action<IServiceProvider, HttpClient> configure) where TClient : IRichWebApiClient
+	{
+		if (!_clientConfigurators.TryGetValue(typeof(TClient), out var configurators))
+		{
+			throw new TestConfigurationException(
+				$"API client of type '{typeof(TClient).Name}' has not been registered");
+		}
+
+		configurators.Add(configure);
+		return this;
+	}
 
 	protected override IServiceCollection ConfigureSharedServices(IServiceCollection services)
 	{
@@ -28,10 +47,18 @@ public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 			.BindConfiguration("Config");
 		foreach (var descriptor in apiClientsToRegister)
 		{
-			descriptor.AddClientToServices(services, static (sp, client) =>
+			if (!_clientConfigurators.TryGetValue(descriptor.ServiceType, out var configurators))
 			{
-				var options = sp.GetRequiredService<IOptions<IntegrationTestsConfig>>();
-				client.BaseAddress = new Uri(options.Value.BaseUrl);
+				throw new TestConfigurationException(
+					$"Configurators for API client '{descriptor.ServiceType.Name}' has not been registered");
+			}
+
+			descriptor.AddClientToServices(services, (sp, client) =>
+			{
+				foreach (var configurator in configurators)
+				{
+					configurator.Invoke(sp, client);
+				}
 			});
 		}
 
@@ -71,7 +98,8 @@ public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 					return false;
 				}
 
-				return parameters[1].ParameterType == typeof(Action<IServiceProvider, HttpClient>);
+				return parameters[0].ParameterType == typeof(IServiceCollection)
+					   && parameters[1].ParameterType == typeof(Action<IServiceProvider, HttpClient>);
 			});
 		return baseClassInheritors
 			.Select(x =>
@@ -86,5 +114,13 @@ public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 			.AsReadOnly();
 	}
 
-	private record ClientDescriptor(Type ServiceType, Type ImplementationType, Action<IServiceCollection, Action<IServiceProvider, HttpClient>> AddClientToServices);
+	private static void ConfigureBaseUrl(IServiceProvider sp, HttpClient client)
+	{
+		var options = sp.GetRequiredService<IOptions<IntegrationTestsConfig>>();
+		client.BaseAddress = new Uri(options.Value.BaseUrl);
+	}
+
+	private record ClientDescriptor(Type ServiceType, Type ImplementationType,
+									Action<IServiceCollection, Action<IServiceProvider, HttpClient>>
+										AddClientToServices);
 }
