@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using FluentAssertions.Specialized;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using RichWebApi.Maintenance;
 using RichWebApi.Maintenance.Exceptions;
 using RichWebApi.Tests;
@@ -25,14 +25,13 @@ public class ApplicationMaintenanceExtensionsTests : UnitTest
 	public void CallsActionInSyncScope()
 	{
 		var sp = _container
-			.ReplaceWithMock<Action>(mock => mock.Setup(x => x.Invoke())
-				.Verifiable())
+			.ReplaceWithEmptyMock<Action>()
 			.BuildServiceProvider();
 		var maintenance = sp.GetRequiredService<ApplicationMaintenance>();
-		var actionMock = sp.GetRequiredService<Mock<Action>>();
-		maintenance.ExecuteInScope(actionMock.Object, new MaintenanceReason("unit test"));
+		var actionMock = sp.GetRequiredService<Action>();
+		maintenance.ExecuteInScope(actionMock, new MaintenanceReason("unit test"));
 
-		actionMock.Verify(x => x.Invoke(), Times.Once());
+		actionMock.Received(1).Invoke();
 	}
 
 	[Fact]
@@ -79,14 +78,13 @@ public class ApplicationMaintenanceExtensionsTests : UnitTest
 	public async Task CallsActionInAsyncScope()
 	{
 		var sp = _container
-			.ReplaceWithMock<Func<Task>>(mock => mock.Setup(x => x.Invoke())
-				.Verifiable())
+			.ReplaceWithEmptyMock<Func<Task>>()
 			.BuildServiceProvider();
 		var maintenance = sp.GetRequiredService<ApplicationMaintenance>();
-		var actionMock = sp.GetRequiredService<Mock<Func<Task>>>();
-		await maintenance.ExecuteInScopeAsync(actionMock.Object, new MaintenanceReason("unit test"));
+		var actionMock = sp.GetRequiredService<Func<Task>>();
+		await maintenance.ExecuteInScopeAsync(actionMock, new MaintenanceReason("unit test"));
 
-		actionMock.Verify(x => x.Invoke(), Times.Once());
+		await actionMock.Received(1).Invoke();
 	}
 
 	[Fact]

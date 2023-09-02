@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using RichWebApi.Entities;
 using RichWebApi.Hubs;
 using RichWebApi.Models;
@@ -33,9 +33,8 @@ public class PatchWeatherForecastTests : UnitTest
 			.WithTestScopeInMemoryDatabase(parts)
 			.WithMockedSignalRHubContext<WeatherHub, IWeatherHubClient>(
 				configureHubClients: (_, mock, client) => mock
-					.Setup(x => x.Group(It.Is<string>(s => s == WeatherHubConstants.GroupName)))
-					.Returns(client)
-					.Verifiable("should access the weather group"))
+					.Group(Arg.Is<string>(s => s == WeatherHubConstants.GroupName))
+					.Returns(client))
 			.ConfigureServices(s => s.AddAppParts(parts))
 			.BuildServiceProvider();
 	}
@@ -57,15 +56,15 @@ public class PatchWeatherForecastTests : UnitTest
 	{
 		var sharedInput = _testResources.GetJsonInputResource<PatchWeatherForecast>();
 
-		var clientMock = _serviceProvider.GetRequiredService<Mock<IWeatherHubClient>>();
-		var groupManagerMock = _serviceProvider.GetRequiredService<Mock<IHubClients<IWeatherHubClient>>>();
+		var clientMock = _serviceProvider.GetRequiredService<IWeatherHubClient>();
+		var groupManagerMock = _serviceProvider.GetRequiredService<IHubClients<IWeatherHubClient>>();
 
 		await _serviceProvider
 			.GetRequiredService<IMediator>()
 			.Send(sharedInput);
 
-		clientMock.Verify(x => x.OnWeatherUpdate(It.IsAny<WeatherForecastDto>()), Times.Once());
-		groupManagerMock.Verify(x => x.Group(It.Is<string>(s => s == WeatherHubConstants.GroupName)), Times.Once());
+		await clientMock.Received(1).OnWeatherUpdate(Arg.Any<WeatherForecastDto>());
+		groupManagerMock.Received(1).Group(Arg.Is<string>(s => s == WeatherHubConstants.GroupName));
 	}
 
 	public override async Task InitializeAsync()

@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using NSubstitute;
 using RichWebApi.Config;
 using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.Moq;
@@ -14,7 +15,7 @@ public static class DependencyContainerFixtureExtensions
 {
 	public static DependencyContainerFixture SetDatabaseEntitiesConfig(this DependencyContainerFixture container,
 																 EntitiesValidationOption option)
-		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) => mock.Setup(x => x.CurrentValue)
+		=> container.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) => mock.CurrentValue
 			.Returns(new DatabaseEntitiesConfig
 			{
 				Validation = option
@@ -27,7 +28,7 @@ public static class DependencyContainerFixtureExtensions
 			.AddDatabase(new DummyEnvironment());
 		return fixture
 			.ReplaceWithMock<IOptionsMonitor<DatabaseEntitiesConfig>>((sp, mock) =>
-				mock.Setup(x => x.CurrentValue)
+				mock.CurrentValue
 					.Returns(new DatabaseEntitiesConfig
 					{
 						Validation = EntitiesValidationOption.None

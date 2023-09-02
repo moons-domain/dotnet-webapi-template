@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using RichWebApi.Startup;
 using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
@@ -26,14 +26,13 @@ public class StartupActionCoordinatorTests : UnitTest
 	{
 		var sp = _container
 			.ReplaceWithMock<IAsyncStartupAction>(mock
-				=> mock.Setup(x => x.PerformActionAsync(It.IsAny<CancellationToken>()))
-					.Returns(Task.CompletedTask)
-					.Verifiable())
+				=> mock.PerformActionAsync(Arg.Any<CancellationToken>())
+					.Returns(Task.CompletedTask))
 			.BuildServiceProvider();
 		var coordinator = sp.GetRequiredService<IStartupActionCoordinator>();
 		await coordinator.PerformStartupActionsAsync(default);
 
-		var startupActionMock = sp.GetRequiredService<Mock<IAsyncStartupAction>>();
-		startupActionMock.Verify(x => x.PerformActionAsync(It.IsAny<CancellationToken>()), Times.Once());
+		var startupActionMock = sp.GetRequiredService<IAsyncStartupAction>();
+		await startupActionMock.Received(1).PerformActionAsync(Arg.Any<CancellationToken>());
 	}
 }

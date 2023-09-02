@@ -2,7 +2,7 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Moq;
+using NSubstitute;
 using RichWebApi.Config;
 using RichWebApi.Entities.Configuration;
 using RichWebApi.Tests.DependencyInjection;
@@ -52,14 +52,14 @@ public class DatabaseDependencyTests : UnitTest
 		var parts = new AppPartsCollection();
 		var sp = SetEnvironment(_container, Environments.Development)
 			.BuildServiceProvider();
-		var envMock = sp.GetRequiredService<Mock<IHostEnvironment>>();
-		var dependency = new DatabaseDependency(envMock.Object);
+		var envMock = sp.GetRequiredService<IHostEnvironment>();
+		var dependency = new DatabaseDependency(envMock);
 		dependency.ConfigureServices(services, parts);
 		var dependencyServiceProvider = services.BuildServiceProvider();
 		dependencyServiceProvider.GetRequiredService<IValidator<DatabaseConfig>>()
 			.Should()
 			.BeOfType<DatabaseConfig.DevEnvValidator>();
-		envMock.Verify(x => x.EnvironmentName, Times.Once());
+		var _ = envMock.Received(1).EnvironmentName;
 	}
 
 	[Fact]
@@ -69,20 +69,18 @@ public class DatabaseDependencyTests : UnitTest
 		var parts = new AppPartsCollection();
 		var sp = SetEnvironment(_container, Environments.Production)
 			.BuildServiceProvider();
-		var envMock = sp.GetRequiredService<Mock<IHostEnvironment>>();
-		var dependency = new DatabaseDependency(envMock.Object);
+		var envMock = sp.GetRequiredService<IHostEnvironment>();
+		var dependency = new DatabaseDependency(envMock);
 		dependency.ConfigureServices(services, parts);
 		var dependencyServiceProvider = services.BuildServiceProvider();
 		dependencyServiceProvider.GetRequiredService<IValidator<DatabaseConfig>>()
 			.Should()
 			.BeOfType<DatabaseConfig.ProdEnvValidator>();
-		envMock.Verify(x => x.EnvironmentName, Times.Once());
+		var _ = envMock.Received(1).EnvironmentName;
 	}
 
 	private static DependencyContainerFixture SetEnvironment(DependencyContainerFixture container, string environmentName)
 		=> container
-			.ReplaceWithMock<IHostEnvironment>(mock => mock
-				.Setup(x => x.EnvironmentName)
-				.Returns(environmentName)
-				.Verifiable());
+			.ReplaceWithMock<IHostEnvironment>(mock => mock.EnvironmentName
+				.Returns(environmentName));
 }

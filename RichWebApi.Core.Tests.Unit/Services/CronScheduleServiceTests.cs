@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NCrontab;
+using NSubstitute;
 using RichWebApi.Services;
 using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
@@ -25,9 +25,8 @@ public class CronScheduleServiceTests : UnitTest
 	public async Task CallsServiceFunction()
 	{
 		var sp = _container
-			.ReplaceWithMock<IUnitService>(mock => mock.Setup(x => x.DoSomethingAsync())
-				.Returns(Task.CompletedTask)
-				.Verifiable())
+			.ReplaceWithMock<IUnitService>(mock => mock.DoSomethingAsync()
+				.Returns(Task.CompletedTask))
 			.BuildServiceProvider();
 		var schedule = CrontabSchedule.Parse("* * * * *");
 		var scheduledService = new UnitCronScheduleService(sp, schedule);
@@ -38,8 +37,8 @@ public class CronScheduleServiceTests : UnitTest
 						 + TimeSpan.FromSeconds(2)); // wait until performing of service function
 		await scheduledService.StopAsync(default);
 
-		var mock = sp.GetRequiredService<Mock<IUnitService>>();
-		mock.Verify(x => x.DoSomethingAsync(), Times.Once());
+		var mock = sp.GetRequiredService<IUnitService>();
+		await mock.Received(1).DoSomethingAsync();
 	}
 
 	// ReSharper disable once MemberCanBePrivate.Global - it's being used by Moq
