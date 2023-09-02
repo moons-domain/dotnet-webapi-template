@@ -27,9 +27,9 @@ public static class DependencyContainerFixtureExtensions
 			.ReplaceWithMock<IHubContext<T>>((sp, mock) =>
 			{
 				mock.Clients
-					.Returns(sp.GetRequiredService<IProxyHubClients<T>>());
+					.Returns(_ => sp.GetRequiredService<IProxyHubClients<T>>());
 				mock.Groups
-					.Returns(sp.GetRequiredService<IGroupManager<T>>());
+					.Returns(_ => sp.GetRequiredService<IGroupManager<T>>());
 				configureHubContext?.Invoke(sp, mock);
 			}, args);
 
