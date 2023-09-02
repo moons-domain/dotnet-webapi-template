@@ -7,7 +7,7 @@ using Microsoft.Extensions.Options;
 using NSubstitute;
 using RichWebApi.Config;
 using RichWebApi.Persistence.Interceptors;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 
 namespace RichWebApi.Tests.DependencyInjection;
 

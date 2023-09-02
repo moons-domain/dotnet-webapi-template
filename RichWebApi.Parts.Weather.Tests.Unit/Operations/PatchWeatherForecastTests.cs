@@ -10,7 +10,7 @@ using RichWebApi.Persistence;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.FluentAssertions;
 using RichWebApi.Tests.Logging;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 using RichWebApi.Tests.Persistence;
 using RichWebApi.Tests.Resources;
 using Xunit.Abstractions;

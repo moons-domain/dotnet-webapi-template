@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using NSubstitute;
 using RichWebApi.Tests.DependencyInjection;
 
-namespace RichWebApi.Tests.Moq;
+namespace RichWebApi.Tests.NSubstitute;
 
 public static class DependencyContainerFixtureExtensions
 {
