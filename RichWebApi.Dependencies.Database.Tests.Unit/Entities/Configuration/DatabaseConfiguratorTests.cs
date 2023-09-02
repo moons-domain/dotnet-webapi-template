@@ -15,7 +15,8 @@ public class DatabaseConfiguratorTests : UnitTest
 {
 	private readonly DependencyContainerFixture _container;
 
-	public DatabaseConfiguratorTests(ITestOutputHelper testOutputHelper, UnitDependencyContainerFixture container) : base(testOutputHelper)
+	public DatabaseConfiguratorTests(ITestOutputHelper testOutputHelper, UnitDependencyContainerFixture container) :
+		base(testOutputHelper)
 	{
 		var parts = new AppPartsCollection
 		{
@@ -34,31 +35,32 @@ public class DatabaseConfiguratorTests : UnitTest
 	[Fact]
 	public async Task IgnoresIgnoredConfigurations()
 	{
+		var configMock = Substitute.For<IgnoredEntity.Configurator>();
+		configMock.Configure(Arg.Any<EntityTypeBuilder<IgnoredEntity>>());
 		var sp = _container
-			.ReplaceWithMock<INonGenericEntityConfiguration>(mock =>
-			{
-				((IEntityConfiguration<IgnoredEntity>)mock).Configure(Arg.Any<EntityTypeBuilder<IgnoredEntity>>());
-			})
-			.ConfigureServices(s => s.TryAddEnumerable(ServiceDescriptor.Singleton<INonGenericEntityConfiguration, UnitAuditableEntity.Configurator>()))
+			.ReplaceWithMock<INonGenericEntityConfiguration>(configMock)
+			.ConfigureServices(s
+				=> s.TryAddEnumerable(ServiceDescriptor
+					.Singleton<INonGenericEntityConfiguration, UnitAuditableEntity.Configurator>()))
 			.BuildServiceProvider();
 		await TriggerDbContextConfigurationAsync(sp);
-		var mock = sp.GetRequiredService<INonGenericEntityConfiguration>();
-		((IEntityConfiguration<IgnoredEntity>)mock)
-			.DidNotReceive().Configure(Arg.Any<EntityTypeBuilder<IgnoredEntity>>());
+		configMock.DidNotReceive().Configure(Arg.Any<EntityTypeBuilder<IgnoredEntity>>());
 	}
 
 	[Fact]
 	public async Task CallsEntityConfiguration()
 	{
+		var configMock = Substitute.For<ConfigurableEntity.Configurator>();
+		configMock.When(x => x.Configure(Arg.Any<EntityTypeBuilder<ConfigurableEntity>>()))
+			.Do(x => x.Arg<EntityTypeBuilder<ConfigurableEntity>>().HasNoKey());
 		var sp = _container
-			.ReplaceWithMock<INonGenericEntityConfiguration>(mock => ((IEntityConfiguration<ConfigurableEntity>)mock)
-				.When(x => x.Configure(Arg.Any<EntityTypeBuilder<ConfigurableEntity>>()))
-				.Do(x => x.Arg<EntityTypeBuilder<ConfigurableEntity>>().HasNoKey()))
-			.ConfigureServices(s => s.TryAddEnumerable(ServiceDescriptor.Singleton<INonGenericEntityConfiguration, UnitAuditableEntity.Configurator>()))
+			.ReplaceWithMock<INonGenericEntityConfiguration>(configMock)
+			.ConfigureServices(s
+				=> s.TryAddEnumerable(ServiceDescriptor
+					.Singleton<INonGenericEntityConfiguration, UnitAuditableEntity.Configurator>()))
 			.BuildServiceProvider();
 		await TriggerDbContextConfigurationAsync(sp);
-		var mock = sp.GetRequiredService<INonGenericEntityConfiguration>();
-		((IEntityConfiguration<ConfigurableEntity>)mock)
+		configMock
 			.Received(1)
 			.Configure(Arg.Any<EntityTypeBuilder<ConfigurableEntity>>());
 	}

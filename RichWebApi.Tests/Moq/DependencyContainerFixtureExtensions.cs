@@ -7,7 +7,6 @@ namespace RichWebApi.Tests.Moq;
 
 public static class DependencyContainerFixtureExtensions
 {
-
 	public static DependencyContainerFixture ReplaceWithMock<TService>(
 		this DependencyContainerFixture fixture,
 		Action<IServiceProvider, TService>? configure = null,
@@ -21,6 +20,15 @@ public static class DependencyContainerFixtureExtensions
 					configure?.Invoke(sp, mock);
 					return mock;
 				}));
+			});
+
+	public static DependencyContainerFixture ReplaceWithMock<TService>(
+		this DependencyContainerFixture fixture,
+		TService instance) where TService : class
+		=> fixture
+			.ConfigureServices(services =>
+			{
+				services.Replace(ServiceDescriptor.Singleton(instance));
 			});
 
 	public static DependencyContainerFixture ReplaceWithMock<TService>(
