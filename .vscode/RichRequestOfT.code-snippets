@@ -1,0 +1,37 @@
+{
+	"Rich - MediatR Request<T>": {
+		"prefix": "RMediatrRequestOfT",
+		"body": [
+			"using FluentValidation;",
+			"using JetBrains.Annotations;",
+			"using MediatR;",
+			"",
+			"namespace RichWebApi;",
+			"",
+			"public record ${TM_FILENAME_BASE} : IRequest<T>",
+			"{",
+			"	[UsedImplicitly]",
+			"    public class Validator : AbstractValidator<${TM_FILENAME_BASE}>",
+			"    {",
+			"        public Validator()",
+			"        {",
+			"        }",
+			"    }",
+			"",
+			"    [UsedImplicitly]",
+			"    internal class ${TM_FILENAME_BASE}Handler : IRequestHandler<${TM_FILENAME_BASE}, T>",
+			"	{",
+			"		public ${TM_FILENAME_BASE}Handler()",
+			"        {",
+			"        }",
+			"",
+			"        public Task<T> Handle(${TM_FILENAME_BASE} request, CancellationToken cancellationToken)",
+			"        {",
+			"            throw new NotImplementedException();",
+			"        }",
+			"    }",
+			"}"
+		],
+		"description": "Rich - MediatR Request<T>"
+	}
+}

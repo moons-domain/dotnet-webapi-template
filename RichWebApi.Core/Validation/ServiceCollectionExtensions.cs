@@ -13,8 +13,8 @@ public static class ServiceCollectionExtensions
 	public static IServiceCollection AddOptionsWithValidator<TOptions, TValidator>(
 		this IServiceCollection services,
 		string configurationSection)
-		where TOptions : class, new()
-		where TValidator : OptionsValidator<TOptions>
+		where TOptions : class, IAppConfig, new()
+		where TValidator : AbstractValidator<TOptions>
 	{
 		services.TryAddTransient<IValidator<TOptions>, TValidator>();
 		services.TryAddSingleton<IValidateOptions<TOptions>>(x

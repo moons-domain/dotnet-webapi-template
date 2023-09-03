@@ -1,14 +1,14 @@
 ﻿using FluentAssertions;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using RichWebApi.Config;
 using RichWebApi.Exceptions;
 using RichWebApi.Persistence.Internal;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 using Xunit.Abstractions;
 
 namespace RichWebApi.Tests.Persistence.Internal;
@@ -85,16 +85,14 @@ public class EntityValidatorsProviderTests : UnitTest
 	{
 		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.None)
-			.ReplaceWithMock<IValidator<ConfigurableEntity>>(mock => mock
-				.Setup(x => x.ValidateAsync(It.IsAny<ConfigurableEntity>(), It.IsAny<CancellationToken>()))
-				.Verifiable())
+			.ReplaceWithMock<IValidator<ConfigurableEntity>>(mock => mock.ValidateAsync(Arg.Any<ConfigurableEntity>(), Arg.Any<CancellationToken>()))
 			.BuildServiceProvider();
 		var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 		var validator = validatorsProvider.GetAsyncValidator(sp, typeof(ConfigurableEntity));
 		await validator(new ConfigurableEntity(), default);
 
-		var mock = sp.GetRequiredService<Mock<IValidator<ConfigurableEntity>>>();
-		mock.Verify(x => x.ValidateAsync(It.IsAny<ConfigurableEntity>(), It.IsAny<CancellationToken>()), Times.Once());
+		var mock = sp.GetRequiredService<IValidator<ConfigurableEntity>>();
+		await mock.Received(1).ValidateAsync(Arg.Any<ConfigurableEntity>(), Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
