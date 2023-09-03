@@ -1,13 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using RichWebApi.Startup;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.NSubstitute;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Core.Tests.Unit.Startup;
+namespace RichWebApi.Tests.Startup;
 
 public class StartupActionCoordinatorTests : UnitTest
 {
