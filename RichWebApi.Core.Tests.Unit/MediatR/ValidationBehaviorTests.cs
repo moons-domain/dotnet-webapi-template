@@ -4,12 +4,12 @@ using FluentValidation.Results;
 using JetBrains.Annotations;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using RichWebApi.Exceptions;
 using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 using Xunit.Abstractions;
 
 namespace RichWebApi.Core.Tests.Unit.MediatR;
@@ -29,19 +29,17 @@ public class ValidationBehaviorTests : UnitTest
 	{
 		var request = new UnitRequest();
 		var sp = _container
-			.ReplaceWithMock<IValidator<UnitRequest>>(mock => mock.Setup(x
-					=> x.ValidateAsync(It.Is<UnitRequest>(r => r == request),
-						It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new ValidationResult()))
+			.ReplaceWithMock<IValidator<UnitRequest>>(mock => mock.ValidateAsync(Arg.Is<UnitRequest>(r => r == request),
+						Arg.Any<CancellationToken>())
+				.Returns(new ValidationResult()))
 			.BuildServiceProvider();
 		var mediator = sp.GetRequiredService<IMediator>();
 
 		await mediator.Send(request);
 
-		var mock = sp.GetRequiredService<Mock<IValidator<UnitRequest>>>();
-		mock.Verify(x
-			=> x.ValidateAsync(It.Is<UnitRequest>(r => r == request),
-				It.IsAny<CancellationToken>()), Times.Once());
+		var mock = sp.GetRequiredService<IValidator<UnitRequest>>();
+		await mock.Received(1).ValidateAsync(Arg.Is<UnitRequest>(r => r == request),
+				Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
@@ -50,16 +48,15 @@ public class ValidationBehaviorTests : UnitTest
 		var request = new UnitRequest();
 		var sp = _container
 			.ReplaceWithMock<IRequestHandler<UnitRequest>>(mock
-				=> mock.Setup(x => x.Handle(It.Is<UnitRequest>(r => r == request), It.IsAny<CancellationToken>()))
-					.Returns(Task.CompletedTask)
-					.Verifiable())
+				=> mock.Handle(Arg.Is<UnitRequest>(r => r == request), Arg.Any<CancellationToken>())
+					.Returns(Task.CompletedTask))
 			.BuildServiceProvider();
 		var mediator = sp.GetRequiredService<IMediator>();
 
 		await mediator.Send(request);
 
-		var mock = sp.GetRequiredService<Mock<IRequestHandler<UnitRequest>>>();
-		mock.Verify(x => x.Handle(It.Is<UnitRequest>(r => r == request), It.IsAny<CancellationToken>()), Times.Once());
+		var mock = sp.GetRequiredService<IRequestHandler<UnitRequest>>();
+		await mock.Received(1).Handle(Arg.Is<UnitRequest>(r => r == request), Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
@@ -68,9 +65,8 @@ public class ValidationBehaviorTests : UnitTest
 		var request = new UnitRequest(true);
 		var sp = _container
 			.ReplaceWithMock<IRequestHandler<UnitRequest>>(mock
-				=> mock.Setup(x => x.Handle(It.Is<UnitRequest>(r => r == request), It.IsAny<CancellationToken>()))
-					.Returns(Task.CompletedTask)
-					.Verifiable())
+				=> mock.Handle(Arg.Is<UnitRequest>(r => r == request), Arg.Any<CancellationToken>())
+					.Returns(Task.CompletedTask))
 			.BuildServiceProvider();
 		var mediator = sp.GetRequiredService<IMediator>();
 

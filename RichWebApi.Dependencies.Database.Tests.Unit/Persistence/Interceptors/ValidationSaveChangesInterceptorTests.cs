@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Moq;
+using NSubstitute;
 using RichWebApi.Config;
 using RichWebApi.Persistence.Interceptors;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 using Xunit.Abstractions;
 
 namespace RichWebApi.Tests.Persistence.Interceptors;
@@ -49,8 +49,8 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 
 		await interceptor.SavingChangesAsync(eventData, default);
 
-		var optionsMock = sp.GetRequiredService<Mock<IOptionsMonitor<DatabaseEntitiesConfig>>>();
-		optionsMock.Verify(x => x.CurrentValue, Times.Never());
+		var optionsMock = sp.GetRequiredService<IOptionsMonitor<DatabaseEntitiesConfig>>();
+		var _ = optionsMock.DidNotReceive().CurrentValue;
 	}
 
 	[Fact]
@@ -71,8 +71,8 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 
 		await interceptor.SavingChangesAsync(eventData, default);
 
-		var optionsMock = sp.GetRequiredService<Mock<IOptionsMonitor<DatabaseEntitiesConfig>>>();
-		optionsMock.Verify(x => x.CurrentValue, Times.Once());
+		var optionsMock = sp.GetRequiredService<IOptionsMonitor<DatabaseEntitiesConfig>>();
+		var _ = optionsMock.Received().CurrentValue;
 	}
 
 	[Fact]
@@ -81,10 +81,9 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 		var entity = new UnitAuditableEntity();
 		var sp = _container
 			.SetDatabaseEntitiesConfig(EntitiesValidationOption.Required)
-			.ReplaceWithMock<IValidator<UnitAuditableEntity>>(mock => mock
-				.Setup(x => x.ValidateAsync(It.Is<UnitAuditableEntity>(e => e == entity),
-					It.IsAny<CancellationToken>()))
-				.ReturnsAsync(new ValidationResult()))
+			.ReplaceWithMock<IValidator<UnitAuditableEntity>>(mock => mock.ValidateAsync(Arg.Is<UnitAuditableEntity>(e => e == entity),
+					Arg.Any<CancellationToken>())
+				.Returns(new ValidationResult()))
 			.BuildServiceProvider();
 		var dbContext = sp.GetRequiredService<RichWebApiDbContext>();
 		await dbContext.AddAsync(entity);
@@ -95,10 +94,8 @@ public class ValidationSaveChangesInterceptorTests : UnitTest
 
 		await interceptor.SavingChangesAsync(eventData, default);
 
-		var validatorMock = sp.GetRequiredService<Mock<IValidator<UnitAuditableEntity>>>();
-		validatorMock.Verify(
-			x => x.ValidateAsync(It.Is<UnitAuditableEntity>(e => e == entity), It.IsAny<CancellationToken>()),
-			Times.Once());
+		var validatorMock = sp.GetRequiredService<IValidator<UnitAuditableEntity>>();
+		await validatorMock.Received(1).ValidateAsync(Arg.Is<UnitAuditableEntity>(e => e == entity), Arg.Any<CancellationToken>());
 	}
 
 	[Fact]

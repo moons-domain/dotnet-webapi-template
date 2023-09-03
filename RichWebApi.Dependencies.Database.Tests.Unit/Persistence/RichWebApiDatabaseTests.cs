@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 using Polly;
 using RichWebApi.Entities;
 using RichWebApi.Persistence;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Entities;
 using RichWebApi.Tests.Logging;
-using RichWebApi.Tests.Moq;
+using RichWebApi.Tests.NSubstitute;
 using RichWebApi.Utilities;
 using Xunit.Abstractions;
 
@@ -28,27 +28,24 @@ public class RichWebApiDatabaseTests : UnitTest
 	{
 		var sp = _container
 			.ReplaceWithMock<IAsyncPolicy>(mock =>
-				mock.Setup(x
-						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task<IEntity>>>(),
-							It.IsAny<CancellationToken>()))
-					.Verifiable())
+				mock.ExecuteAsync(Arg.Any<Func<CancellationToken, Task<IEntity>>>(),
+							Arg.Any<CancellationToken>()))
 			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
-				mock.Setup(x => x.DatabaseReadPolicy)
-					.Returns(sp.GetRequiredService<IAsyncPolicy>)
-					.Verifiable())
+				mock.DatabaseReadPolicy
+					.Returns(_ => sp.GetRequiredService<IAsyncPolicy>())
+				)
 			.WithTestScopeInMemoryDatabase(new AppPartsCollection())
 			.BuildServiceProvider();
-		var policySetMock = sp.GetRequiredService<Mock<IDatabasePolicySet>>();
-		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock.Object);
+		var policySetMock = sp.GetRequiredService<IDatabasePolicySet>();
+		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock);
 		await database.ReadAsync((db, ct) => Task.FromResult<IEntity>(new ConfigurableEntity()), default);
 
-		var asyncPolicyMock = sp.GetRequiredService<Mock<IAsyncPolicy>>();
+		var asyncPolicyMock = sp.GetRequiredService<IAsyncPolicy>();
 
-		policySetMock.Verify(x => x.DatabaseReadPolicy, Times.Once());
-		asyncPolicyMock.Verify(x => x.ExecuteAsync(
-				It.IsAny<Func<CancellationToken, Task<IEntity>>>(),
-				It.IsAny<CancellationToken>()),
-			Times.Once());
+		var _ = policySetMock.Received(1).DatabaseReadPolicy;
+		await asyncPolicyMock.Received(1).ExecuteAsync(
+				Arg.Any<Func<CancellationToken, Task<IEntity>>>(),
+				Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
@@ -56,27 +53,23 @@ public class RichWebApiDatabaseTests : UnitTest
 	{
 		var sp = _container
 			.ReplaceWithMock<IAsyncPolicy>(mock =>
-				mock.Setup(x
-						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
-							It.IsAny<CancellationToken>()))
-					.Verifiable())
+				mock.ExecuteAsync(Arg.Any<Func<CancellationToken, Task>>(),
+							Arg.Any<CancellationToken>()))
 			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
-				mock.Setup(x => x.DatabaseWritePolicy)
-					.Returns(sp.GetRequiredService<IAsyncPolicy>)
-					.Verifiable())
+				mock.DatabaseWritePolicy
+					.Returns(_ => sp.GetRequiredService<IAsyncPolicy>()))
 			.WithTestScopeInMemoryDatabase(new AppPartsCollection())
 			.BuildServiceProvider();
-		var policySetMock = sp.GetRequiredService<Mock<IDatabasePolicySet>>();
-		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock.Object);
+		var policySetMock = sp.GetRequiredService<IDatabasePolicySet>();
+		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock);
 		await database.WriteAsync((_, _) => Task.CompletedTask, default);
 
-		var asyncPolicyMock = sp.GetRequiredService<Mock<IAsyncPolicy>>();
+		var asyncPolicyMock = sp.GetRequiredService<IAsyncPolicy>();
 
-		policySetMock.Verify(x => x.DatabaseWritePolicy, Times.Once());
-		asyncPolicyMock.Verify(x => x.ExecuteAsync(
-				It.IsAny<Func<CancellationToken, Task>>(),
-				It.IsAny<CancellationToken>()),
-			Times.Once());
+		var _ = policySetMock.Received(1).DatabaseWritePolicy;
+		await asyncPolicyMock.Received(1).ExecuteAsync(
+				Arg.Any<Func<CancellationToken, Task>>(),
+				Arg.Any<CancellationToken>());
 	}
 
 	[Fact]
@@ -84,26 +77,22 @@ public class RichWebApiDatabaseTests : UnitTest
 	{
 		var sp = _container
 			.ReplaceWithMock<IAsyncPolicy>(mock =>
-				mock.Setup(x
-						=> x.ExecuteAsync(It.IsAny<Func<CancellationToken, Task>>(),
-							It.IsAny<CancellationToken>()))
-					.Verifiable())
+				mock.ExecuteAsync(Arg.Any<Func<CancellationToken, Task>>(),
+							Arg.Any<CancellationToken>()))
 			.ReplaceWithMock<IDatabasePolicySet>((sp, mock) =>
-				mock.Setup(x => x.DatabaseWritePolicy)
-					.Returns(sp.GetRequiredService<IAsyncPolicy>)
-					.Verifiable())
+				mock.DatabaseWritePolicy
+					.Returns(_ => sp.GetRequiredService<IAsyncPolicy>()))
 			.WithTestScopeInMemoryDatabase(new AppPartsCollection())
 			.BuildServiceProvider();
-		var policySetMock = sp.GetRequiredService<Mock<IDatabasePolicySet>>();
-		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock.Object);
+		var policySetMock = sp.GetRequiredService<IDatabasePolicySet>();
+		var database = new RichWebApiDatabase(sp.GetRequiredService<RichWebApiDbContext>(), policySetMock);
 		await database.PersistAsync();
 
-		var asyncPolicyMock = sp.GetRequiredService<Mock<IAsyncPolicy>>();
+		var asyncPolicyMock = sp.GetRequiredService<IAsyncPolicy>();
 
-		policySetMock.Verify(x => x.DatabaseWritePolicy, Times.Once());
-		asyncPolicyMock.Verify(x => x.ExecuteAsync(
-				It.IsAny<Func<CancellationToken, Task>>(),
-				It.IsAny<CancellationToken>()),
-			Times.Once());
+		var _ = policySetMock.Received(1).DatabaseWritePolicy;
+		await asyncPolicyMock.Received(1).ExecuteAsync(
+				Arg.Any<Func<CancellationToken, Task>>(),
+				Arg.Any<CancellationToken>());
 	}
 }
