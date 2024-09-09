@@ -20,9 +20,10 @@ public class GetWeatherForecastsTests : IntegrationTest
 	[Fact]
 	public async Task ReturnsCurrentWeekForecasts()
 	{
-		var now = DateTime.UtcNow;
+		var now = DateTimeOffset.UtcNow;
+		var today = new DateTimeOffset(DateOnly.FromDateTime(now.UtcDateTime), TimeOnly.MinValue, TimeSpan.Zero);
 		var client = _serviceProvider.GetRequiredService<IWeatherForecastClient>();
-		var pageResponse = await client.GetWeatherForecastsAsync(0, 100, now, now.AddDays(6));
+		var pageResponse = await client.GetWeatherForecastsAsync(0, 100, today, today.AddDays(7));
 		pageResponse.StatusCode
 			.Should()
 			.Be(200);

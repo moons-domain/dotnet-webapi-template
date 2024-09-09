@@ -20,7 +20,7 @@ public class GetWeatherForecastTests : IntegrationTest
 	[Fact]
 	public async Task ReturnsTomorrowForecast()
 	{
-		var tomorrow = DateTimeOffset.Now.AddDays(1);
+		var tomorrow = DateTimeOffset.UtcNow.AddDays(1);
 		var client = _serviceProvider.GetRequiredService<IWeatherForecastClient>();
 		var response = await client.GetWeatherForecastAsync(tomorrow);
 		response.StatusCode.Should().Be(200);
