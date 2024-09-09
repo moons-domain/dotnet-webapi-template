@@ -17,8 +17,8 @@ internal static class RuleBuilderExtensions
 			{
 				context.AddFailure(
 					new ValidationFailure(
-						context.PropertyName,
-						$"'{context.PropertyName}' does not contain a valid SQL Server connection string.",
+						context.PropertyPath,
+						$"'{context.PropertyPath}' does not contain a valid SQL Server connection string.",
 						value));
 			}
 		});

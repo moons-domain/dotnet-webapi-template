@@ -4,13 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 using RichWebApi.Maintenance;
 using RichWebApi.Maintenance.Exceptions;
-using RichWebApi.Tests;
 using RichWebApi.Tests.DependencyInjection;
 using RichWebApi.Tests.Logging;
 using RichWebApi.Tests.NSubstitute;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Core.Tests.Unit.Maintenance;
+namespace RichWebApi.Tests.Maintenance;
 
 public class ApplicationMaintenanceExtensionsTests : UnitTest
 {

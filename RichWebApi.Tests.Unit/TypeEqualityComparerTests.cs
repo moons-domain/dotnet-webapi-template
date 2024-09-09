@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
-using RichWebApi.Tests;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Core.Tests.Unit;
+namespace RichWebApi.Tests;
 
 public class TypeEqualityComparerTests : UnitTest
 {

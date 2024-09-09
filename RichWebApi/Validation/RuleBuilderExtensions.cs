@@ -17,8 +17,8 @@ public static class RuleBuilderExtensions
 			{
 				context.AddFailure(
 					new ValidationFailure(
-						context.PropertyName,
-						$"'{context.PropertyName}' does not contain a valid CRON expression.",
+						context.PropertyPath,
+						$"'{context.PropertyPath}' does not contain a valid CRON expression.",
 						value));
 			}
 		});

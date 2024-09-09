@@ -16,7 +16,7 @@ public static class DependencyContainerFixtureExtensions
 			{
 				services.Replace(ServiceDescriptor.Singleton(sp =>
 				{
-					var mock = Substitute.For<TService>(args ?? Array.Empty<object>());
+					var mock = Substitute.For<TService>(args ?? []);
 					configure?.Invoke(sp, mock);
 					return mock;
 				}));

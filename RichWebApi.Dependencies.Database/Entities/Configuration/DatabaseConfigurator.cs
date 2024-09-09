@@ -81,6 +81,6 @@ internal class DatabaseConfigurator : IDatabaseConfigurator
 				configurationGenericInterface.Name));
 		}
 
-		configureMethod.Invoke(configuration, new[] { entityTypeBuilder });
+		configureMethod.Invoke(configuration, [entityTypeBuilder]);
 	}
 }

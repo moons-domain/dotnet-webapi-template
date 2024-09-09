@@ -8,10 +8,6 @@ public class RichWebApiTestException : Exception
 	{
 	}
 
-	protected RichWebApiTestException(SerializationInfo info, StreamingContext context) : base(info, context)
-	{
-	}
-
 	public RichWebApiTestException(string? message) : base(message)
 	{
 	}

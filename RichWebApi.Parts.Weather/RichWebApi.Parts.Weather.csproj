@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
@@ -12,7 +12,7 @@
     <ItemGroup>
       <ProjectReference Include="..\RichWebApi.Dependencies.Database\RichWebApi.Dependencies.Database.csproj" />
       <ProjectReference Include="..\RichWebApi.Dependencies.SignalR\RichWebApi.Dependencies.SignalR.csproj" />
-      <ProjectReference Include="..\RichWebApi.Parts.Core\RichWebApi.Parts.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Parts\RichWebApi.Parts.csproj" />
     </ItemGroup>
 
 </Project>
