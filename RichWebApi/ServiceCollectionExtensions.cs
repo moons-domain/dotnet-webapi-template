@@ -11,7 +11,7 @@ using RichWebApi.MediatR;
 using RichWebApi.Services;
 using RichWebApi.Startup;
 
-[assembly: InternalsVisibleTo("RichWebApi.Core.Tests.Unit")]
+[assembly: InternalsVisibleTo("RichWebApi.Tests.Unit")]
 
 namespace RichWebApi;
 

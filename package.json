@@ -5,14 +5,14 @@
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/mrlldd/template-dotnet-richwebapi.git"
+		"url": "git+https://github.com/moons-domain/dotnet-webapi-template.git"
 	},
 	"author": "mrlldd",
 	"license": "ISC",
 	"bugs": {
-		"url": "https://github.com/mrlldd/template-dotnet-richwebapi/issues"
+		"url": "https://github.com/moons-domain/dotnet-webapi-template/issues"
 	},
-	"homepage": "https://github.com/mrlldd/template-dotnet-richwebapi#readme",
+	"homepage": "https://github.com/moons-domain/dotnet-webapi-template#readme",
 	"private": true,
 	"scripts": {
 		"preinstall": "dotnet tool restore && dotnet restore -f",
@@ -37,12 +37,12 @@
 		"useTabs": true
 	},
 	"devDependencies": {
+		"adm-zip": "^0.5.10",
 		"glob": "^10.3.3",
 		"husky": "^8.0.2",
 		"lint-staged": "^13.1.0",
 		"nswag": "^13.18.2",
 		"prettier": "^2.8.1",
-		"replace": "^1.2.2",
-		"adm-zip": "^0.5.10"
+		"replace": "^1.2.2"
 	}
 }

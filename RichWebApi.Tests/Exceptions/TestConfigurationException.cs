@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace RichWebApi.Tests.Exceptions;
+﻿namespace RichWebApi.Tests.Exceptions;
 
 [Serializable]
 public class TestConfigurationException : RichWebApiTestException
@@ -10,10 +8,6 @@ public class TestConfigurationException : RichWebApiTestException
 	}
 
 	public TestConfigurationException(string? message) : base(message)
-	{
-	}
-
-	protected TestConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
 	{
 	}
 }

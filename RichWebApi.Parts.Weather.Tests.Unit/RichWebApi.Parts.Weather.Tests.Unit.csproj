@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -11,8 +11,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.5.0">
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
@@ -20,7 +20,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\RichWebApi.Dependencies.Database.Tests.Unit\RichWebApi.Dependencies.Database.Tests.Unit.csproj" />
-        <ProjectReference Include="..\RichWebApi.Dependencies.SignalR.Tests\RichWebApi.Dependencies.SignalR.Tests.csproj" />
+        <ProjectReference Include="..\RichWebApi.Dependencies.SignalR.Tests.Unit\RichWebApi.Dependencies.SignalR.Tests.Unit.csproj" />
         <ProjectReference Include="..\RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj" />
         <ProjectReference Include="..\RichWebApi.Tests.Unit\RichWebApi.Tests.Unit.csproj" />
     </ItemGroup>

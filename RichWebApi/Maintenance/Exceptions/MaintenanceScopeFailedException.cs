@@ -1,6 +1,4 @@
-﻿using RichWebApi.Exceptions;
-
-namespace RichWebApi.Maintenance.Exceptions;
+﻿namespace RichWebApi.Maintenance.Exceptions;
 
 public class MaintenanceScopeFailedException : MaintenanceException
 {

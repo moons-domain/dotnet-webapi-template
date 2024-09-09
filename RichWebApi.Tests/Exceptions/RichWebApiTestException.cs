@@ -1,14 +1,8 @@
-﻿using System.Runtime.Serialization;
-
-namespace RichWebApi.Tests.Exceptions;
+﻿namespace RichWebApi.Tests.Exceptions;
 
 public class RichWebApiTestException : Exception
 {
 	public RichWebApiTestException()
-	{
-	}
-
-	protected RichWebApiTestException(SerializationInfo info, StreamingContext context) : base(info, context)
 	{
 	}
 

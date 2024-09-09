@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>RichWebApi</RootNamespace>
@@ -9,11 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RichWebApi.Core\RichWebApi.Core.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+      <ProjectReference Include="..\RichWebApi\RichWebApi.csproj" />
+      <ProjectReference Include="..\RichWebApi.Parts\RichWebApi.Parts.csproj" />
     </ItemGroup>
 
 </Project>

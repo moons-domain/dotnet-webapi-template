@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Application", "RichWebApi.Application\RichWebApi.Application.csproj", "{ACDF4937-17B4-47F5-9CC1-3F9F974501EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Core", "RichWebApi.Core\RichWebApi.Core.csproj", "{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi", "RichWebApi\RichWebApi.csproj", "{9A761A1C-11B0-4FCD-B951-3D9EA60551D4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{E7D89A8D-9835-4A6D-BA2C-97C75CAB1893}"
 EndProject
@@ -10,13 +10,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Dat
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Parts", "Parts", "{2504DDD8-13F0-4E1E-88E3-F940F25E1AA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts.Core", "RichWebApi.Parts.Core\RichWebApi.Parts.Core.csproj", "{E40723F9-86E9-42AB-9BAA-E52D3251D98A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts", "RichWebApi.Parts\RichWebApi.Parts.csproj", "{E40723F9-86E9-42AB-9BAA-E52D3251D98A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts.Weather", "RichWebApi.Parts.Weather\RichWebApi.Parts.Weather.csproj", "{3E9EBDD8-C7D9-4E8F-9B27-C0D14938FB7C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.SignalR", "RichWebApi.Dependencies.SignalR\RichWebApi.Dependencies.SignalR.csproj", "{798821DC-6A7B-48BF-AA98-BB779F08B890}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Core", "RichWebApi.Dependencies.Core\RichWebApi.Dependencies.Core.csproj", "{C5274D60-37EE-4048-BFD5-C6C97674397E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies", "RichWebApi.Dependencies\RichWebApi.Dependencies.csproj", "{C5274D60-37EE-4048-BFD5-C6C97674397E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.Database.Migrations", "RichWebApi.Dependencies.Database.Migrations\RichWebApi.Dependencies.Database.Migrations.csproj", "{C2EB3CF2-14E4-4FF3-BAEB-ED2C194BE0C8}"
 EndProject
@@ -29,8 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{7C0470FC-1
 		.lintstagedrc.js = .lintstagedrc.js
 		CODEOWNERS = CODEOWNERS
 		package.json = package.json
-		package-lock.json = package-lock.json
 		README.md = README.md
+		yarn.lock = yarn.lock
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nix", "nix", "{D6C11702-27B4-4F33-A24F-7DB36F8F8C8A}"
@@ -82,7 +82,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Parts.Weather.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{528E1362-3249-4D82-A206-08C175CFC142}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.SignalR.Tests", "RichWebApi.Dependencies.SignalR.Tests\RichWebApi.Dependencies.SignalR.Tests.csproj", "{12783E6F-3388-48F9-94FD-4DDA1D63B841}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RichWebApi.Dependencies.SignalR.Tests.Unit", "RichWebApi.Dependencies.SignalR.Tests.Unit\RichWebApi.Dependencies.SignalR.Tests.Unit.csproj", "{12783E6F-3388-48F9-94FD-4DDA1D63B841}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{1A86A37B-594F-43DE-AB86-97E2770863C5}"
 EndProject
