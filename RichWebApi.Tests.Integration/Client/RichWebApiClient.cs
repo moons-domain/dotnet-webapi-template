@@ -4,7 +4,11 @@ namespace RichWebApi.Tests.Client;
 
 internal abstract class RichWebApiClient : IRichWebApiClient
 {
-	public virtual void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
+	protected virtual ValueTask<HttpRequestMessage> CreateHttpRequestMessageAsync(
+		CancellationToken cancellationToken = default)
+		=> new(new HttpRequestMessage());
+
+	public static void UpdateJsonSerializerSettings(JsonSerializerSettings settings)
 	{
 
 	}
