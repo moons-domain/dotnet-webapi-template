@@ -19,22 +19,14 @@ public record GetWeatherForecast(DateTime Date) : IRequest<WeatherForecastDto>
 	}
 
 	[UsedImplicitly]
-	internal class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, WeatherForecastDto>
+	internal class GetWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper)
+		: IRequestHandler<GetWeatherForecast, WeatherForecastDto>
 	{
-		private readonly IRichWebApiDatabase _database;
-		private readonly IMapper _mapper;
-
-		public GetWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper)
-		{
-			_database = database;
-			_mapper = mapper;
-		}
-
 		public Task<WeatherForecastDto> Handle(GetWeatherForecast request, CancellationToken cancellationToken)
-			=> _database.ReadAsync((db, ct) => db.Context
+			=> database.ReadAsync((db, ct) => db.Context
 				.Set<WeatherForecast>()
 				.Where(x => x.Date == request.Date)
-				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
+				.ProjectTo<WeatherForecastDto>(mapper.ConfigurationProvider)
 				.FirstOrExceptionAsync(ct), cancellationToken);
 	}
 }

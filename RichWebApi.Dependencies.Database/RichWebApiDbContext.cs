@@ -2,26 +2,21 @@
 
 namespace RichWebApi;
 
-public sealed class RichWebApiDbContext : DbContext
+public sealed class RichWebApiDbContext(
+	IDatabaseConfigurator databaseConfigurator,
+	DbContextOptions<RichWebApiDbContext> options)
+	: DbContext(options)
 {
-	private readonly IDatabaseConfigurator _databaseConfigurator;
-
-	public RichWebApiDbContext(IDatabaseConfigurator databaseConfigurator,
-							   DbContextOptions<RichWebApiDbContext> options) : base(options)
-	{
-		_databaseConfigurator = databaseConfigurator;
-	}
-
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
-		_databaseConfigurator.OnModelCreating(builder);
+		databaseConfigurator.OnModelCreating(builder);
 	}
 
 	protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
 	{
 		base.ConfigureConventions(configurationBuilder);
-		_databaseConfigurator.ConfigureConventions(configurationBuilder, Database);
+		databaseConfigurator.ConfigureConventions(configurationBuilder, Database);
 	}
 
 	public override int SaveChanges(bool acceptAllChangesOnSuccess) => throw new NotSupportedException();

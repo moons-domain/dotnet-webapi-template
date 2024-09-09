@@ -108,7 +108,7 @@ public class IntegrationDependencyContainerFixture : DependencyContainerFixture
 				var addSpecificHttpClient = addHttpClientMethod.MakeGenericMethod(serviceType, x);
 				return new ClientDescriptor(serviceType,
 					x,
-					(services, configure) => addSpecificHttpClient.Invoke(null, new object?[] { services, configure }));
+					(services, configure) => addSpecificHttpClient.Invoke(null, [services, configure]));
 			})
 			.ToList()
 			.AsReadOnly();

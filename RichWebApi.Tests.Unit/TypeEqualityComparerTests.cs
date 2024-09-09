@@ -3,12 +3,8 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests;
 
-public class TypeEqualityComparerTests : UnitTest
+public class TypeEqualityComparerTests(ITestOutputHelper testOutputHelper) : UnitTest(testOutputHelper)
 {
-	public TypeEqualityComparerTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
-	{
-	}
-
 	[Fact]
 	public void NotEqualIfDifferentRuntimeTypes() => new TypeEqualityComparer<IBaseInterface>()
 		.Equals(new ClassA(), new ClassB())

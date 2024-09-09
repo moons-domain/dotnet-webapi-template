@@ -4,21 +4,14 @@ using RichWebApi.Extensions;
 
 namespace RichWebApi.Entities.Configuration;
 
-internal class DatabaseConfigurator : IDatabaseConfigurator
+internal class DatabaseConfigurator(
+	IEnumerable<INonGenericEntityConfiguration> configurations,
+	ILogger<DatabaseConfigurator> logger)
+	: IDatabaseConfigurator
 {
-	private readonly IEnumerable<INonGenericEntityConfiguration> _configurations;
-	private readonly ILogger<DatabaseConfigurator> _logger;
-
-	public DatabaseConfigurator(IEnumerable<INonGenericEntityConfiguration> configurations,
-								ILogger<DatabaseConfigurator> logger)
+	public void OnModelCreating(ModelBuilder modelBuilder) => logger.Time(() =>
 	{
-		_configurations = configurations;
-		_logger = logger;
-	}
-
-	public void OnModelCreating(ModelBuilder modelBuilder) => _logger.Time(() =>
-	{
-		foreach (var configuration in _configurations)
+		foreach (var configuration in configurations)
 		{
 			if (configuration is IIgnoredEntityConfiguration)
 			{
@@ -31,11 +24,11 @@ internal class DatabaseConfigurator : IDatabaseConfigurator
 			}
 			catch (Exception e)
 			{
-				_logger.LogError(e, "Error when configuring db entities");
+				logger.LogError(e, "Error when configuring db entities");
 				throw;
 			}
 		}
-	}, $"{nameof(OnModelCreating)}({{Count}})", _configurations.Count());
+	}, $"{nameof(OnModelCreating)}({{Count}})", configurations.Count());
 
 	public void ConfigureConventions(ModelConfigurationBuilder configurationBuilder, DatabaseFacade databaseFacade)
 	{

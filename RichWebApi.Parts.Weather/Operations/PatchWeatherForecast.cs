@@ -21,31 +21,23 @@ public record PatchWeatherForecast(WeatherForecastDto WeatherForecast) : IReques
 	}
 
 	[UsedImplicitly]
-	internal class PatchWeatherForecastHandler : IRequestHandler<PatchWeatherForecast>
+	internal class PatchWeatherForecastHandler(
+		IRichWebApiDatabase database,
+		IMapper mapper,
+		IHubContext<WeatherHub, IWeatherHubClient> hubContext)
+		: IRequestHandler<PatchWeatherForecast>
 	{
-		private readonly IRichWebApiDatabase _database;
-		private readonly IMapper _mapper;
-		private readonly IHubContext<WeatherHub, IWeatherHubClient> _hubContext;
-
-		public PatchWeatherForecastHandler(IRichWebApiDatabase database, IMapper mapper,
-										   IHubContext<WeatherHub, IWeatherHubClient> hubContext)
-		{
-			_database = database;
-			_mapper = mapper;
-			_hubContext = hubContext;
-		}
-
 		public async Task Handle(PatchWeatherForecast request, CancellationToken cancellationToken)
 		{
 			var forecast = request.WeatherForecast;
-			var foundForecast = await _database.ReadAsync((db, ct) => db.Context
+			var foundForecast = await database.ReadAsync((db, ct) => db.Context
 					.Set<WeatherForecast>()
 					.FirstOrExceptionAsync(x => x.Date == forecast.Date, ct), cancellationToken
 			);
 
-			_mapper.Map(forecast, foundForecast);
-			await _database.PersistAsync(cancellationToken);
-			await _hubContext.Clients
+			mapper.Map(forecast, foundForecast);
+			await database.PersistAsync(cancellationToken);
+			await hubContext.Clients
 				.Group(WeatherHubConstants.GroupName)
 				.OnWeatherUpdate(forecast);
 		}

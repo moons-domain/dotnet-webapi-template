@@ -1,10 +1,8 @@
 ﻿namespace RichWebApi.Maintenance;
 
-public class MaintenanceInfo
+public class MaintenanceInfo(MaintenanceReason reason)
 {
-	public MaintenanceReason Reason { get; }
-
-	public MaintenanceInfo(MaintenanceReason reason) => Reason = reason;
+	public MaintenanceReason Reason { get; } = reason;
 
 	public DateTime StartedAt { get; set; }
 }

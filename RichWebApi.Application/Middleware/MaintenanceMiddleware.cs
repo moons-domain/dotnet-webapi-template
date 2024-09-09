@@ -4,12 +4,8 @@ using RichWebApi.Maintenance;
 
 namespace RichWebApi.Middleware;
 
-public class MaintenanceMiddleware
+public class MaintenanceMiddleware(RequestDelegate next)
 {
-	private readonly RequestDelegate _next;
-
-	public MaintenanceMiddleware(RequestDelegate next) => _next = next;
-
 	public async Task Invoke(HttpContext context)
 	{
 		var maintenance = context.RequestServices.GetRequiredService<ApplicationMaintenance>();
@@ -21,6 +17,6 @@ public class MaintenanceMiddleware
 			return;
 		}
 
-		await _next(context);
+		await next(context);
 	}
 }

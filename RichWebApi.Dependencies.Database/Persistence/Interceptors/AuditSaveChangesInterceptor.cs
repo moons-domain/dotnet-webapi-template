@@ -7,19 +7,11 @@ using RichWebApi.Extensions;
 
 namespace RichWebApi.Persistence.Interceptors;
 
-internal class AuditSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInterceptor
+internal class AuditSaveChangesInterceptor(ILogger<AuditSaveChangesInterceptor> logger, ISystemClock clock)
+	: SaveChangesInterceptor, IOrderedInterceptor
 {
-	private readonly ILogger<AuditSaveChangesInterceptor> _logger;
-	private readonly ISystemClock _clock;
-
 	public uint Order => 0;
 
-
-	public AuditSaveChangesInterceptor(ILogger<AuditSaveChangesInterceptor> logger, ISystemClock clock)
-	{
-		_logger = logger;
-		_clock = clock;
-	}
 
 	public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData,
 																				InterceptionResult<int> result,
@@ -30,11 +22,11 @@ internal class AuditSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInt
 		var ctx = eventData.Context;
 		if (ctx is null)
 		{
-			_logger.LogWarning("Database context is null");
+			logger.LogWarning("Database context is null");
 			return result;
 		}
 
-		_logger.Time(() => AuditEntities(ctx.ChangeTracker), "Audit tracked database context '{DatabaseContextName}' entities",
+		logger.Time(() => AuditEntities(ctx.ChangeTracker), "Audit tracked database context '{DatabaseContextName}' entities",
 			ctx.GetType().Name);
 		return result;
 	}
@@ -61,7 +53,7 @@ internal class AuditSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInt
 
 		foreach (var entry in entries)
 		{
-			var now = _clock.UtcNow.DateTime;
+			var now = clock.UtcNow.DateTime;
 
 			if (entry.Entity is IAuditableEntity auditable)
 			{

@@ -3,12 +3,10 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests;
 
-public abstract class Test : IClassFixture<ResourceRepositoryFixture>, IAsyncLifetime
+public abstract class Test(ITestOutputHelper testOutputHelper)
+	: IClassFixture<ResourceRepositoryFixture>, IAsyncLifetime
 {
-	protected ITestOutputHelper TestOutputHelper { get; }
-
-	protected Test(ITestOutputHelper testOutputHelper)
-		=> TestOutputHelper = testOutputHelper;
+	protected ITestOutputHelper TestOutputHelper { get; } = testOutputHelper;
 
 	public virtual Task InitializeAsync() => Task.CompletedTask;
 

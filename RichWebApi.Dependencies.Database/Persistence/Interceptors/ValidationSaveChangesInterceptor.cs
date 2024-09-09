@@ -11,22 +11,15 @@ using RichWebApi.Persistence.Internal;
 
 namespace RichWebApi.Persistence.Interceptors;
 
-internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrderedInterceptor, IDisposable
+internal class ValidationSaveChangesInterceptor(
+	IServiceProvider serviceProvider,
+	ILogger<ValidationSaveChangesInterceptor> logger,
+	IOptionsMonitor<DatabaseEntitiesConfig> configMonitor)
+	: SaveChangesInterceptor, IOrderedInterceptor, IDisposable
 {
-	private readonly ILogger<ValidationSaveChangesInterceptor> _logger;
-	private readonly IOptionsMonitor<DatabaseEntitiesConfig> _configMonitor;
-	private readonly IServiceScope _scope;
+	private readonly IServiceScope _scope = serviceProvider.CreateScope();
 
 	public uint Order => 1;
-
-	public ValidationSaveChangesInterceptor(IServiceProvider serviceProvider,
-											ILogger<ValidationSaveChangesInterceptor> logger,
-											IOptionsMonitor<DatabaseEntitiesConfig> configMonitor)
-	{
-		_logger = logger;
-		_configMonitor = configMonitor;
-		_scope = serviceProvider.CreateScope();
-	}
 
 	public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result,
 																				CancellationToken cancellationToken = default)
@@ -35,11 +28,11 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 		var context = eventData.Context;
 		if (context is null)
 		{
-			_logger.LogWarning("Database context is null");
+			logger.LogWarning("Database context is null");
 			return result;
 		}
 
-		var validationOption = _configMonitor.CurrentValue.Validation;
+		var validationOption = configMonitor.CurrentValue.Validation;
 		if (validationOption == EntitiesValidationOption.None)
 		{
 			return result;
@@ -71,7 +64,7 @@ internal class ValidationSaveChangesInterceptor : SaveChangesInterceptor, IOrder
 	private async Task ValidateTrackedEntitiesAsync(ChangeTracker changeTracker, CancellationToken cancellationToken)
 	{
 		var sp = _scope.ServiceProvider;
-		var failures = await _logger.TimeAsync(async () =>
+		var failures = await logger.TimeAsync(async () =>
 		{
 			var validatorsProvider = sp.GetRequiredService<IEntityValidatorsProvider>();
 			var entriesByType = changeTracker.Entries()

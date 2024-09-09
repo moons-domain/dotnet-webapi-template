@@ -12,16 +12,11 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests.Persistence;
 
-public class RichWebApiDatabaseTests : UnitTest
+public class RichWebApiDatabaseTests(ITestOutputHelper testOutputHelper, UnitDependencyContainerFixture container)
+	: UnitTest(testOutputHelper)
 {
-	private readonly DependencyContainerFixture _container;
-
-	public RichWebApiDatabaseTests(ITestOutputHelper testOutputHelper, UnitDependencyContainerFixture container) : base(
-		testOutputHelper)
-	{
-		_container = container
-			.WithXunitLogging(testOutputHelper);
-	}
+	private readonly DependencyContainerFixture _container = container
+		.WithXunitLogging(testOutputHelper);
 
 	[Fact]
 	public async Task CallsReadPolicyOnRead()

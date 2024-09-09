@@ -6,16 +6,14 @@ using NCrontab;
 
 namespace RichWebApi.Services;
 
-public abstract class CronScheduleService : IHostedService
+public abstract class CronScheduleService(IServiceProvider serviceProvider) : IHostedService
 {
 
 	private readonly CancellationTokenSource _cts = new();
 
 	// ReSharper disable once NotAccessedField.Local
 	private Task _task = Task.CompletedTask;
-	private readonly AsyncServiceScope _serviceProviderScope;
-
-	protected CronScheduleService(IServiceProvider serviceProvider) => _serviceProviderScope = serviceProvider.CreateAsyncScope();
+	private readonly AsyncServiceScope _serviceProviderScope = serviceProvider.CreateAsyncScope();
 
 	public Task StartAsync(CancellationToken cancellationToken)
 	{

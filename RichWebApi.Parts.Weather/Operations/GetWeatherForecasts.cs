@@ -31,26 +31,18 @@ public record GetWeatherForecasts(int Page, int Size, DateTime? From = null, Dat
 	}
 
 	[UsedImplicitly]
-	internal class GetWeatherForecastsHandler : IRequestHandler<GetWeatherForecasts, PagedResult<WeatherForecastDto>>
+	internal class GetWeatherForecastsHandler(IRichWebApiDatabase database, IMapper mapper)
+		: IRequestHandler<GetWeatherForecasts, PagedResult<WeatherForecastDto>>
 	{
-		private readonly IRichWebApiDatabase _database;
-		private readonly IMapper _mapper;
-
-		public GetWeatherForecastsHandler(IRichWebApiDatabase database, IMapper mapper)
-		{
-			_database = database;
-			_mapper = mapper;
-		}
-
 		public Task<PagedResult<WeatherForecastDto>> Handle(GetWeatherForecasts request,
 															CancellationToken cancellationToken)
-			=> _database.ReadAsync((db, ct) => db.Context
+			=> database.ReadAsync((db, ct) => db.Context
 				.Set<WeatherForecast>()
 				.MaybeWhere(request.From is not null, x => x.Date >= request.From)
 				.MaybeWhere(request.To is not null, x => x.Date <= request.To)
 				.OrderBy(x => x.Date)
 				.AsNoTracking()
-				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
+				.ProjectTo<WeatherForecastDto>(mapper.ConfigurationProvider)
 				.ToPagedResultAsync(request, ct), cancellationToken);
 	}
 }

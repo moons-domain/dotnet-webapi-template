@@ -1,8 +1,3 @@
 ﻿namespace RichWebApi.Exceptions;
 
-public abstract class DependencyException : RichWebApiException
-{
-	protected DependencyException(string message) : base(message)
-	{
-	}
-}
+public abstract class DependencyException(string message) : RichWebApiException(message);

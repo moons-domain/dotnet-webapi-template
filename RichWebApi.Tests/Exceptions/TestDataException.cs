@@ -2,9 +2,4 @@
 namespace RichWebApi.Tests.Exceptions;
 
 [Serializable]
-public class TestDataException : TestConfigurationException
-{
-	public TestDataException(string? message) : base(message)
-	{
-	}
-}
+public class TestDataException(string? message) : TestConfigurationException(message);
