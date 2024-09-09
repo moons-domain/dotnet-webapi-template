@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using JetBrains.Annotations;
-using RichWebApi.Entities;
 
 namespace RichWebApi.Models;
 

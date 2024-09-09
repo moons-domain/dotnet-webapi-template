@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using JetBrains.Annotations;
 
 namespace RichWebApi;
 
@@ -9,8 +10,11 @@ public sealed class AppPartsCollection : IAppPartsCollection
 		new PartsCore()
 	};
 
+	[MustDisposeResource]
 	public IEnumerator<IAppPart> GetEnumerator()
 		=> ((IEnumerable<IAppPart>)_appParts).GetEnumerator();
+
+	[MustDisposeResource]
 	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 	public void Add(IAppPart item)
