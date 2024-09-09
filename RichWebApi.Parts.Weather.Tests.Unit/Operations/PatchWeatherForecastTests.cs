@@ -47,7 +47,7 @@ public class PatchWeatherForecastTests : UnitTest
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		await mediator.Send(sharedInput);
-		var expected = await mediator.Send(new GetWeatherForecast(0, 1));
+		var expected = await mediator.Send(new GetWeatherForecasts(0, 1));
 		caseResources.CompareWithJsonExpectation(TestOutputHelper, expected, configure: c => c.ExcludingAuditableDtoProperties());
 	}
 

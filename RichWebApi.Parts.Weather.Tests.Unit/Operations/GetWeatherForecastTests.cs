@@ -40,7 +40,7 @@ public class GetWeatherForecastTests : UnitTest
 			.GetRequiredService<IRichWebApiDatabase>()
 			.PersistEntitiesAsync(entities);
 
-		var input = caseResources.GetJsonInputResource<GetWeatherForecast>();
+		var input = caseResources.GetJsonInputResource<GetWeatherForecasts>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);
@@ -56,7 +56,7 @@ public class GetWeatherForecastTests : UnitTest
 			.GetRequiredService<IRichWebApiDatabase>()
 			.PersistEntitiesAsync(entities);
 
-		var input = caseResources.GetJsonInputResource<GetWeatherForecast>();
+		var input = caseResources.GetJsonInputResource<GetWeatherForecasts>();
 		var mediator = _serviceProvider.GetRequiredService<IMediator>();
 
 		var result = await mediator.Send(input);

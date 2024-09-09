@@ -3,25 +3,23 @@ using AutoMapper.QueryableExtensions;
 using FluentValidation;
 using JetBrains.Annotations;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using RichWebApi.Entities;
+using RichWebApi.Extensions;
 using RichWebApi.Models;
 using RichWebApi.Persistence;
-using RichWebApi.Utilities.Paging;
 
 namespace RichWebApi.Operations;
 
-public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<WeatherForecastDto>>, IPagedRequest
+public record GetWeatherForecast(DateTime Date) : IRequest<WeatherForecastDto>
 {
 	[UsedImplicitly]
 	public class Validator : AbstractValidator<GetWeatherForecast>
 	{
-		public Validator(IValidator<IPagedRequest> validator)
-			=> Include(validator);
+		public Validator() => RuleFor(x => x.Date).NotEqual(default(DateTime));
 	}
 
 	[UsedImplicitly]
-	internal class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, PagedResult<WeatherForecastDto>>
+	internal class GetWeatherForecastHandler : IRequestHandler<GetWeatherForecast, WeatherForecastDto>
 	{
 		private readonly IRichWebApiDatabase _database;
 		private readonly IMapper _mapper;
@@ -32,13 +30,11 @@ public record GetWeatherForecast(int Page, int Size) : IRequest<PagedResult<Weat
 			_mapper = mapper;
 		}
 
-		public Task<PagedResult<WeatherForecastDto>> Handle(GetWeatherForecast request,
-															CancellationToken cancellationToken)
+		public Task<WeatherForecastDto> Handle(GetWeatherForecast request, CancellationToken cancellationToken)
 			=> _database.ReadAsync((db, ct) => db.Context
 				.Set<WeatherForecast>()
-				.OrderBy(x => x.Date)
-				.AsNoTracking()
+				.Where(x => x.Date == request.Date)
 				.ProjectTo<WeatherForecastDto>(_mapper.ConfigurationProvider)
-				.ToPagedResultAsync(request, ct), cancellationToken);
+				.FirstOrExceptionAsync(ct), cancellationToken);
 	}
 }

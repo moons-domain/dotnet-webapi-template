@@ -21,7 +21,7 @@
 		"format-all": "npm run format:cs && npm run format:other",
 		"format:cs": "dotnet format whitespace RichWebApi.sln",
 		"format:other": "prettier . --write -u",
-		"hooks:pre-push": "npm run test",
+		"hooks:pre-push": "npm run test -- --filter \"Category=Unit\"",
 		"test": "dotnet test -c Release",
 		"build:apiclient": "cd RichWebApi.Tests.Integration && nswag run .nswag"
 	},
@@ -37,12 +37,12 @@
 		"useTabs": true
 	},
 	"devDependencies": {
-		"adm-zip": "^0.5.10",
-		"glob": "^10.3.3",
-		"husky": "^8.0.2",
-		"lint-staged": "^13.1.0",
-		"nswag": "^13.18.2",
-		"prettier": "^2.8.1",
+		"adm-zip": "^0.5.16",
+		"glob": "^11.0.0",
+		"husky": "^9.1.5",
+		"lint-staged": "^15.2.10",
+		"nswag": "^14.1.0",
+		"prettier": "^3.3.3",
 		"replace": "^1.2.2"
 	}
 }
