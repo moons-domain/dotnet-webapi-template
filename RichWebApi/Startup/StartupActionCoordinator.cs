@@ -4,20 +4,14 @@ using RichWebApi.Extensions;
 
 namespace RichWebApi.Startup;
 
-internal sealed class StartupActionCoordinator : IStartupActionCoordinator
+internal sealed class StartupActionCoordinator(
+	IServiceProvider serviceProvider,
+	ILogger<StartupActionCoordinator> logger)
+	: IStartupActionCoordinator
 {
-	private readonly IServiceProvider _serviceProvider;
-	private readonly ILogger<StartupActionCoordinator> _logger;
-
-	public StartupActionCoordinator(IServiceProvider serviceProvider, ILogger<StartupActionCoordinator> logger)
+	public Task PerformStartupActionsAsync(CancellationToken cancellationToken) => logger.TimeAsync(async () =>
 	{
-		_serviceProvider = serviceProvider;
-		_logger = logger;
-	}
-
-	public Task PerformStartupActionsAsync(CancellationToken cancellationToken) => _logger.TimeAsync(async () =>
-	{
-		var actions = _serviceProvider
+		var actions = serviceProvider
 			.GetServices<IAsyncStartupAction>()
 			.OrderBy(x => x.Order)
 			.ToList();
@@ -27,12 +21,12 @@ internal sealed class StartupActionCoordinator : IStartupActionCoordinator
 			return;
 		}
 
-		_logger.LogDebug("Will run {StartupActionCount} startup actions: {@StartupActions}", actions.Count, actions.Select(a => new { a.GetType().Name, a.Order }));
+		logger.LogDebug("Will run {StartupActionCount} startup actions: {@StartupActions}", actions.Count, actions.Select(a => new { a.GetType().Name, a.Order }));
 		foreach (var actionGroup in actions.GroupBy(x => x.Order))
 		{
-			await _logger.TimeAsync(() =>
+			await logger.TimeAsync(() =>
 			{
-				var tasks = actionGroup.Select(action => _logger.TimeAsync(
+				var tasks = actionGroup.Select(action => logger.TimeAsync(
 					() => action.PerformActionAsync(cancellationToken),
 					"run startup action '{StartupActionName}'", action.GetType().Name));
 				return Task.WhenAll(tasks);

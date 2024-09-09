@@ -4,9 +4,5 @@ using Xunit.Abstractions;
 namespace RichWebApi.Tests;
 
 [Trait("Category", "Integration")]
-public abstract class IntegrationTest : Test, IClassFixture<IntegrationDependencyContainerFixture>
-{
-	protected IntegrationTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
-	{
-	}
-}
+public abstract class IntegrationTest(ITestOutputHelper testOutputHelper)
+	: Test(testOutputHelper), IClassFixture<IntegrationDependencyContainerFixture>;

@@ -4,11 +4,8 @@ using RichWebApi.Maintenance.Exceptions;
 
 namespace RichWebApi.Maintenance;
 
-public sealed class ApplicationMaintenance
+public sealed class ApplicationMaintenance(ILogger<ApplicationMaintenance> logger, ISystemClock clock)
 {
-	private readonly ILogger<ApplicationMaintenance> _logger;
-	private readonly ISystemClock _clock;
-
 	public bool IsEnabled => _info != null;
 
 	private MaintenanceInfo? _info;
@@ -27,12 +24,6 @@ public sealed class ApplicationMaintenance
 		}
 	}
 
-	public ApplicationMaintenance(ILogger<ApplicationMaintenance> logger, ISystemClock clock)
-	{
-		_logger = logger;
-		_clock = clock;
-	}
-
 	public void Enable(MaintenanceReason reason)
 	{
 		if (IsEnabled)
@@ -42,9 +33,9 @@ public sealed class ApplicationMaintenance
 
 		_info = new MaintenanceInfo(reason)
 		{
-			StartedAt = _clock.UtcNow.DateTime
+			StartedAt = clock.UtcNow.DateTime
 		};
-		_logger.LogInformation("Maintenance mode enabled, reason: {@Reason}", reason);
+		logger.LogInformation("Maintenance mode enabled, reason: {@Reason}", reason);
 	}
 
 	public void Disable()
@@ -54,6 +45,6 @@ public sealed class ApplicationMaintenance
 			throw new MaintenanceAlreadyDisabledException();
 		}
 		_info = null;
-		_logger.LogInformation("Maintenance mode disabled");
+		logger.LogInformation("Maintenance mode disabled");
 	}
 }

@@ -4,12 +4,8 @@ using Xunit.Abstractions;
 
 namespace RichWebApi.Tests.Maintenance;
 
-public class MaintenanceReasonTests : UnitTest
+public class MaintenanceReasonTests(ITestOutputHelper testOutputHelper) : UnitTest(testOutputHelper)
 {
-	public MaintenanceReasonTests(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
-	{
-	}
-
 	[Theory]
 	[InlineData(null)]
 	[InlineData("")]

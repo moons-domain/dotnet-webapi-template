@@ -46,21 +46,14 @@ public class CronScheduleServiceTests : UnitTest
 		Task DoSomethingAsync();
 	}
 
-	private class UnitCronScheduleService : CronScheduleService
+	private class UnitCronScheduleService(IServiceProvider serviceProvider, CrontabSchedule schedule)
+		: CronScheduleService(serviceProvider)
 	{
-		private readonly CrontabSchedule _schedule;
-
-		public UnitCronScheduleService(IServiceProvider serviceProvider, CrontabSchedule schedule) : base(
-			serviceProvider)
-		{
-			_schedule = schedule;
-		}
-
 		public override Task PerformServiceFunctionAsync(IServiceProvider serviceProvider,
 														 CancellationToken cancellationToken)
 			=> serviceProvider.GetRequiredService<IUnitService>().DoSomethingAsync();
 
 		protected override CrontabSchedule GetSchedule()
-			=> _schedule;
+			=> schedule;
 	}
 }

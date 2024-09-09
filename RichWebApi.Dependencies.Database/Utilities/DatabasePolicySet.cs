@@ -5,12 +5,8 @@ using Polly.Timeout;
 
 namespace RichWebApi.Utilities;
 
-internal sealed class DatabasePolicySet : IDatabasePolicySet
+internal sealed class DatabasePolicySet(ILogger<DatabasePolicySet> logger) : IDatabasePolicySet
 {
-	private readonly ILogger<DatabasePolicySet> _logger;
-
-	public DatabasePolicySet(ILogger<DatabasePolicySet> logger) => _logger = logger;
-
 	public IAsyncPolicy DatabaseReadPolicy => Policy.WrapAsync(
 			CommonWaitAndRetryOn<SqlException, InvalidOperationException, TimeoutRejectedException>(3)
 				.WithPolicyKey("Database read retry"),
@@ -38,7 +34,7 @@ internal sealed class DatabasePolicySet : IDatabasePolicySet
 
 	private Task LogTimeoutAsync(Context context, TimeSpan waitedFor, Task _)
 	{
-		_logger.LogWarning(
+		logger.LogWarning(
 			"{PolicyKey}:{PolicyWrapKey} - timed out after waiting {WaitedFor} for {Operation}",
 			context.PolicyKey,
 			context.PolicyWrapKey,
@@ -47,7 +43,7 @@ internal sealed class DatabasePolicySet : IDatabasePolicySet
 		return Task.CompletedTask;
 	}
 
-	private void OnRetry(Exception because, TimeSpan goingToWait, Context context) => _logger.LogWarning(because,
+	private void OnRetry(Exception because, TimeSpan goingToWait, Context context) => logger.LogWarning(because,
 		"{PolicyKey}:{PolicyWrapKey} - failed to do {Operation}. Unless retry count is exceeded, going to wait {Wait} and retry",
 		context.PolicyKey,
 		context.PolicyWrapKey,

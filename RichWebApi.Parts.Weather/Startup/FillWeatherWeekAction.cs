@@ -5,22 +5,16 @@ using RichWebApi.Services;
 namespace RichWebApi.Startup;
 
 [UsedImplicitly]
-internal sealed class FillWeatherWeekAction : IAsyncStartupAction
+internal sealed class FillWeatherWeekAction(
+	WeatherWeekFillerService weatherWeekFillerService,
+	IServiceProvider serviceProvider)
+	: IAsyncStartupAction
 {
-	private readonly WeatherWeekFillerService _weatherWeekFillerService;
-	private readonly IServiceProvider _serviceProvider;
-
 	public uint Order => 2;
-
-	public FillWeatherWeekAction(WeatherWeekFillerService weatherWeekFillerService, IServiceProvider serviceProvider)
-	{
-		_weatherWeekFillerService = weatherWeekFillerService;
-		_serviceProvider = serviceProvider;
-	}
 
 	public async Task PerformActionAsync(CancellationToken cancellationToken = default)
 	{
-		await using var serviceFunctionScope = _serviceProvider.CreateAsyncScope();
-		await _weatherWeekFillerService.PerformServiceFunctionAsync(serviceFunctionScope.ServiceProvider, cancellationToken);
+		await using var serviceFunctionScope = serviceProvider.CreateAsyncScope();
+		await weatherWeekFillerService.PerformServiceFunctionAsync(serviceFunctionScope.ServiceProvider, cancellationToken);
 	}
 }

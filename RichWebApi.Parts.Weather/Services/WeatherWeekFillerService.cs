@@ -12,13 +12,11 @@ using RichWebApi.Persistence;
 namespace RichWebApi.Services;
 
 [UsedImplicitly]
-internal sealed class WeatherWeekFillerService : CronScheduleService
+internal sealed class WeatherWeekFillerService(
+	IServiceProvider serviceProvider,
+	IOptionsMonitor<WeatherWeekFillerServiceConfig> optionsMonitor)
+	: CronScheduleService(serviceProvider)
 {
-	private readonly IOptionsMonitor<WeatherWeekFillerServiceConfig> _optionsMonitor;
-
-	public WeatherWeekFillerService(IServiceProvider serviceProvider, IOptionsMonitor<WeatherWeekFillerServiceConfig> optionsMonitor) : base(serviceProvider)
-		=> _optionsMonitor = optionsMonitor;
-
 	public override async Task PerformServiceFunctionAsync(IServiceProvider serviceProvider, CancellationToken cancellationToken)
 	{
 		var logger = serviceProvider.GetRequiredService<ILogger<WeatherWeekFillerService>>();
@@ -54,5 +52,5 @@ internal sealed class WeatherWeekFillerService : CronScheduleService
 	}
 
 	protected override CrontabSchedule GetSchedule()
-		=> CrontabSchedule.Parse(_optionsMonitor.CurrentValue.Schedule);
+		=> CrontabSchedule.Parse(optionsMonitor.CurrentValue.Schedule);
 }

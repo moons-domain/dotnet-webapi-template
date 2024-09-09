@@ -1,9 +1,7 @@
 ﻿namespace RichWebApi.Maintenance.Exceptions;
 
-public class MaintenanceScopeFailedException : MaintenanceException
+public class MaintenanceScopeFailedException(MaintenanceInfo info, Exception innerException)
+	: MaintenanceException($"Last maintenance operation '{info.Reason.Description}' failed", innerException)
 {
-	public MaintenanceInfo Info { get; }
-
-	public MaintenanceScopeFailedException(MaintenanceInfo info, Exception innerException) : base($"Last maintenance operation '{info.Reason.Description}' failed", innerException)
-		=> Info = info;
+	public MaintenanceInfo Info { get; } = info;
 }

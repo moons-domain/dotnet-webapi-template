@@ -1,29 +1,20 @@
 ﻿namespace RichWebApi.Tests.Resources;
 
-internal sealed class ResourceScope : IResourceScope
+internal sealed class ResourceScope(string scope, ResourceRepositoryFixture resourceRepository) : IResourceScope
 {
-	private readonly ResourceRepositoryFixture _resourceRepository;
-
-
 	private readonly List<ResourceScope> _innerScopes = [];
 
-	public string Scope { get; }
-
-	public ResourceScope(string scope, ResourceRepositoryFixture resourceRepository)
-	{
-		_resourceRepository = resourceRepository;
-		Scope = scope;
-	}
+	public string Scope { get; } = scope;
 
 	public IResourceScope CreateScope(string scope)
 	{
-		var newScope = new ResourceScope(Scope.ConcatScopeString(scope), _resourceRepository);
+		var newScope = new ResourceScope(Scope.ConcatScopeString(scope), resourceRepository);
 		_innerScopes.Add(newScope);
 		return newScope;
 	}
 
 	public Stream GetResourceStream(string nameSubstring)
-		=> _resourceRepository.GetResourceStream($"{Scope}.{nameSubstring}");
+		=> resourceRepository.GetResourceStream($"{Scope}.{nameSubstring}");
 
 	public void Dispose()
 	{

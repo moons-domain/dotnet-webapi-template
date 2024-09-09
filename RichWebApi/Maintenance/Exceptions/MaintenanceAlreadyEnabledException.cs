@@ -1,8 +1,7 @@
 ﻿namespace RichWebApi.Maintenance.Exceptions;
 
-public sealed class MaintenanceAlreadyEnabledException : MaintenanceException
+public sealed class MaintenanceAlreadyEnabledException(MaintenanceInfo info)
+	: MaintenanceException("Maintenance is enabled already")
 {
-	public MaintenanceInfo Info { get; }
-
-	public MaintenanceAlreadyEnabledException(MaintenanceInfo info) : base("Maintenance is enabled already") => Info = info;
+	public MaintenanceInfo Info { get; } = info;
 }

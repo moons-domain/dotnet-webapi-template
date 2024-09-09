@@ -1,11 +1,9 @@
 ﻿namespace RichWebApi.Exceptions;
 
-public class MissingEntitiesValidatorsException : DatabaseDependencyException
+public class MissingEntitiesValidatorsException(IReadOnlyCollection<Type> missingTypes)
+	: DatabaseDependencyException(FormatMissingTypesMessage(missingTypes))
 {
-	public IReadOnlyCollection<Type> MissingTypes { get; }
-
-	public MissingEntitiesValidatorsException(IReadOnlyCollection<Type> missingTypes) : base(FormatMissingTypesMessage(missingTypes))
-		=> MissingTypes = missingTypes;
+	public IReadOnlyCollection<Type> MissingTypes { get; } = missingTypes;
 
 	private static string FormatMissingTypesMessage(IEnumerable<Type> missingTypes)
 	{

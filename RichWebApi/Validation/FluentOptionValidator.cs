@@ -7,49 +7,38 @@ using RichWebApi.Config;
 
 namespace RichWebApi.Validation;
 
-internal class FluentOptionValidator<T> : IValidateOptions<T>
+internal class FluentOptionValidator<T>(
+	string configurationSection,
+	IValidator<T> validator,
+	IWebHostEnvironment environment,
+	ILogger<FluentOptionValidator<T>> logger)
+	: IValidateOptions<T>
 	where T : class, IAppConfig
 {
-	private readonly string _configurationSection;
-	private readonly IValidator<T> _validator;
-	private readonly IWebHostEnvironment _environment;
-	private readonly ILogger<FluentOptionValidator<T>> _logger;
-
-	public FluentOptionValidator(string configurationSection,
-		IValidator<T> validator,
-		IWebHostEnvironment environment,
-		ILogger<FluentOptionValidator<T>> logger)
-	{
-		_configurationSection = configurationSection;
-		_validator = validator;
-		_environment = environment;
-		_logger = logger;
-	}
-
 	public ValidateOptionsResult Validate(string? name, T options)
 	{
-		var result = _validator.Validate(options);
+		var result = validator.Validate(options);
 		if (result.IsValid)
 		{
-			if (_environment.IsDevelopment())
+			if (environment.IsDevelopment())
 			{
-				_logger.LogDebug("Config section {ConfigSection} is valid, value {@Value}", _configurationSection,
+				logger.LogDebug("Config section {ConfigSection} is valid, value {@Value}", configurationSection,
 					options);
 			}
 			else
 			{
-				_logger.LogDebug("Config section {ConfigSection} is valid", _configurationSection);
+				logger.LogDebug("Config section {ConfigSection} is valid", configurationSection);
 			}
 
 			return ValidateOptionsResult.Success;
 		}
 		var errorMessages = result.Errors.Select(x => x.ErrorMessage).ToList();
-		var errorMessage = $"Config section '{_configurationSection}' is invalid, reasons:"
+		var errorMessage = $"Config section '{configurationSection}' is invalid, reasons:"
 						   + Environment.NewLine
 						   + string.Join(Environment.NewLine, errorMessages);
 
-		_logger.LogError("Config section '{ConfigurationSection}' is invalid, reasons: {@Reasons}",
-			_configurationSection,
+		logger.LogError("Config section '{ConfigurationSection}' is invalid, reasons: {@Reasons}",
+			configurationSection,
 			errorMessages);
 		return ValidateOptionsResult.Fail(errorMessage);
 	}

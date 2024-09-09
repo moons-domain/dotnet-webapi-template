@@ -20,16 +20,13 @@ using RichWebApi.Validation;
 [assembly: InternalsVisibleTo("RichWebApi.Dependencies.Database.Tests.Unit")]
 namespace RichWebApi;
 
-internal class DatabaseDependency : IAppDependency
+internal class DatabaseDependency(IHostEnvironment environment) : IAppDependency
 {
-	private readonly IHostEnvironment _environment;
 	private const string ConfigurationSection = "Database";
-
-	public DatabaseDependency(IHostEnvironment environment) => _environment = environment;
 
 	public void ConfigureServices(IServiceCollection services, IAppPartsCollection parts)
 	{
-		if (_environment.IsDevelopment())
+		if (environment.IsDevelopment())
 		{
 			services.AddOptionsWithValidator<DatabaseConfig, DatabaseConfig.DevEnvValidator>(ConfigurationSection);
 		}

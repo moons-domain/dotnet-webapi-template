@@ -1,9 +1,7 @@
 ﻿namespace RichWebApi.Maintenance;
 
-internal sealed class MaintenanceScopeFailedReason : MaintenanceReason
+internal sealed class MaintenanceScopeFailedReason(MaintenanceInfo info)
+	: MaintenanceReason($"Last maintenance operation '{info.Reason.Description}' failed")
 {
-	public MaintenanceInfo Info { get; }
-
-	public MaintenanceScopeFailedReason(MaintenanceInfo info) : base($"Last maintenance operation '{info.Reason.Description}' failed")
-		=> Info = info;
+	public MaintenanceInfo Info { get; } = info;
 }
