@@ -9,6 +9,7 @@ using RichWebApi.Startup;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace RichWebApi;
 
@@ -28,7 +29,11 @@ public class Program
 
 			ConfigureServices(builder.Services, parts, dependencies);
 
-			var app = Configure(builder.Build(), dependencies);
+			var app = ConfigureWebApp(builder.Build(), dependencies);
+			var logger = app.Services.GetRequiredService<ILogger<Program>>();
+			logger.LogDebug("Configured app parts {@AppParts} along with dependencies {@Dependencies}",
+				parts.Select(x => x.GetType().FullName),
+				dependencies.Select(x => x.GetType().FullName));
 			await RunAsync(app);
 		}
 		catch (Exception e)
@@ -104,7 +109,8 @@ public class Program
 	public static IAppPartsCollection EnrichWithApplicationParts(IAppPartsCollection collection)
 		=> collection.AddWeather();
 
-	private static IServiceCollection ConfigureServices(IServiceCollection services, IAppPartsCollection parts,
+	private static IServiceCollection ConfigureServices(IServiceCollection services,
+														IAppPartsCollection parts,
 														IAppDependenciesCollection dependencies)
 	{
 		services.AddControllers();
@@ -134,7 +140,7 @@ public class Program
 		return services;
 	}
 
-	private static WebApplication Configure(WebApplication app, IAppDependenciesCollection dependencies)
+	private static WebApplication ConfigureWebApp(WebApplication app, IAppDependenciesCollection dependencies)
 	{
 		// Configure the HTTP request pipeline.
 		if (app.Environment.IsDevelopment())
