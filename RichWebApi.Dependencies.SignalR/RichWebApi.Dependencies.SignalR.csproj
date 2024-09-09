@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>RichWebApi</RootNamespace>
@@ -9,11 +9,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RichWebApi.Dependencies.Core\RichWebApi.Dependencies.Core.csproj" />
+      <ProjectReference Include="..\RichWebApi.Dependencies\RichWebApi.Dependencies.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="SignalRSwaggerGen" Version="4.4.0" />
+      <PackageReference Include="SignalRSwaggerGen" Version="4.7.0" />
     </ItemGroup>
 
 </Project>

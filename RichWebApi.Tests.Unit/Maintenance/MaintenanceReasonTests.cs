@@ -1,9 +1,8 @@
 ﻿using FluentAssertions;
 using RichWebApi.Maintenance;
-using RichWebApi.Tests;
 using Xunit.Abstractions;
 
-namespace RichWebApi.Core.Tests.Unit.Maintenance;
+namespace RichWebApi.Tests.Maintenance;
 
 public class MaintenanceReasonTests : UnitTest
 {

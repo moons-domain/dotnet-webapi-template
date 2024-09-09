@@ -14,7 +14,7 @@ public sealed class ResourceRepositoryFixture : IResourceScope
 {
 	private readonly ConcurrentDictionary<Assembly, string[]> _assemblyEmbeddedResources = new();
 
-	private readonly List<ResourceScope> _innerScopes = new();
+	private readonly List<ResourceScope> _innerScopes = [];
 
 	public string Scope => string.Empty;
 

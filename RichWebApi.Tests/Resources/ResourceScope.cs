@@ -5,7 +5,7 @@ internal sealed class ResourceScope : IResourceScope
 	private readonly ResourceRepositoryFixture _resourceRepository;
 
 
-	private readonly List<ResourceScope> _innerScopes = new();
+	private readonly List<ResourceScope> _innerScopes = [];
 
 	public string Scope { get; }
 

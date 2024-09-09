@@ -12,8 +12,4 @@ public class TestConfigurationException : RichWebApiTestException
 	public TestConfigurationException(string? message) : base(message)
 	{
 	}
-
-	protected TestConfigurationException(SerializationInfo info, StreamingContext context) : base(info, context)
-	{
-	}
 }
